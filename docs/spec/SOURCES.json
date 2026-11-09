@@ -1,0 +1,32 @@
+[
+ {
+  "file": "lz4_Block_format.md",
+  "repository": "https://github.com/lz4/lz4",
+  "commit": "79abc99fc4f0e044eec17e76a949e1f24f08912d",
+  "path": "doc/lz4_Block_format.md",
+  "url": "https://raw.githubusercontent.com/lz4/lz4/79abc99fc4f0e044eec17e76a949e1f24f08912d/doc/lz4_Block_format.md",
+  "sha256": "2fc5066fb6a5fc55a868993852087a3b050b9af8c3ed10bab70871ceb54e335b",
+  "bytes": 10817,
+  "fetched_at": "2026-10-26T13:58:33Z"
+ },
+ {
+  "file": "lz4_Frame_format.md",
+  "repository": "https://github.com/lz4/lz4",
+  "commit": "79abc99fc4f0e044eec17e76a949e1f24f08912d",
+  "path": "doc/lz4_Frame_format.md",
+  "url": "https://raw.githubusercontent.com/lz4/lz4/79abc99fc4f0e044eec17e76a949e1f24f08912d/doc/lz4_Frame_format.md",
+  "sha256": "d579fbb30d192b1f18a31a9199b9bd18977322165afeeac36e27519570737194",
+  "bytes": 15494,
+  "fetched_at": "2026-10-26T13:58:33Z"
+ },
+ {
+  "file": "xxhash_spec.md",
+  "repository": "https://github.com/Cyan4973/xxHash",
+  "commit": "e7bfdc8fe8d37dbeb0dbf8393650180211bf915d",
+  "path": "doc/xxhash_spec.md",
+  "url": "https://raw.githubusercontent.com/Cyan4973/xxHash/e7bfdc8fe8d37dbeb0dbf8393650180211bf915d/doc/xxhash_spec.md",
+  "sha256": "61c47af338b2feefcc7621700ef6b941bcf9b1dd33899c503f68cb797e7ef333",
+  "bytes": 35240,
+  "fetched_at": "2026-10-26T13:58:33Z"
+ }
+]
