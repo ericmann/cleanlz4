@@ -24,7 +24,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-13 DESIGN.md: the Phase 1 spec-rule report
 - [x] P1-14 Phase 1 end: push and record the manual check
 - [x] P2-01 Frame descriptor parsing and introspection
-- [ ] P2-02 Options, and one regular frame with independent blocks
+- [x] P2-02 Options, and one regular frame with independent blocks
 - [ ] P2-03 Linked blocks
 - [ ] P2-04 Block and content checksums
 - [ ] P2-05 Content size
@@ -139,3 +139,7 @@ Push: done. Manual check: NOT VERIFIED (human): read DESIGN.md's rule table agai
 ### P2-01 — 530414f
 
 frame.rs: BlockMaxSize{bytes()}, FrameDescriptor (Copy), parse_frame_descriptor(input)->(desc, header_len); re-exported from lib. Check order as specified. Oracle Dict-ID: prefs dict_id 0 means no Dict-ID field, non-zero sets the flag (observed, descriptor.rs asserts it). 9 unit tests + 64-combination oracle test. Footgun: python-based edits fail silently when rustfmt reformatted the text; run clippy locally before kukulu_verify.
+
+### P2-02 — d111b34
+
+lib.rs: Dictionary, TrailingData, FrameKind, DecodeOptions(Default), FrameOutput, decompress_frame, decompress_frame_with. frame.rs: BlockHeader/parse_block_header/END_MARK, FrameState{new, descriptor, decode_data_block(header,data,&mut out), finish()}, decode_frames(input,&options) (single frame; TrailingData for extra bytes; block/content checksums skipped; compressed blocks decoded via scratch Vec with dict &[] so P2-03 only needs to add history). Block size field is checked before the data is requested. Tests: cleanlz4/tests/frame.rs x9, oracle/tests/frame.rs x1.
