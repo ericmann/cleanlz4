@@ -5,7 +5,7 @@ Started: 2026-11-10T00:53:38.909Z
 
 ## Tasks
 
-- [ ] P0-01 Cargo workspace, make check, the deps script and the config file
+- [x] P0-01 Cargo workspace, make check, the deps script and the config file
 - [ ] P0-02 Verify docs/spec against SOURCES.json
 - [ ] P0-03 Fetch the corpora, write MANIFEST.json and go offline
 - [ ] P0-04 Phase 0 end: push and record the manual check
@@ -63,3 +63,7 @@ Started: 2026-11-10T00:53:38.909Z
 ## Log
 
 (one entry per task, appended by implement)
+
+### P0-01 — 143d24b
+
+Workspace, fuzz crate, make check, deps script, config.json created; cargo build and fuzz build ok (lz4-sys 1.11.1 resolved). Tests: oracle/tests/config.rs x3, prng unit test, test-check-deps.sh. Interpretation: none. Config struct sections: limits, fuzz, bench, stream, dict, conformance, diff.
