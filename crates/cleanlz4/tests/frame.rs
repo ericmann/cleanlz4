@@ -301,3 +301,68 @@ fn verification_off_still_rejects_a_bad_header_checksum() {
         Err(Error::BadHeaderChecksum)
     );
 }
+
+const CONTENT_SIZE: u8 = 0x08;
+
+/// A frame declaring `declared` as its content size around `blocks`.
+fn sized_frame(declared: u64, blocks: &[(bool, Vec<u8>)]) -> Vec<u8> {
+    let mut d = vec![flg(CONTENT_SIZE), bd(4)];
+    d.extend_from_slice(&declared.to_le_bytes());
+    let mut f = MAGIC.to_vec();
+    f.extend_from_slice(&d);
+    f.push(((xxh32(&d, 0) >> 8) & 0xFF) as u8);
+    for (uncompressed, data) in blocks {
+        f.extend_from_slice(&block_word(data.len(), *uncompressed));
+        f.extend_from_slice(data);
+    }
+    f.extend_from_slice(&[0, 0, 0, 0]);
+    f
+}
+
+#[test]
+fn matching_content_size_is_accepted() {
+    let blocks = [(true, b"abc".to_vec()), (false, literal_block(b"defg"))];
+    assert_eq!(
+        decompress_frame(&sized_frame(7, &blocks)).expect("ok"),
+        b"abcdefg"
+    );
+}
+
+#[test]
+fn content_size_smaller_than_the_data_is_rejected() {
+    let blocks = [(true, b"abc".to_vec()), (true, b"defg".to_vec())];
+    assert_eq!(
+        decompress_frame(&sized_frame(6, &blocks)),
+        Err(Error::ContentSizeMismatch)
+    );
+    // Caught as soon as the count passes it, before later blocks are needed.
+    let mut f = sized_frame(2, &[(true, b"abc".to_vec())]);
+    f.truncate(f.len() - 4);
+    assert_eq!(decompress_frame(&f), Err(Error::ContentSizeMismatch));
+}
+
+#[test]
+fn content_size_larger_than_the_data_is_rejected() {
+    let blocks = [(true, b"abc".to_vec())];
+    assert_eq!(
+        decompress_frame(&sized_frame(4, &blocks)),
+        Err(Error::ContentSizeMismatch)
+    );
+    // A huge declared size allocates nothing and is still just a mismatch.
+    assert_eq!(
+        decompress_frame(&sized_frame(u64::MAX, &blocks)),
+        Err(Error::ContentSizeMismatch)
+    );
+}
+
+#[test]
+fn content_size_zero_with_an_empty_frame_is_accepted() {
+    assert_eq!(
+        decompress_frame(&sized_frame(0, &[])).expect("ok"),
+        Vec::<u8>::new()
+    );
+    assert_eq!(
+        decompress_frame(&sized_frame(0, &[(true, vec![])])).expect("ok"),
+        Vec::<u8>::new()
+    );
+}

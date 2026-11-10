@@ -175,6 +175,8 @@ pub(crate) struct FrameState {
     verify: bool,
     /// XXH32 of the decoded bytes so far (fed only when verifying).
     content_hash: Xxh32,
+    /// Decoded bytes so far, compared with the descriptor's content size.
+    decoded: u64,
 }
 
 /// The LZ4 window (Frame format, "Block Independence flag": "up to LZ4 window
@@ -189,6 +191,7 @@ impl FrameState {
             history: Vec::new(),
             verify,
             content_hash: Xxh32::new(0),
+            decoded: 0,
         }
     }
 
@@ -230,6 +233,7 @@ impl FrameState {
             return Err(Error::BlockSizeExceeded);
         }
         if header.uncompressed {
+            self.account(data.len())?;
             out.extend_from_slice(data);
             self.produced(data);
             return Ok(());
@@ -247,9 +251,21 @@ impl FrameState {
             Err(Error::OutputLimitExceeded) => return Err(Error::BlockSizeExceeded),
             Err(e) => return Err(e),
         }
+        self.account(block.len())?;
         out.extend_from_slice(&block);
         self.produced(&block);
         Ok(())
+    }
+
+    /// Count `n` more decoded bytes; more than the declared content size is
+    /// `ContentSizeMismatch` (Frame format, "Content Size": "used to validate
+    /// content correctness"). The size never drives an allocation.
+    fn account(&mut self, n: usize) -> Result<()> {
+        self.decoded = self.decoded.saturating_add(n as u64);
+        match self.desc.content_size {
+            Some(size) if self.decoded > size => Err(Error::ContentSizeMismatch),
+            _ => Ok(()),
+        }
     }
 
     /// Account for newly decoded bytes: history and the content checksum.
@@ -263,6 +279,13 @@ impl FrameState {
     /// End the frame after its EndMark, with the stored content checksum when
     /// the descriptor has one (Frame format, "Content Checksum").
     pub(crate) fn finish(&mut self, stored_content_checksum: Option<u32>) -> Result<()> {
+        if self
+            .desc
+            .content_size
+            .is_some_and(|size| self.decoded != size)
+        {
+            return Err(Error::ContentSizeMismatch);
+        }
         if let Some(stored) = stored_content_checksum {
             if self.verify && self.content_hash.digest() != stored {
                 return Err(Error::ContentChecksumMismatch);

@@ -83,3 +83,22 @@ fn a_flipped_payload_byte_is_caught_by_the_block_checksum() {
         ));
     }
 }
+
+#[test]
+fn content_size_frames_roundtrip() {
+    let cfg = Config::load().expect("config");
+    for (name, data) in inputs(cfg.fuzz.seed) {
+        for linked in [false, true] {
+            let prefs = Prefs {
+                block_size_id: 4,
+                linked,
+                content_size: Some(data.len() as u64),
+                ..Prefs::default()
+            };
+            let f = compress_frame(&[&data], &prefs);
+            let out = cleanlz4::decompress_frame(&f)
+                .unwrap_or_else(|e| panic!("{name} linked {linked}: {e}"));
+            assert!(out == data, "{name} linked {linked}");
+        }
+    }
+}
