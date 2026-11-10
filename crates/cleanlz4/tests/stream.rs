@@ -616,3 +616,23 @@ fn return_remainder_leaves_a_trailing_magic_prefix_unconsumed() {
     let input = [f, tails[0].to_vec()].concat();
     assert_eq!(run(&input, 1, 8), Err(Error::TrailingData));
 }
+
+#[test]
+fn skippable_frame_first_streams_like_one_shot() {
+    let regular = frame(0x60, &[(true, b"hello".to_vec())], b"hello");
+    for low in [0u8, 7, 15] {
+        let input = [skippable(low, b"user data"), regular.clone()].concat();
+        let want = one_shot(&input);
+        assert_eq!(want, Ok(b"hello".to_vec()));
+        for (in_chunk, out_size) in [(1, 1), (3, 2), (input.len(), 64)] {
+            assert_eq!(run(&input, in_chunk, out_size), want, "{low} {in_chunk}");
+        }
+        let (out, pos, frames) = run_with(DecodeOptions::default(), &input, 1).expect("ok");
+        assert_eq!((out, pos, frames), (b"hello".to_vec(), input.len(), 2));
+    }
+    // A skippable frame alone decodes to nothing; its user data may be empty.
+    for input in [skippable(1, b"xyz"), skippable(2, &[])] {
+        assert_eq!(run(&input, 1, 8), Ok(Vec::new()));
+        assert_eq!(one_shot(&input), Ok(Vec::new()));
+    }
+}
