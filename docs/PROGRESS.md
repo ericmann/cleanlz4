@@ -34,7 +34,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P2-09 Spike: the oracle's frame behaviour, and the differential compare module
 - [x] P2-10 Conformance generator: oracle-compressed frame suites
 - [x] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
-- [ ] P2-12 The full conformance run and its results
+- [x] P2-12 The full conformance run and its results
 - [ ] P2-13 The malformed corpus and its results
 - [x] P2-14 Phase 2 end: push and record the manual check
 - [x] P3-01 Streaming decoder: regular frames
@@ -566,3 +566,7 @@ FrameState::new(desc, verify, Option<&Dictionary>)->Result enforces DictionaryRe
 ### P2-11 — ae17c40
 
 New suites dictionary(72 entries), skippable(21), legacy(14), concatenated(6); SUITES now 8. Entry.extra keys: dict_file, dict_sha256, dict_bytes, dict_source, dict_offset, dict_dependent, dict_id (id frames only), cli_version. runner: kind "block-dict", entry_dictionary(), frames get DecodeOptions.dictionary when dict_file present. Checked: conformance --check over the four categories 113/113 pass. make corpus 108 s, MANIFEST byte-stable. Footgun: manifest entry order changes diff widely on first regeneration (sorted by id).
+
+### P2-12 — c52d095
+
+testdata/results/conformance-P2-12.json: total 2349, passed 2349, failed 0; per category block 156, checksums 301, concatenated 6, content-size 401, dictionary 72, frame-independent 45, frame-linked 53, legacy 14, skippable 21, synthetic 1280. EVIDENCE.md lists the file. DESIGN Measurements section has the table.
