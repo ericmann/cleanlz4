@@ -33,3 +33,12 @@ bench:
 .PHONY: malformed
 malformed:
 	cargo run --release -p oracle --bin malformed -- --task $(TASK)
+
+.PHONY: fuzz-run fuzz-smoke
+fuzz-run:
+	cargo run --release -p oracle --bin fuzz_run -- --target $(TARGET) --task $(TASK)
+
+fuzz-smoke:
+	for t in no_panic_block no_panic_frame no_panic_stream diff_roundtrip diff_accept; do \
+		cargo run --release -p oracle --bin fuzz_run -- --target $$t --task smoke --smoke || exit 1; \
+	done

@@ -12,6 +12,7 @@ pub mod diff;
 pub mod ffi;
 pub mod frame;
 pub mod fuzz_logic;
+pub mod fuzzrun;
 pub mod malformed;
 pub mod manifest;
 pub mod prng;
