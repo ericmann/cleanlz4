@@ -37,7 +37,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [-] P2-12 The full conformance run and its results
 - [-] P2-13 The malformed corpus and its results
 - [x] P2-14 Phase 2 end: push and record the manual check
-- [ ] P3-01 Streaming decoder: regular frames
+- [x] P3-01 Streaming decoder: regular frames
 - [ ] P3-02 Streaming decoder: skippable, legacy and concatenated frames, dictionaries and trailing data
 - [ ] P3-03 Chunking-invariance property test
 - [ ] P3-04 The output limit and bounded memory
@@ -191,3 +191,7 @@ SKIPPED: depends on P2-08
 ### P2-14 — 7b9a924
 
 Push: done. Manual check: NOT VERIFIED (human): testdata/results/conformance-P2-12.json shows passed == total with all ten categories present; testdata/results/malformed-P2-13.json shows matched_expected_error == total and panics == 0; read docs/spikes/P2-09.md and DESIGN.md's Differential rules and confirm each normalization cites a Frame format section. CAUTION: P2-11, P2-12, P2-13 were auto-skipped because P1-10 (BLOCKED: the binding crate has no LZ4_decompress_safe_usingDict) and P2-08 (skipped) did not complete, so neither result file exists; the Dict-ID DictionaryRequired/Mismatch rules are not implemented in cleanlz4.
+
+### P3-01 — cae1d4e
+
+stream.rs: Decoder{new,decode,descriptor,checksums_verified}, Progress, Status; Stage machine Boundary/Header/BlockHeader/BlockData/Trailer/Finished; re-exported from lib. Reuses FrameState (verify_block_checksum, decode_data_block into `pending`, finish). frame.rs only made FRAME_MAGIC, read_u32_le, is_magic_prefix pub(crate). Boundary: only regular magic accepted (P3-02 will add skippable/legacy). NOTE for later: P3-02 depends on P2-08 (skipped) so it, and P3-03, will be auto-skipped: streaming of skippable/legacy frames and dictionaries is NOT implemented unless a fix round unblocks P1-10/P2-08. Tests 10 (bytewise in/out, statuses, sticky errors, descriptor timing).
