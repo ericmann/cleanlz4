@@ -18,5 +18,6 @@
     "slug": "cleanlz4-0-2-0",
     "dir": "docs/flights/cleanlz4-0-2-0",
     "at": "2026-11-10T22:51:40.747Z"
-  }
+  },
+  "breaking": false
 }
