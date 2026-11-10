@@ -32,7 +32,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P2-07 The legacy frame
 - [-] P2-08 Preset dictionary and Dict-ID
 - [x] P2-09 Spike: the oracle's frame behaviour, and the differential compare module
-- [ ] P2-10 Conformance generator: oracle-compressed frame suites
+- [x] P2-10 Conformance generator: oracle-compressed frame suites
 - [ ] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
 - [ ] P2-12 The full conformance run and its results
 - [ ] P2-13 The malformed corpus and its results
@@ -171,3 +171,7 @@ SKIPPED: depends on P1-10
 ### P2-09 — 2ac0ed6
 
 docs/spikes/P2-09.md. Oracle differs from fixed verdicts only on: legacy frame (oracle rejects frameType_unknown) -> normalization legacy-frame; Dict-ID without dictionary (oracle accepts) -> retry with empty dictionary on DictionaryRequired. zero-offset normalization carried from P1-07. craft_frame.rs (FrameSpec/BlockSpec/build/skippable/legacy/probes()), diff.rs (Verdict, NORMALIZATIONS, Ours, judge, run_frames_with, compare_frame(_using), compare_block). GAP: P2-08 skipped so cleanlz4 does not yet reject a Dict-ID frame without a dictionary (accepts); test every_probe_... exempts that probe. diff.max_output_bytes is passed to cleanlz4 but not enforced until P3-04; judge treats ours output > cap as Skipped.
+
+### P2-10 — afe2455
+
+Suites added: synthetic (21 inputs x 64), frames-cantrbry (11 x 64), frames-silesia (12 x 8); SUITES now has 4 entries; runner handles kind "frame". `make corpus` takes ~92 s and leaves ~1 GB under testdata/conformance (gitignored); MANIFEST.json is 1.7 MB and regeneration is byte-stable. Interpretation: i%len with block size fastest means level correlates with block size id (id4->level 0 ...); every level still meets both values of every flag. Tests corpus.rs +4.
