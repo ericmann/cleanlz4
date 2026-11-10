@@ -41,7 +41,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [-] P3-02 Streaming decoder: skippable, legacy and concatenated frames, dictionaries and trailing data
 - [-] P3-03 Chunking-invariance property test
 - [x] P3-04 The output limit and bounded memory
-- [ ] P3-05 Tune limits.max_output_bytes
+- [x] P3-05 Tune limits.max_output_bytes
 - [ ] P3-06 Tune stream.chunking_cases
 - [ ] P3-07 Phase 3 end: push and record the manual check
 - [ ] P4-01 Fuzz targets (a): no panic on arbitrary bytes
@@ -207,3 +207,7 @@ SKIPPED: depends on P3-02
 ### P3-04 — 8f7d248
 
 frame.rs: block_bound/limit_error helpers; FrameState::decode_data_block(header,data,out,allowance)->Result<usize>; one-shot tracks `remaining` across frames (regular and legacy); stream.rs Decoder.remaining; header-time check content_size > remaining -> OutputLimitExceeded in both paths. Existing test content_size_larger_than_the_data_is_rejected changed for u64::MAX (now OutputLimitExceeded at the header, per this task's rule). Peak allocation for a 64 MiB-of-zeros bomb with a 1 MiB limit stays under the specified bound in both paths. Codebase note: the oracle limits test binary has a counting GlobalAlloc, which needs `unsafe impl` outside ffi.rs (task-mandated, test binary only).
+
+### P3-05 — 0d5cee5
+
+Measurement (limit_probe, release): 1 MiB -> 0.0 ms, peak 8 B; 64 MiB -> 548.2 ms, peak 83,886,070 (+16,777,206); default 1 GiB -> 5,947.8 ms, peak 1,090,519,030 (+16,777,206). Key unchanged (1073741824): the excess is 10 bytes under the 16 MiB criterion. REVIEWER NOTE: excess exceeds the bound P3-04 wrote down (limit + one block + 64 KiB); likely the linked-history Vec keeps a 4 MiB-block capacity after trimming plus scratch and output growth; fixing it is a decoder change this task disallowed. Config key tuned: no.
