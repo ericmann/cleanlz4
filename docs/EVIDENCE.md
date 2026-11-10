@@ -15,6 +15,7 @@ testdata/results/bench-P4-10.json
 testdata/results/bench-P4-11.json
 testdata/results/conformance-P1-12.json
 testdata/results/conformance-P2-12.json
+testdata/results/fuzz-diff_accept-P4-08.json
 testdata/results/fuzz-diff_roundtrip-P4-07.json
 testdata/results/fuzz-no_panic_block-P4-04.json
 testdata/results/fuzz-no_panic_frame-P4-05.json
@@ -33,12 +34,13 @@ testdata/results/malformed-P2-13.json
 | `testdata/results/fuzz-no_panic_block-P4-04.json` | target `no_panic_block`, 3,601 s, 20,681,767 runs, 0 crashes, 0 divergences, 1,249 corpus entries, seed 1 |
 | `testdata/results/fuzz-no_panic_frame-P4-05.json` | target `no_panic_frame`, 3,601 s, 101,577,396 runs, 0 crashes, 0 divergences, 834 corpus entries, seed 1 |
 | `testdata/results/fuzz-no_panic_stream-P4-06.json` | target `no_panic_stream`, 3,601 s, 21,051,494 runs, 0 crashes, 0 divergences, 895 corpus entries, seed 1 |
+| `testdata/results/fuzz-diff_accept-P4-08.json` | target `diff_accept`, 3,601 s, 21,607,948 runs, 0 crashes, 100 divergences (the file cap; inputs in `testdata/results/divergences/`, untriaged), 820 corpus entries, seed 1 |
 | `testdata/results/fuzz-diff_roundtrip-P4-07.json` | target `diff_roundtrip`, 3,601 s, 58,050 runs, 0 crashes, 0 divergences, 444 corpus entries, seed 1 |
 | `testdata/results/malformed-P2-13.json` | 144 of 144 matched their expected error, 0 panics |
 | `testdata/results/bench-P4-10.json` | 23 corpus files; cleanlz4 413.8 to 2,224.6 MB/s, oracle 188.0 to 1,957.9 MB/s; no target |
 | `testdata/results/bench-P4-11.json` | 23 corpus files at the final `bench.repeats`; cleanlz4 437.6 to 2,048.7 MB/s, oracle 182.6 to 1,988.1 MB/s; no target |
 
-The fuzz results so far are `fuzz-no_panic_block-P4-04.json`, `fuzz-no_panic_frame-P4-05.json` and `fuzz-no_panic_stream-P4-06.json` and `fuzz-diff_roundtrip-P4-07.json`; `diff_accept` has none.
+The fuzz results so far are `fuzz-no_panic_block-P4-04.json`, `fuzz-no_panic_frame-P4-05.json` and `fuzz-no_panic_stream-P4-06.json` `fuzz-diff_roundtrip-P4-07.json` and `fuzz-diff_accept-P4-08.json`.
 
 ## Done checklist
 
@@ -57,7 +59,7 @@ SPEC section 1, "Done means":
    fuzz command was never run.
 3. **The fuzz campaign has run for its configured duration with zero crashes and
    zero divergences: not met.**
-   Four fuzz results exist so far (P4-04 to P4-07); P4-08 and P4-09 pending.
+   Five fuzz results exist (P4-04 to P4-08); `diff_accept` found 100 divergences awaiting triage (P4-09).
 4. **`kukulu_similarity` and `kukulu_attest` have produced `docs/SIMILARITY.md`
    and a verifying bundle: owed to the summarize stage.**
 5. **A draft PR is open: owed to the summarize stage** (`kukulu_run_finish`
