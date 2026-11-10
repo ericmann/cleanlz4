@@ -58,7 +58,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [-] P4-12 Tune fuzz.seconds_per_target
 - [x] P4-13 Phase 4 end: push and record the manual check
 - [x] P5-01 The evidence index and the Done checklist
-- [ ] P5-02 Phase 5 end: push and record the manual check
+- [x] P5-02 Phase 5 end: push and record the manual check
 
 ## Log
 
@@ -275,3 +275,7 @@ Push: done. Manual check: NOT VERIFIED (human): every testdata/results/fuzz-*.js
 ### P5-01 — f289cc4
 
 docs/EVIDENCE.md written (evidence list: DESIGN.md, 2 spikes, MANIFEST.json, 3 result files; results table read from the files; Done checklist: items 1 and 3 NOT MET, 2/4/5 owed to summarize; blocked P1-10 and the skipped chain named). README.md replaced. Test evidence_index_lists_every_result_file added. testdata/malformed/index.json does not exist so is not listed.
+
+### P5-02 — 58a26ec
+
+Push: done. Manual check: NOT VERIFIED (human): after the summarize stage, docs/SIMILARITY.md exists with both controls, and node docs/attestation/verify.mjs docs/attestation --key sha256:<owner's fingerprint> passes; the owner runs that verifier from a clean checkout on a second machine; SUMMARY.md quotes the result files, the denial counts and verdicts, the interventions and the similarity scores. HANDOFF.md names docs/EVIDENCE.md's fenced list as the attestation evidence.
