@@ -19,7 +19,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P1-08 Phase 1 end: push and record the manual check
 - [x] P2-01 The full conformance run
 - [x] P2-02 The full malformed run
-- [ ] P2-03 Run no_panic_block for the configured duration
+- [x] P2-03 Run no_panic_block for the configured duration
 - [ ] P2-04 Run no_panic_frame for the configured duration
 - [ ] P2-05 Run no_panic_stream for the configured duration
 - [ ] P2-06 Run diff_roundtrip for the configured duration
@@ -90,3 +90,7 @@ conformance-P2-01.json: passed 2349, total 2349, failed 0; corpus_sha256 fd6392a
 ### P2-02 — c507c2b
 
 malformed-P2-02.json: total 144, matched_expected_error 144, panics 0. testdata/malformed untouched. EVIDENCE.md list and table updated.
+
+### P2-03 — e4c08b4
+
+fuzz-no_panic_block-P2-03.json: seconds 3601, runs 37841791, crashes 0, divergences 0, corpus_entries 1194, seed 1. Crashes: 0 Divergences: 0. Friction: the kukulu_verify call hit the MCP 1800s idle timeout and returned an error while the make fuzz-run process (75 min) kept running; I waited for the result file rather than restart, then committed it by hand. EVIDENCE.md updated (sorted).
