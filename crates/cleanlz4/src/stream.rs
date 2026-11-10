@@ -1,0 +1,1 @@
+//! Streaming decoder state machine.

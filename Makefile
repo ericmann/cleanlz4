@@ -1,0 +1,10 @@
+GUARD = node /home/ericmann/.claude/plugins/cache/displacetech/kukulu/0.8.0/scripts/cleanroom-guard.mjs --self-test docs/cleanroom.json
+
+.PHONY: check
+check:
+	cargo fmt --all -- --check
+	cargo clippy --workspace --all-targets -- -D warnings
+	cargo test --workspace
+	$(GUARD)
+	bash scripts/check-deps.sh
+	bash scripts/test-check-deps.sh

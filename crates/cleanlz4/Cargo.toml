@@ -1,0 +1,7 @@
+[package]
+name = "cleanlz4"
+version = "0.1.0"
+edition = "2021"
+description = "A clean-room, memory-safe, zero-dependency LZ4 and XXH32 decoder"
+
+[dependencies]

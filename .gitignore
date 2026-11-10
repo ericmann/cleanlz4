@@ -3,3 +3,6 @@ fuzz/target/
 fuzz/artifacts/
 fuzz/corpus/
 .kukulu/implement.lock
+testdata/corpora/
+testdata/conformance/
+fuzz/logs/
