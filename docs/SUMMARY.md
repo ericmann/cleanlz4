@@ -31,8 +31,7 @@ From PLAN.md's Decisions:
 - Legacy frames: blocks are independent, each up to 8 MiB. A zero block size ends the frame. "All blocks full except the last" is not enforced.
 - The one-shot and streaming drivers share primitives in `frame.rs`. `stream` imports `frame`, never the reverse.
 - Differential normalizations are named in `diff.rs` and recorded in DESIGN.md. cleanlz4 stays strict wherever the spec says "must" or "shall".
-- Fuzzing: five targets, each run as its own task. Conformance categories are assigned by the suite that made each entry, with a stated precedence.
-- Operator settings: maxRounds was raised to 6 and maxRoundsHard to 8.
+- Fuzzing: five targets, each run as its own task. Conformance categories are assigned by the suite that made each entry, with a stated precedence. Operator settings: maxRounds raised to 6, maxRoundsHard to 8.
 
 From HANDOFF.md's interpretation choices:
 - P0-03: the corpus names are `canterbury` and `silesia`. The Canterbury files live in `testdata/corpora/cantrbry`.
@@ -116,9 +115,7 @@ Edits for the owner to make to SPEC.md:
   - Decide whether `testdata/results/divergences/*.bin` stays committed next to `testdata/regressions/`.
   - Act on P4-12's recommendation: lengthen `diff_roundtrip`'s run and the timeouts in `docs/kukulu.json`.
   - Read `bench-P4-10.json` and `bench-P4-11.json` (actual figures only; there is no target).
-- **Phase 5:**
-  - `docs/SIMILARITY.md` and the attestation bundle exist, and `verify.mjs` passes.
-  - Run the verifier from a clean checkout on a second machine.
+- **Phase 5:** `docs/SIMILARITY.md` and the attestation bundle exist and `verify.mjs` passes (done here); run the verifier from a clean checkout on a second machine.
 
 ## Review history
 
@@ -139,6 +136,7 @@ Edits for the owner to make to SPEC.md:
 7. review, tool-refusal: `kukulu_review_submit` refused CHANGES REQUESTED with no tasks and no unblock, but the skill forbids APPROVED while a task is blocked. When the only open item is an owner-only block, the reviewer has no sanctioned verdict. The skill should say what to submit, for example halt for the owner.
 8. implement, stall: `kukulu_verify` on a result path that runs `make fuzz-run` (3600 s) was aborted by the MCP idle timeout of 1800 s with no progress output, though the process kept running. The implementer had to poll for the result file by hand. Long-run `extraVerify` commands need progress notifications or a longer timeout.
 9. review, tool-refusal: the guard refused a read-only `sed -n` on `docs/spec/lz4_Frame_format.md` as a "protected path" write, though `grep` on the same file had been allowed. The reviewer switched to the Read tool.
+10. summarize, tool-refusal (not logged with `kukulu_feedback_log`): one Bash call that read `docs/SIMILARITY.md` and also printed part of `docs/kukulu.json` (to see the similarity pairs' definitions) was denied as a protected path. The summarizer did not retry `docs/kukulu.json` another way and read `docs/SIMILARITY.md` alone with the Read tool.
 
 ## Suggested CLAUDE.md additions
 
@@ -163,3 +161,39 @@ Edits for the owner to make to SPEC.md:
 ## Breaking call
 
 Breaking: no. This is the first implementation in the repository: the base held only docs and the spec. There is no existing public interface, config default or user behavior to break, and there is no CHANGELOG.md.
+
+## Contamination score
+
+The subject is `crates/cleanlz4/src` (34 files scored, 6 skipped). It was scored by `kukulu_similarity` in commit `055e84a`; the full report is in `docs/SIMILARITY.md`.
+
+verdict: independence not supported: subject-vs-indep: ngram_jaccard@5 is above positive; subject-vs-indep: ngram_containment@5 is above positive; subject-vs-indep: ngram_jaccard@10 is above positive; subject-vs-indep: ngram_containment@10 is above positive
+
+- subject-vs-c, ngram_jaccard@5: 0.0352 (c = -0.3999, below negative)
+- subject-vs-c, ngram_containment@5: 0.1137 (c = 0.2128, at or near negative)
+- subject-vs-c, ngram_jaccard@10: 0.0006 (c = -0.2180, below negative)
+- subject-vs-c, ngram_containment@10: 0.0029 (c = -0.3183, below negative)
+- subject-vs-c, ident_jaccard: 0.0128 (c = 0.0071, at or near negative)
+- subject-vs-c, ident_match_rate_left: 0.0687 (c = 0.0477, at or near negative)
+- subject-vs-c, comment_jaccard: 0.0001 (c = n/a, not separated)
+- subject-vs-indep, ngram_jaccard@5: 0.2231 (c = 7.4416, above positive)
+- subject-vs-indep, ngram_containment@5: 0.4805 (c = 8.5513, above positive)
+- subject-vs-indep, ngram_jaccard@10: 0.0523 (c = 8.7797, above positive)
+- subject-vs-indep, ngram_containment@10: 0.1324 (c = 12.2093, above positive)
+- subject-vs-indep, ident_jaccard: 0.0793 (c = 0.1058, at or near negative)
+- subject-vs-indep, ident_match_rate_left: 0.1924 (c = 0.1990, at or near negative)
+- subject-vs-indep, comment_jaccard: 0.0007 (c = n/a, not separated)
+
+**What this means for a human (summarizer's reading, not part of the tool's output).**
+- Against the C prior art, every metric is at or below the negative control.
+- The "not supported" verdict comes only from the four n-gram metrics of `subject-vs-indep`. That pair's identifier and comment metrics, which the tool's own limits call the separating ones, are at or near the negative control.
+- Both controls (`independent-vs-c`, `derived-vs-c`) are cross-language, so their n-gram band is calibrated on Rust-vs-C pairs. The tool's limits say a same-language positive control is needed for structural metrics. A same-language Rust pair would be expected to share more n-grams.
+- The verdict still stands as recorded, and **a human should judge it before merging**: look at which tree `subject-vs-indep` compares against, and whether the n-gram overlap is idiomatic Rust or shared structure.
+
+## Attestation
+
+- Directory: `docs/attestation/`, committed as `d69ef7a` and pushed. The evidence is the fenced list in `docs/EVIDENCE.md`, plus `docs/EVIDENCE.md` itself.
+- Manifest: `8338a742e2d10a03fb97fcd2149c39d77349afad10b30d4c113180418ed33226`; signer fingerprint: `sha256:29eb2de703efe67ab50bf992d6c66c1e75d824010c727b1a76b0b336a5ed9f75`
+- Verifier: `verify-attestation: PASS` (mode clean-room, enforcement hook, all 12 checks true), with 3 coverage gaps printed as notes:
+  - the untrailed commits `9461374` (the owner decision) and `2594153` ("chore: round 2 handoff");
+  - intervention seq 688.
+- One further note: "implementer: the endpoint reported claude-sonnet-5-5; routing declared sonnet".
