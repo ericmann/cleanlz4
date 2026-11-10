@@ -16,7 +16,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P1-05 Benchmark before the scratch-buffer change
 - [x] P1-06 Reuse one scratch buffer across blocks
 - [x] P1-07 Measure the scratch-buffer change and decide
-- [ ] P1-08 Phase 1 end: push and record the manual check
+- [x] P1-08 Phase 1 end: push and record the manual check
 - [ ] P2-01 The full conformance run
 - [ ] P2-02 The full malformed run
 - [ ] P2-03 Run no_panic_block for the configured duration
@@ -78,3 +78,7 @@ Tests first on unchanged decoder failed: legacy one-shot 16 blocks 18 fresh allo
 ### P1-07 — 9a9eb31
 
 A(before)=532.1 MB/s. After run 1: 485.4 (slowdown 8.77%, above 7.28%); run 2: 502.7 (slowdown 5.54%). Criterion met on second run: scratch change KEPT, no code changes. 7 of 23 inputs individually slower than 7.28% (info). DESIGN Measurements "Scratch-buffer reuse (P1-07)" table added; bench-P1-07.json (second run) and EVIDENCE.md updated. Note for reviewer: run-to-run noise is large (~3 points of aggregate).
+
+### P1-08 — 321ad27
+
+Push: done. Manual check: NOT VERIFIED (human): read crates/oracle/tests/dict_corpus.rs (the dictionary differential test) and the two mutant-killing tests, a_block_sharing_nothing_with_the_dictionary_is_not_dict_dependent in crates/oracle/tests/dict.rs and runner_passes_the_dictionary_to_frame_entries in crates/oracle/tests/results.rs; read DESIGN.md Measurements, Scratch-buffer reuse (P1-07), and confirm the keep-or-revert decision follows its table
