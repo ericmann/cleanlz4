@@ -5,7 +5,7 @@ Started: 2026-11-10T15:48:48.480Z
 
 ## Tasks
 
-- [ ] P0-01 Confirm the corpora, the tool versions and the spec sources
+- [x] P0-01 Confirm the corpora, the tool versions and the spec sources
 - [ ] P0-02 Confirm make check and the fuzz toolchain
 - [ ] P0-03 Regenerate the corpus, record the baseline conformance run and lock down
 - [ ] P0-04 Phase 0 end: push and record the manual check
@@ -34,3 +34,7 @@ Started: 2026-11-10T15:48:48.480Z
 ## Log
 
 (one entry per task, appended by implement)
+
+### P0-01 — 70eab32
+
+Checks: cantrbry 11 files, silesia 12 files. manifest tests 3 passed, no "absent" notice. lz4 -V: "*** LZ4 command line interface 64-bits v1.9.4, by Yann Collet ***"; lz4-sys 1.11.1+lz4-1.10.0 (match). rustc 1.99.1 (58cf8f9c3 2026-10-13), cargo 1.99.1. spec sources: ok (3 files). kukulu_verify all green. Empty commit (no files touched).
