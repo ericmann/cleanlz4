@@ -49,7 +49,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P4-03 The fuzz runner, its results writer and regression replay
 - [x] P4-04 Run no_panic_block for the configured duration
 - [x] P4-05 Run no_panic_frame for the configured duration
-- [ ] P4-06 Run no_panic_stream for the configured duration
+- [x] P4-06 Run no_panic_stream for the configured duration
 - [ ] P4-07 Run diff_roundtrip for the configured duration
 - [ ] P4-08 Run diff_accept for the configured duration
 - [ ] P4-09 Triage crashes and divergences
@@ -606,3 +606,7 @@ testdata/results/fuzz-no_panic_block-P4-04.json (commit e85cbea): seconds 3601, 
 ### P4-05 — 4c708b3
 
 fuzz-no_panic_frame-P4-05.json: seconds 3601, runs 101,577,396, crashes 0, divergences 0, corpus_entries 834, seed 1. Crashes: 0 Divergences: 0. kukulu_verify hit the MCP 1800 s idle timeout again; the run completed in the background and the file is the runner's output. EVIDENCE.md lists it.
+
+### P4-06 — 6521e1c
+
+fuzz-no_panic_stream-P4-06.json: seconds 3601, runs 21,051,494, crashes 0, divergences 0, corpus_entries 895, seed 1. Crashes: 0 Divergences: 0. kukulu_verify MCP idle timeout again; run finished in background; EVIDENCE.md lists the file.
