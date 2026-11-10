@@ -49,12 +49,20 @@ fn every_probe_is_agree_or_a_named_normalization() {
                 p.id
             );
         }
-        // cleanlz4's verdict is the plan's, except where its task was skipped:
-        // P2-08 (dictionaries) is not implemented, so a Dict-ID frame is accepted.
-        let accepted = matches!(verdict, Verdict::Agree { accepted: true });
-        if p.id != "Dict-ID and no dictionary" {
-            assert_eq!(accepted, p.fixed_accept, "{}", p.id);
+        if p.id == "Dict-ID and no dictionary" {
+            // The comparison retries with an empty dictionary, so its verdict is
+            // "accepted" by design; the fixed verdict is cleanlz4's own.
+            assert_eq!(
+                cleanlz4::decompress_frame_with(&p.bytes, &cleanlz4::DecodeOptions::default())
+                    .map(|o| o.data),
+                Err(Error::DictionaryRequired),
+                "{}",
+                p.id
+            );
+            continue;
         }
+        let accepted = matches!(verdict, Verdict::Agree { accepted: true });
+        assert_eq!(accepted, p.fixed_accept, "{}", p.id);
     }
 }
 
