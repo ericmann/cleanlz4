@@ -12,7 +12,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P1-01 Dictionary differential test: every dictionary entry against the lz4 program
 - [x] P1-02 Kill the dict_dependent mutant in the oracle's dict module
 - [x] P1-03 Kill the dropped-dictionary mutant in the conformance runner
-- [ ] P1-04 Merge is_magic into magic_kind
+- [x] P1-04 Merge is_magic into magic_kind
 - [ ] P1-05 Benchmark before the scratch-buffer change
 - [ ] P1-06 Reuse one scratch buffer across blocks
 - [ ] P1-07 Measure the scratch-buffer change and decide
@@ -62,3 +62,7 @@ Added a_block_sharing_nothing_with_the_dictionary_is_not_dict_dependent in tests
 ### P1-03 — e099856
 
 Added runner_passes_the_dictionary_to_frame_entries in tests/results.rs. Mutant (condition -> false) fails it: assertion `left == right` failed: failures: [("dictionary/canterbury/alice29.txt/d4096/indep-id", "the frame needs a dictionary and none was supplied"), ...]; undone, runner.rs diff clean. kukulu_verify with runner.rs ran make conformance-check: 2349 of 2349 passed.
+
+### P1-04 — a4dc3ed
+
+Deleted is_magic; decode_legacy_frame uses magic_kind(word).is_some(). Tests: frame.rs magic_kind_names_the_three_kinds_and_nothing_else, tests/frame.rs legacy_frame_ends_before_a_second_legacy_frame. Mutant (legacy arm of magic_kind removed) fails both; undone. DESIGN entry added. single-magic-classifier constraint active and green; conformance-check 2349/2349.
