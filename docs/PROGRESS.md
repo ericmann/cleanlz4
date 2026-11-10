@@ -66,7 +66,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [-] R1-05 Streaming ReturnRemainder leaves a trailing magic prefix to the caller
 - [x] R1-06 Frame suites: every level meets every block size
 - [-] R1-07 Refresh the evidence index after the reopened tasks
-- [ ] R2-01 Test that a legacy frame's output capacity stays within the limit
+- [x] R2-01 Test that a legacy frame's output capacity stays within the limit
 - [ ] R2-02 Test the frame-combination generator itself, and the manifest against it
 
 ## Log
@@ -460,3 +460,7 @@ New order in corpus::frame_combos (hi=i/4 gives flags, block size = 4+(hi+lo)%4,
 ### R1-07 — skipped
 
 SKIPPED: depends on P2-12
+
+### R2-01 — 455d695
+
+Added limits.rs legacy_output_capacity_never_exceeds_the_limit (hand-built legacy frame, 3x8MiB run blocks + 5-byte block, limit = total). Hand-run mutant out.extend_from_slice(&block) fails it (capacity 33554432). frame.rs unchanged. DESIGN.md Output limit 'Held by' updated. clippy needed repeat_n. No Interpretation choices.
