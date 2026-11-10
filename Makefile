@@ -8,3 +8,5 @@ check:
 	$(GUARD)
 	bash scripts/check-deps.sh
 	bash scripts/test-check-deps.sh
+	node scripts/verify-spec-sources.mjs
+	node scripts/test-verify-spec-sources.mjs
