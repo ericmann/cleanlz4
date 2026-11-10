@@ -97,3 +97,15 @@ Phase 1 report: every rule implemented so far, the section it implements, the fu
 ## Divergence triage
 
 ## Measurements
+
+### limits.max_output_bytes (P3-05)
+
+`cargo run --release -p oracle --example limit_probe -- 1048576 67108864 default`: one-shot decode of the oracle's linked frame of 2 GiB of zeros (4 MiB blocks, 8,429,067 bytes compressed), one run per limit, release build, counting allocator.
+
+| limit (bytes) | time to the error | peak allocated (bytes) | peak above the limit (bytes) |
+|---|---|---|---|
+| 1,048,576 (1 MiB) | 0.0 ms | 8 | n/a (the first match already passes the limit) |
+| 67,108,864 (64 MiB) | 548.2 ms | 83,886,070 | 16,777,206 |
+| 1,073,741,824 (default) | 5,947.8 ms | 1,090,519,030 | 16,777,206 |
+
+Before (the default's row) and after are the same: the key stays at its default, because the criterion is that the peak at the default must not exceed the default plus 16 MiB (16,777,216 bytes) and the measured excess is 16,777,206 bytes, 10 bytes under. Observations for a reviewer: the margin is thin, and the excess is larger than the bound P3-04 recorded (limit + one block + 65,536 bytes). A probe at 5,000,000 and 70,000,000 bytes gave excesses of 11,777,206 and 13,886,070 bytes. The likely cause is buffer capacity, not live data: the linked-block history buffer is extended by a whole 4 MiB block before it is trimmed to 64 KiB, and `Vec` keeps the capacity, on top of the 4 MiB block buffer and the output's amortized growth. Trimming the history to its tail before extending it would remove most of the excess; the task did not allow a decoder change. `bomb_peak_allocation_is_bounded` passes because at its 1 MiB limit the first block fails before any large buffer exists.
