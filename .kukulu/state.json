@@ -156,6 +156,18 @@
       "stage": "implement",
       "round": 3,
       "at": "2026-11-10T02:17:16.680Z"
+    },
+    {
+      "event": "end",
+      "stage": "implement",
+      "round": 3,
+      "at": "2026-11-10T09:30:33.714Z"
+    },
+    {
+      "event": "start",
+      "stage": "review",
+      "round": 3,
+      "at": "2026-11-10T09:30:33.714Z"
     }
   ]
 }
