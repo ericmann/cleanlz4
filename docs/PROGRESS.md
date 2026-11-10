@@ -46,7 +46,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P3-07 Phase 3 end: push and record the manual check
 - [x] P4-01 Fuzz targets (a): no panic on arbitrary bytes
 - [x] P4-02 Fuzz targets (b) and (c): differential
-- [ ] P4-03 The fuzz runner, its results writer and regression replay
+- [x] P4-03 The fuzz runner, its results writer and regression replay
 - [ ] P4-04 Run no_panic_block for the configured duration
 - [ ] P4-05 Run no_panic_frame for the configured duration
 - [ ] P4-06 Run no_panic_stream for the configured duration
@@ -594,3 +594,7 @@ fuzz_logic.rs: no_panic_block/frame/stream; fuzz targets are one-line wrappers; 
 ### P4-02 — 4dc91f9
 
 fuzz_logic.rs: diff_roundtrip, diff_accept(_in), record_divergence(dir,input,limit)->Result<bool>; fuzz targets diff_roundtrip and diff_accept added with [[bin]] entries. Tests fuzz_logic.rs +5 (8 total) pass; fuzz build ok. testdata/results/divergences/.gitkeep added. Interpretations in the commit. Footgun: clippy manual_is_multiple_of wants is_multiple_of.
+
+### P4-03 — 5915567
+
+fuzzrun.rs (TARGETS, fuzz_args, parse_final_stats, assemble_result, regression_name), bin fuzz_run, Makefile fuzz-run/fuzz-smoke, testdata/regressions/index.json = []. Tests fuzzrun x4, regressions x2 pass. make fuzz-smoke foreground exit 0: five targets, 0 crashes, 0 divergences (runs: block 45,814 incl. build, frame 1,148,016, stream 777,419, diff_roundtrip 1,236, diff_accept 120,142 in ~21 s each). Note: diff_roundtrip is slow (about 60 exec/s).
