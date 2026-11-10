@@ -14,7 +14,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-03 The typed error enum
 - [x] P1-04 XXH32, one-shot and streaming
 - [x] P1-05 Block decoder: sequences, overlap copies and strict end-of-block rules
-- [ ] P1-06 Spike: the oracle's end-of-block behaviour
+- [x] P1-06 Spike: the oracle's end-of-block behaviour
 - [ ] P1-07 Align the end-of-block policy with the oracle
 - [ ] P1-08 Dictionary-prefixed block decoding
 - [ ] P1-09 Synthetic inputs and block round-trip tests against the oracle
@@ -99,3 +99,7 @@ cleanlz4::xxh32::{xxh32(input,seed), Xxh32{new,update,digest}}. Matches oracle c
 ### P1-05 — 13b602b
 
 block.rs: pub(crate) decode_block(src,&mut Vec,max_len), decode_block_with(.., EndOfBlockPolicy) (policy fields last_sequence_is_literals_only, last_five_are_literals, last_match_twelve_from_end; const EOB all true); lib.rs decompress_block(input,max_output). Interpretation: final token low nibble ignored; length/limit check precedes literal-availability check (so a huge claimed literal length gives OutputLimitExceeded). Matches copy in passes of <=offset bytes. 14 unit tests.
+
+### P1-06 — 8245176
+
+Spike docs/spikes/P1-06.md. Policy observed: rule 1 enforce; rule 2 enforce; rule 3 DO NOT enforce (R3/9..11 and L1/11,12 rejected at exact capacity, accepted with +65536 slack); empty input enforce (reject); single 0x00 accepted; final low nibble not enforced (accepted). Oracle-side differentials must decode with slack capacity. craft.rs: Seq, build_block(seqs, final, nibble), build_block_without_final, expected_output. Note: oracle rejects short-final-run test blocks, so crafted tests need >=12 bytes from last match start to end.
