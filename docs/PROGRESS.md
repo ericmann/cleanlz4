@@ -42,7 +42,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P3-03 Chunking-invariance property test
 - [x] P3-04 The output limit and bounded memory
 - [x] P3-05 Tune limits.max_output_bytes
-- [ ] P3-06 Tune stream.chunking_cases
+- [x] P3-06 Tune stream.chunking_cases
 - [x] P3-07 Phase 3 end: push and record the manual check
 - [ ] P4-01 Fuzz targets (a): no panic on arbitrary bytes
 - [ ] P4-02 Fuzz targets (b) and (c): differential
@@ -582,3 +582,7 @@ stream.rs: new stages SkipSize/Skipping/LegacySize/LegacyData; boundary dispatch
 ### P3-03 — 227d1d1
 
 tests/chunking.rs: 3 tests pass, all stream.chunking_cases cases and a tenth as many error cases, 7 s. Per-case seed = fuzz.seed ^ case*0x9E3779B97F4A7C15, printed on failure with lengths and regimes. No decoder changes needed: no failing case.
+
+### P3-06 — aa5d1b7
+
+chunking_coverage_report added (ignored; CHUNKING_CASES_OVERRIDE). Measured shapes of 392: 1,000 cases 179 (0.63 s); 10,000 (before) 343 (8.80 s); 20k 366; 30k 380; 40k 386; 50k 390; 60k 391; 70k 391 (66.5 s); 80k 392 (76.2 s). stream.chunking_cases raised 10000 -> 80000 in testdata/config.json (smallest multiple hitting all shapes); chunking_invariance_random_chunks now ~68 s. DESIGN Measurements has the table. SPEC ASSUMPTION key tuned.
