@@ -237,3 +237,40 @@ fn one_shot_output_capacity_never_exceeds_the_limit() {
         out.data.capacity()
     );
 }
+
+/// One legacy block that decodes to `len` copies of `byte`: a literal, an
+/// offset-1 match, then a literal-only sequence of five bytes.
+fn legacy_run_block(byte: u8, len: usize) -> Vec<u8> {
+    let matched = len - 6;
+    let extra = matched - 19;
+    let mut b = vec![0x1F, byte, 1, 0];
+    b.extend(std::iter::repeat_n(255u8, extra / 255));
+    b.push((extra % 255) as u8);
+    b.push(0x50);
+    b.extend_from_slice(&[byte; 5]);
+    b
+}
+
+#[test]
+fn legacy_output_capacity_never_exceeds_the_limit() {
+    const BLOCK: usize = 8 << 20;
+    let mut f = vec![0x02, 0x21, 0x4C, 0x18];
+    let mut expected = Vec::new();
+    for i in 0..3u8 {
+        let b = legacy_run_block(i + 1, BLOCK);
+        f.extend_from_slice(&(b.len() as u32).to_le_bytes());
+        f.extend_from_slice(&b);
+        expected.extend(std::iter::repeat_n(i + 1, BLOCK));
+    }
+    let tail = [0x50, 9, 9, 9, 9, 9];
+    f.extend_from_slice(&(tail.len() as u32).to_le_bytes());
+    f.extend_from_slice(&tail);
+    expected.extend_from_slice(&[9; 5]);
+    let out = decompress_frame_with(&f, &limit(expected.len() as u64)).expect("ok");
+    assert!(out.data == expected, "output differs");
+    assert!(
+        out.data.capacity() <= expected.len(),
+        "capacity {}",
+        out.data.capacity()
+    );
+}
