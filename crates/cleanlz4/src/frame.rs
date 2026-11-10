@@ -210,6 +210,9 @@ pub(crate) struct FrameState {
     content_hash: Xxh32,
     /// Decoded bytes so far, compared with the descriptor's content size.
     decoded: u64,
+    /// The one buffer every compressed block of this frame decodes into; it
+    /// never holds more than one block and dies with the frame.
+    scratch: Vec<u8>,
 }
 
 /// The LZ4 window (Frame format, "Block Independence flag": "up to LZ4 window
@@ -258,6 +261,7 @@ impl FrameState {
             verify,
             content_hash: Xxh32::new(0),
             decoded: 0,
+            scratch: Vec::new(),
         })
     }
 
@@ -317,7 +321,8 @@ impl FrameState {
             return Ok(data.len());
         }
         let (bound, allowance_bounds) = block_bound(max, allowance);
-        let mut block = Vec::new();
+        let mut block = core::mem::take(&mut self.scratch);
+        block.clear();
         // Linked blocks see the previous output as a prefix; independent ones see
         // only the preset dictionary, if any.
         let prefix: &[u8] = if self.desc.block_independence {
@@ -330,7 +335,9 @@ impl FrameState {
         self.account(block.len())?;
         append_capped(out, &block, allowance)?;
         self.produced(&block);
-        Ok(block.len())
+        let n = block.len();
+        self.scratch = block;
+        Ok(n)
     }
 
     /// Count `n` more decoded bytes; more than the declared content size is
@@ -474,6 +481,7 @@ fn decode_regular_frame(
 /// block size (consumed: the documented Linux kernel extension).
 fn decode_legacy_frame(input: &[u8], out: &mut Vec<u8>, remaining: &mut u64) -> Result<usize> {
     let mut pos = 4usize;
+    let mut scratch = Vec::new();
     loop {
         if pos >= input.len() {
             return Ok(pos);
@@ -492,22 +500,24 @@ fn decode_legacy_frame(input: &[u8], out: &mut Vec<u8>, remaining: &mut u64) -> 
         let start = pos.saturating_add(4);
         let end = skip(input, start, size)?;
         let data = input.get(start..end).ok_or(Error::TruncatedInput)?;
-        decode_legacy_block(data, out, remaining)?;
+        decode_legacy_block(data, &mut scratch, out, remaining)?;
         pos = end;
     }
 }
 
-/// Decode one legacy block, appending to `out` and charging `remaining`.
+/// Decode one legacy block through `scratch` (the frame's one reused buffer),
+/// appending to `out` and charging `remaining`.
 pub(crate) fn decode_legacy_block(
     data: &[u8],
+    scratch: &mut Vec<u8>,
     out: &mut Vec<u8>,
     remaining: &mut u64,
 ) -> Result<()> {
-    let mut block = Vec::new();
+    scratch.clear();
     let (bound, allowance_bounds) = block_bound(LEGACY_BLOCK_BYTES, *remaining);
-    decode_block(data, &[], &mut block, bound).map_err(|e| limit_error(e, allowance_bounds))?;
-    append_capped(out, &block, *remaining)?;
-    *remaining = remaining.saturating_sub(block.len() as u64);
+    decode_block(data, &[], scratch, bound).map_err(|e| limit_error(e, allowance_bounds))?;
+    append_capped(out, scratch, *remaining)?;
+    *remaining = remaining.saturating_sub(scratch.len() as u64);
     Ok(())
 }
 

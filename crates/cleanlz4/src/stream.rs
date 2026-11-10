@@ -77,6 +77,8 @@ pub struct Decoder {
     /// Decoded bytes not yet delivered, and how many were.
     pending: Vec<u8>,
     pending_pos: usize,
+    /// The legacy frame's one reused block buffer; replaced when it ends.
+    scratch: Vec<u8>,
     frame: Option<FrameState>,
     descriptor: Option<FrameDescriptor>,
     /// Frames of any kind finished so far.
@@ -98,6 +100,7 @@ impl Decoder {
             buf: Vec::new(),
             pending: Vec::new(),
             pending_pos: 0,
+            scratch: Vec::new(),
             frame: None,
             descriptor: None,
             frames_done: 0,
@@ -231,6 +234,7 @@ impl Decoder {
     /// A frame ended: report it and look for the next.
     fn end_frame(&mut self) {
         self.frame = None;
+        self.scratch = Vec::new();
         self.frame_done_pending = true;
         self.frames_done = self.frames_done.saturating_add(1);
         self.buf.clear();
@@ -365,6 +369,7 @@ impl Decoder {
                 if magic_kind(word).is_some() {
                     // A known magic number ends the frame and starts the next:
                     // its bytes stay in `buf` for the boundary.
+                    self.scratch = Vec::new();
                     self.frame_done_pending = true;
                     self.frames_done = self.frames_done.saturating_add(1);
                     self.stage = Stage::Boundary;
@@ -382,7 +387,12 @@ impl Decoder {
                 if !self.gather(input, pos, size) {
                     return self.starved(end_of_input);
                 }
-                decode_legacy_block(&self.buf, &mut self.pending, &mut self.remaining)?;
+                decode_legacy_block(
+                    &self.buf,
+                    &mut self.scratch,
+                    &mut self.pending,
+                    &mut self.remaining,
+                )?;
                 self.buf.clear();
                 self.stage = Stage::LegacySize;
                 Ok(Step::Continue)
