@@ -26,6 +26,15 @@ pub fn cleanlz4_decoder(entry: &Entry, bytes: &[u8]) -> Result<Vec<u8>, String> 
         "block" => {
             cleanlz4::decompress_block(bytes, entry.input_bytes as usize).map_err(|e| e.to_string())
         }
+        "frame" => {
+            let options = cleanlz4::DecodeOptions {
+                max_output_bytes: entry.input_bytes,
+                ..cleanlz4::DecodeOptions::default()
+            };
+            cleanlz4::decompress_frame_with(bytes, &options)
+                .map(|o| o.data)
+                .map_err(|e| e.to_string())
+        }
         other => Err(format!("unsupported entry kind {other}")),
     }
 }
