@@ -52,7 +52,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P4-06 Run no_panic_stream for the configured duration
 - [x] P4-07 Run diff_roundtrip for the configured duration
 - [x] P4-08 Run diff_accept for the configured duration
-- [ ] P4-09 Triage crashes and divergences
+- [~] P4-09 Triage crashes and divergences
 - [x] P4-10 Benchmarks against the oracle
 - [x] P4-11 Tune bench.repeats
 - [ ] P4-12 Tune fuzz.seconds_per_target

@@ -15,7 +15,108 @@ testdata/results/bench-P4-10.json
 testdata/results/bench-P4-11.json
 testdata/results/conformance-P1-12.json
 testdata/results/conformance-P2-12.json
+testdata/results/divergences/02b3652175cdf639.bin
+testdata/results/divergences/03ee50efd2dc5559.bin
+testdata/results/divergences/048b222bfed1725e.bin
+testdata/results/divergences/057015f600db7f8e.bin
+testdata/results/divergences/05ba3c4c052cec03.bin
+testdata/results/divergences/06082e22b45cc0f1.bin
+testdata/results/divergences/079ba90af3e3155d.bin
+testdata/results/divergences/09bd8b20f2e3c275.bin
+testdata/results/divergences/0a8a93117b436934.bin
+testdata/results/divergences/0b9d4ae1947b471d.bin
+testdata/results/divergences/0c59d4d3326ef5ab.bin
+testdata/results/divergences/0cee45892073cc75.bin
+testdata/results/divergences/0ea910a8848dbcb0.bin
+testdata/results/divergences/0ec206c9661523dd.bin
+testdata/results/divergences/1085e2d656d4a7de.bin
+testdata/results/divergences/134a2b78a4cc89ca.bin
+testdata/results/divergences/192c85e71818b88a.bin
+testdata/results/divergences/1f00c99755d64f64.bin
+testdata/results/divergences/201f7d2b3916d357.bin
+testdata/results/divergences/20a2e258d9268a74.bin
+testdata/results/divergences/221fbed2694fcebd.bin
+testdata/results/divergences/23b629d2b2d31039.bin
+testdata/results/divergences/246f4b9829f7f7cc.bin
+testdata/results/divergences/2738f28a4274ccce.bin
+testdata/results/divergences/2c28e0e3a4233ec8.bin
+testdata/results/divergences/2c8704d62c85706f.bin
+testdata/results/divergences/2de17a744c3a892a.bin
+testdata/results/divergences/3127caf68ca3dade.bin
+testdata/results/divergences/3a0c726fcabbbf1c.bin
+testdata/results/divergences/3d749dca3c7bbdd9.bin
+testdata/results/divergences/3df0a14974a4c0a7.bin
+testdata/results/divergences/431182c6c3e4799c.bin
+testdata/results/divergences/45554640b4613ed6.bin
+testdata/results/divergences/4695e36e526c01af.bin
+testdata/results/divergences/4896920f7c6df033.bin
+testdata/results/divergences/4bedfa8e8dd95081.bin
+testdata/results/divergences/50785c0618193b56.bin
+testdata/results/divergences/53ea5b71b8902cbc.bin
+testdata/results/divergences/55ee379aae94ab27.bin
+testdata/results/divergences/5a2e15e6005f00ff.bin
+testdata/results/divergences/61df67e57d09c7d4.bin
+testdata/results/divergences/6357bab80a60767c.bin
+testdata/results/divergences/64a8284ea6f7133f.bin
+testdata/results/divergences/6993cdc1cba09c1e.bin
+testdata/results/divergences/6d49f3d86401eee8.bin
+testdata/results/divergences/6d79316f274c7e4a.bin
+testdata/results/divergences/6edbceb77c228f1a.bin
+testdata/results/divergences/6f04999187b4718c.bin
+testdata/results/divergences/6ff758817a3c4f5e.bin
+testdata/results/divergences/74c281d14bbe4949.bin
+testdata/results/divergences/7683a89583d7b942.bin
+testdata/results/divergences/7b3cef1f1c0fc0b5.bin
+testdata/results/divergences/7c452e741ff7fb5f.bin
+testdata/results/divergences/7d98646845c0ee39.bin
+testdata/results/divergences/7f8ef1a2db66d926.bin
+testdata/results/divergences/83f101713fd204b5.bin
+testdata/results/divergences/85d64691640c1286.bin
+testdata/results/divergences/895d0aee79025d8b.bin
+testdata/results/divergences/89a42370315cd7e8.bin
+testdata/results/divergences/8c53dfa920d21cc8.bin
+testdata/results/divergences/8f5b5464ddbeaa70.bin
+testdata/results/divergences/8fc94445c3ecc3a4.bin
+testdata/results/divergences/958a287464f7afc5.bin
+testdata/results/divergences/983c465813fce04e.bin
+testdata/results/divergences/986ec2b18aa99f70.bin
+testdata/results/divergences/9bbbfba094049327.bin
+testdata/results/divergences/a00df93def996566.bin
+testdata/results/divergences/a4eff031fbfc890f.bin
+testdata/results/divergences/a5adbcb0883bef17.bin
+testdata/results/divergences/a8d44d208b2d6ffb.bin
+testdata/results/divergences/ac721f918745f46f.bin
+testdata/results/divergences/b02b3045b6c03997.bin
+testdata/results/divergences/b04ac8cd5f93e3e0.bin
+testdata/results/divergences/b56c8d8216a7677d.bin
+testdata/results/divergences/b651bdf6c660732b.bin
+testdata/results/divergences/bbecb1a6715c1d60.bin
+testdata/results/divergences/bd60a49ac1c7c58c.bin
+testdata/results/divergences/be065c5f92db4878.bin
+testdata/results/divergences/befa74903c6f6cb7.bin
+testdata/results/divergences/bf2bec56eeceaeed.bin
+testdata/results/divergences/c1ceec2b70be2c5b.bin
+testdata/results/divergences/c2703e6bb4b87e02.bin
+testdata/results/divergences/c33e601d6d686969.bin
+testdata/results/divergences/c57354f804af5468.bin
+testdata/results/divergences/c5ffa4c4d365be8f.bin
+testdata/results/divergences/c9a8ccc96666880c.bin
+testdata/results/divergences/d70e63b828ec010b.bin
+testdata/results/divergences/d82434c5e3b51b26.bin
+testdata/results/divergences/d9d7a4f140f5183f.bin
+testdata/results/divergences/e37cfc5894085788.bin
+testdata/results/divergences/e48df48eaa6f6d28.bin
+testdata/results/divergences/e7692743a545b8e2.bin
+testdata/results/divergences/e7a74280d898165d.bin
+testdata/results/divergences/ed2d6d30c6f38d33.bin
+testdata/results/divergences/ed5d1df8d2846582.bin
+testdata/results/divergences/f05fc63775cb3112.bin
+testdata/results/divergences/f16706bf6d5ff97e.bin
+testdata/results/divergences/f2a22ba93678ebcd.bin
+testdata/results/divergences/f4698c73893221d8.bin
+testdata/results/divergences/fbfe04d41d9fbf88.bin
 testdata/results/fuzz-diff_accept-P4-08.json
+testdata/results/fuzz-diff_accept-P4-09.json
 testdata/results/fuzz-diff_roundtrip-P4-07.json
 testdata/results/fuzz-no_panic_block-P4-04.json
 testdata/results/fuzz-no_panic_frame-P4-05.json
@@ -23,7 +124,7 @@ testdata/results/fuzz-no_panic_stream-P4-06.json
 testdata/results/malformed-P2-13.json
 ```
 
-`testdata/malformed/index.json` lists the 144 malformed files and the rule each breaks.
+The 100 `testdata/results/divergences/*.bin` files are the `diff_accept` divergence inputs of P4-08 (all one end-of-block case, triaged in P4-09); `testdata/malformed/index.json` lists the 144 malformed files and the rule each breaks.
 
 ## Results
 
@@ -35,6 +136,7 @@ testdata/results/malformed-P2-13.json
 | `testdata/results/fuzz-no_panic_frame-P4-05.json` | target `no_panic_frame`, 3,601 s, 101,577,396 runs, 0 crashes, 0 divergences, 834 corpus entries, seed 1 |
 | `testdata/results/fuzz-no_panic_stream-P4-06.json` | target `no_panic_stream`, 3,601 s, 21,051,494 runs, 0 crashes, 0 divergences, 895 corpus entries, seed 1 |
 | `testdata/results/fuzz-diff_accept-P4-08.json` | target `diff_accept`, 3,601 s, 21,607,948 runs, 0 crashes, 100 divergences (the file cap; inputs in `testdata/results/divergences/`, untriaged), 820 corpus entries, seed 1 |
+| `testdata/results/fuzz-diff_accept-P4-09.json` | target `diff_accept` re-run after triage, 3,615 s, 16,184,756 runs, 0 crashes, 0 divergences, 1,012 corpus entries, seed 1 |
 | `testdata/results/fuzz-diff_roundtrip-P4-07.json` | target `diff_roundtrip`, 3,601 s, 58,050 runs, 0 crashes, 0 divergences, 444 corpus entries, seed 1 |
 | `testdata/results/malformed-P2-13.json` | 144 of 144 matched their expected error, 0 panics |
 | `testdata/results/bench-P4-10.json` | 23 corpus files; cleanlz4 413.8 to 2,224.6 MB/s, oracle 188.0 to 1,957.9 MB/s; no target |
@@ -59,7 +161,7 @@ SPEC section 1, "Done means":
    fuzz command was never run.
 3. **The fuzz campaign has run for its configured duration with zero crashes and
    zero divergences: not met.**
-   Five fuzz results exist (P4-04 to P4-08); `diff_accept` found 100 divergences awaiting triage (P4-09).
+   Six fuzz results exist (P4-04 to P4-09); the 100 `diff_accept` divergences of P4-08 were triaged in P4-09 (normalization `end-of-block-room`) and the re-run found none.
 4. **`kukulu_similarity` and `kukulu_attest` have produced `docs/SIMILARITY.md`
    and a verifying bundle: owed to the summarize stage.**
 5. **A draft PR is open: owed to the summarize stage** (`kukulu_run_finish`

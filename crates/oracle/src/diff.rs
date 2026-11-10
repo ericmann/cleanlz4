@@ -33,7 +33,7 @@ pub struct Normalization {
 }
 
 /// Every normalization, each with a DESIGN.md entry under "Differential rules".
-pub const NORMALIZATIONS: [Normalization; 2] = [
+pub const NORMALIZATIONS: [Normalization; 3] = [
     Normalization {
         id: "legacy-frame",
         what: "cleanlz4 accepts a legacy frame; the oracle's frame decoder does not know the legacy magic number",
@@ -43,6 +43,11 @@ pub const NORMALIZATIONS: [Normalization; 2] = [
         id: "zero-offset",
         what: "cleanlz4 rejects a zero match offset; the oracle accepts it",
         section: "Block format, Compressed block format (offset)",
+    },
+    Normalization {
+        id: "end-of-block-room",
+        what: "cleanlz4 rejects a block whose last match leaves fewer than five final literals; the oracle accepts some such blocks when its output buffer has spare room",
+        section: "Block format, End of block conditions",
     },
 ];
 
@@ -60,6 +65,7 @@ pub fn normalization_for(ours: &Ours, theirs: &Decoded) -> Option<&'static str> 
             Some("legacy-frame")
         }
         (Err(Error::ZeroOffset), Decoded::Accepted(_)) => Some("zero-offset"),
+        (Err(Error::EndOfBlockViolation), Decoded::Accepted(_)) => Some("end-of-block-room"),
         _ => None,
     }
 }
@@ -172,4 +178,34 @@ pub fn compare_block(input: &[u8], max_output: usize) -> Verdict {
         Err(Rejected) => Decoded::Rejected(String::from("rejected")),
     };
     judge(&ours, &theirs, max_output)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn end_of_block_room_is_a_named_normalization() {
+        let ours = Ours {
+            result: Err(Error::EndOfBlockViolation),
+            kinds: Vec::new(),
+        };
+        let theirs = Decoded::Accepted(vec![1, 2, 3]);
+        assert_eq!(normalization_for(&ours, &theirs), Some("end-of-block-room"));
+        assert_eq!(
+            judge(&ours, &theirs, 1 << 20),
+            Verdict::Agree { accepted: false }
+        );
+        assert!(NORMALIZATIONS.iter().any(|n| n.id == "end-of-block-room"));
+        // The other direction is still a divergence.
+        let ours = Ours {
+            result: Ok(vec![1]),
+            kinds: Vec::new(),
+        };
+        let theirs = Decoded::Rejected(String::from("x"));
+        assert!(matches!(
+            judge(&ours, &theirs, 1 << 20),
+            Verdict::Diverge(_)
+        ));
+    }
 }

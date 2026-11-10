@@ -102,10 +102,118 @@ Phase 1 report: every rule implemented so far, the section it implements, the fu
 - `legacy-frame` (Frame format, "Legacy frame"; spike `docs/spikes/P2-09.md`): the oracle's frame decoder rejects a legacy frame as an unknown frame type while cleanlz4 decodes it. In frame differentials, a cleanlz4 accept whose `kinds` contains `Legacy` against an oracle reject is `Agree`. Held by `crates/oracle/tests/diff.rs` `an_unlisted_disagreement_is_diverge`, `legacy_normalization_requires_a_legacy_frame` and `every_probe_is_agree_or_a_named_normalization`.
 - `zero-offset` (Block format, "Compressed block format", offset): carried over from the block rule above and applied in both block and frame comparisons. Held by `zero_offset_block_is_agree_through_its_named_normalization`, `every_probe_is_agree_or_a_named_normalization` and `tests/eob.rs`.
 - Dict-ID retry (Frame format, "Dictionary ID": the dictionary "can also be passed off-band"): the oracle accepts a frame with a Dict-ID and no dictionary, so when cleanlz4 reports `DictionaryRequired` the comparison re-runs it with an empty dictionary with no id and compares that result. Held by `dictionary_required_is_retried_with_an_empty_dictionary`.
+- `end-of-block-room` (Block format, "End of block conditions": "a conformant decoder is allowed to reject the block as incorrect"; cleanlz4's own measurement, P4-09): cleanlz4 enforces rules 1 and 2, so a block whose final literal run after a match is under five bytes is `EndOfBlockViolation`. The oracle accepts some such blocks, only when its output buffer has spare room: with a final run of four literals it accepted every match length from 19 up at a capacity of 65,536 bytes of slack and rejected all of them at exact capacity, and with three literals it accepted a match of 300 (probe over match lengths 4 to 300, offsets 1 and 8, final runs of 0 to 4). The acceptance depends on the buffer, not on the block, as for rule 3 in `docs/spikes/P1-06.md`. A cleanlz4 `EndOfBlockViolation` against an oracle accept is `Agree` in block and frame comparisons. Held by `end_of_block_room_is_a_named_normalization` and the 100 inputs under `testdata/regressions/`.
 - Output cap: both sides run under `diff.max_output_bytes`; either side over the cap is `Skipped("output-cap")`. Block comparisons give the oracle 65,536 bytes of slack capacity (docs/spikes/P1-06.md). Held by `an_unlisted_disagreement_is_diverge`, `compare_block_agrees_on_the_p1_06_probes`, `compare_block_skips_when_only_the_oracle_goes_over_the_cap`.
 - Every other disagreement, including different outputs when both accept, is `Diverge`. Held by `unequal_outputs_are_reported_as_diverge`.
 
 ## Divergence triage
+
+Runs of P4-04 to P4-08 (`testdata/results/fuzz-*-P4-0[4-8].json`): `no_panic_block` 20,681,767 runs, `no_panic_frame` 101,577,396, `no_panic_stream` 21,051,494, `diff_roundtrip` 58,050, `diff_accept` 21,607,948. Crashes: 0 in all five. Divergences: 0 in the four targets other than `diff_accept`; `diff_accept` reached the `fuzz.max_divergence_files` cap of 100 (all found in the first 1,900 s).
+
+All 100 divergence inputs are one case: a compressed block that ends with a final literal run of four bytes after a long match (match length 19 or more in every input), so the block breaks end-of-block rule 2. cleanlz4 (policy from P1-07) returns `EndOfBlockViolation` in `compare_block`; the oracle accepts it. `compare_frame` agrees on every input (both reject: the bytes are not a frame). The Block format says a decoder "is allowed to reject" such a block, and the oracle's acceptance depends on spare output room (see `end-of-block-room` under Differential rules), so the resolution is (2), a permitted choice recorded as a normalization, and not a cleanlz4 defect. Each input is copied to `testdata/regressions/diff_accept-<name>` and indexed; the inputs stay in `testdata/results/divergences/` as the fuzzer wrote them. Re-run of `diff_accept` for the full duration (`testdata/results/fuzz-diff_accept-P4-09.json`, with the 100 originals moved aside so the divergence file cap could not hide a new one): 16,184,756 runs, 0 crashes, 0 divergences.
+
+| File | Target | cleanlz4 | Oracle | Deciding text | Resolution |
+|---|---|---|---|---|---|
+| `diff_accept-02b3652175cdf639.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 579 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-03ee50efd2dc5559.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1663 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-048b222bfed1725e.bin` (343 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 85064 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-057015f600db7f8e.bin` (139 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 33044 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-05ba3c4c052cec03.bin` (21 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 2954 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-06082e22b45cc0f1.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1807 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-079ba90af3e3155d.bin` (32 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 5759 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-09bd8b20f2e3c275.bin` (125 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 29474 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-0a8a93117b436934.bin` (10 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 149 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-0b9d4ae1947b471d.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1679 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-0c59d4d3326ef5ab.bin` (11 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 360 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-0cee45892073cc75.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1679 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-0ea910a8848dbcb0.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 579 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-0ec206c9661523dd.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1679 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-1085e2d656d4a7de.bin` (32 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 5730 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-134a2b78a4cc89ca.bin` (135 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 32024 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-192c85e71818b88a.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 537 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-1f00c99755d64f64.bin` (182 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 44009 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-201f7d2b3916d357.bin` (32 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 5759 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-20a2e258d9268a74.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1679 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-221fbed2694fcebd.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 659 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-23b629d2b2d31039.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1679 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-246f4b9829f7f7cc.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 537 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-2738f28a4274ccce.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 659 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-2c28e0e3a4233ec8.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-2c8704d62c85706f.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-2de17a744c3a892a.bin` (233 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 57014 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-3127caf68ca3dade.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-3a0c726fcabbbf1c.bin` (32 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 5759 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-3d749dca3c7bbdd9.bin` (135 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 32024 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-3df0a14974a4c0a7.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1679 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-431182c6c3e4799c.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 659 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-45554640b4613ed6.bin` (142 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 33809 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-4695e36e526c01af.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-4896920f7c6df033.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 579 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-4bedfa8e8dd95081.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 659 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-50785c0618193b56.bin` (53 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 11114 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-53ea5b71b8902cbc.bin` (14 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1169 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-55ee379aae94ab27.bin` (291 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 71804 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-5a2e15e6005f00ff.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1679 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-61df67e57d09c7d4.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-6357bab80a60767c.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-64a8284ea6f7133f.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 579 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-6993cdc1cba09c1e.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-6d49f3d86401eee8.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-6d79316f274c7e4a.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1679 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-6edbceb77c228f1a.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1679 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-6f04999187b4718c.bin` (34 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 6269 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-6ff758817a3c4f5e.bin` (105 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 24374 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-74c281d14bbe4949.bin` (109 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 25394 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-7683a89583d7b942.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 579 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-7b3cef1f1c0fc0b5.bin` (75 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 16724 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-7c452e741ff7fb5f.bin` (135 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 32024 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-7d98646845c0ee39.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-7f8ef1a2db66d926.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 579 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-83f101713fd204b5.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 597 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-85d64691640c1286.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1578 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-895d0aee79025d8b.bin` (73 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 16214 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-89a42370315cd7e8.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 659 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-8c53dfa920d21cc8.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1679 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-8f5b5464ddbeaa70.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-8fc94445c3ecc3a4.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 537 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-958a287464f7afc5.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1679 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-983c465813fce04e.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 659 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-986ec2b18aa99f70.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 537 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-9bbbfba094049327.bin` (135 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 32024 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-a00df93def996566.bin` (285 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 70274 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-a4eff031fbfc890f.bin` (20 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 2699 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-a5adbcb0883bef17.bin` (32 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 5759 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-a8d44d208b2d6ffb.bin` (104 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 24119 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-ac721f918745f46f.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1679 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-b02b3045b6c03997.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-b04ac8cd5f93e3e0.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-b56c8d8216a7677d.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-b651bdf6c660732b.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 659 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-bbecb1a6715c1d60.bin` (125 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 29474 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-bd60a49ac1c7c58c.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 595 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-be065c5f92db4878.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-befa74903c6f6cb7.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1679 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-bf2bec56eeceaeed.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 916 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-c1ceec2b70be2c5b.bin` (92 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 21059 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-c2703e6bb4b87e02.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 659 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-c33e601d6d686969.bin` (10 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 201 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-c57354f804af5468.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 579 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-c5ffa4c4d365be8f.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-c9a8ccc96666880c.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-d70e63b828ec010b.bin` (16 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 1679 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-d82434c5e3b51b26.bin` (200 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 48599 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-d9d7a4f140f5183f.bin` (30 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 5249 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-e37cfc5894085788.bin` (32 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 5759 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-e48df48eaa6f6d28.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 659 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-e7692743a545b8e2.bin` (29 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 4994 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-e7a74280d898165d.bin` (18 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 2189 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-ed2d6d30c6f38d33.bin` (113 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 26414 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-ed5d1df8d2846582.bin` (12 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 659 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-f05fc63775cb3112.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 900 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-f16706bf6d5ff97e.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-f2a22ba93678ebcd.bin` (19 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 2444 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-f4698c73893221d8.bin` (214 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 52169 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
+| `diff_accept-fbfe04d41d9fbf88.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
 
 ## Measurements
 
