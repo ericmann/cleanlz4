@@ -1,7 +1,10 @@
 //! Frame tests with frames built by hand from the Frame format document.
 
 use cleanlz4::xxh32::xxh32;
-use cleanlz4::{decompress_frame, DecodeOptions, Error, TrailingData, DEFAULT_MAX_OUTPUT_BYTES};
+use cleanlz4::{
+    decompress_frame, decompress_frame_with, DecodeOptions, Error, TrailingData,
+    DEFAULT_MAX_OUTPUT_BYTES,
+};
 
 const MAGIC: [u8; 4] = [0x04, 0x22, 0x4D, 0x18];
 
@@ -205,4 +208,96 @@ fn history_reaches_back_65535_bytes_across_blocks() {
     blocks.push((false, match_block(65_535, 8)));
     let out = decompress_frame(&frame_with(LINKED, &blocks)).expect("ok");
     assert_eq!(&out[3 * 65_536..3 * 65_536 + 8], &big[1..9]);
+}
+
+const BLOCK_CHECKSUM: u8 = 0x10;
+const CONTENT_CHECKSUM: u8 = 0x04;
+
+/// A frame with block checksums (computed per block) and a content checksum
+/// for `content`; `tamper_*` adds to the stored values to make them wrong.
+fn checked_frame(
+    blocks: &[(bool, Vec<u8>)],
+    content: &[u8],
+    tamper_block: u32,
+    tamper_content: u32,
+) -> Vec<u8> {
+    let mut f = header(flg(BLOCK_CHECKSUM | CONTENT_CHECKSUM), bd(4));
+    for (uncompressed, data) in blocks {
+        f.extend_from_slice(&block_word(data.len(), *uncompressed));
+        f.extend_from_slice(data);
+        f.extend_from_slice(&xxh32(data, 0).wrapping_add(tamper_block).to_le_bytes());
+    }
+    f.extend_from_slice(&[0, 0, 0, 0]);
+    f.extend_from_slice(&xxh32(content, 0).wrapping_add(tamper_content).to_le_bytes());
+    f
+}
+
+fn without_checks() -> DecodeOptions {
+    DecodeOptions {
+        verify_checksums: false,
+        ..DecodeOptions::default()
+    }
+}
+
+#[test]
+fn block_checksum_mismatch_is_rejected() {
+    let blocks = [(false, literal_block(b"abc")), (true, b"def".to_vec())];
+    let good = checked_frame(&blocks, b"abcdef", 0, 0);
+    assert_eq!(decompress_frame(&good).expect("ok"), b"abcdef");
+    let bad = checked_frame(&blocks, b"abcdef", 1, 0);
+    assert_eq!(decompress_frame(&bad), Err(Error::BlockChecksumMismatch));
+}
+
+#[test]
+fn content_checksum_mismatch_is_rejected() {
+    let blocks = [(true, b"abc".to_vec())];
+    let bad = checked_frame(&blocks, b"abc", 0, 1);
+    assert_eq!(decompress_frame(&bad), Err(Error::ContentChecksumMismatch));
+    // The checksum covers the decoded bytes, not the stored ones.
+    let wrong_content = checked_frame(&blocks, b"abd", 0, 0);
+    assert_eq!(
+        decompress_frame(&wrong_content),
+        Err(Error::ContentChecksumMismatch)
+    );
+}
+
+#[test]
+fn empty_block_still_carries_a_block_checksum() {
+    let blocks = [(true, vec![]), (true, b"x".to_vec())];
+    let good = checked_frame(&blocks, b"x", 0, 0);
+    assert_eq!(decompress_frame(&good).expect("ok"), b"x");
+    let bad = checked_frame(&blocks, b"x", 1, 0);
+    assert_eq!(decompress_frame(&bad), Err(Error::BlockChecksumMismatch));
+    // Without the four bytes after the empty block the frame does not parse.
+    let mut f = header(flg(BLOCK_CHECKSUM), bd(4));
+    f.extend_from_slice(&block_word(0, true));
+    f.extend_from_slice(&[0, 0, 0, 0]);
+    assert!(decompress_frame(&f).is_err());
+}
+
+#[test]
+fn verification_off_accepts_bad_checksums_and_reports_it() {
+    let blocks = [(true, b"abc".to_vec())];
+    let bad = checked_frame(&blocks, b"abc", 1, 1);
+    let out = decompress_frame_with(&bad, &without_checks()).expect("ok");
+    assert_eq!(out.data, b"abc");
+    assert!(!out.checksums_verified);
+    let good = checked_frame(&blocks, b"abc", 0, 0);
+    let out = decompress_frame_with(&good, &DecodeOptions::default()).expect("ok");
+    assert!(out.checksums_verified);
+    // The checksum bytes are still consumed: a truncated one is an error.
+    assert_eq!(
+        decompress_frame_with(&bad[..bad.len() - 1], &without_checks()),
+        Err(Error::TruncatedInput)
+    );
+}
+
+#[test]
+fn verification_off_still_rejects_a_bad_header_checksum() {
+    let mut f = frame(&[(true, b"abc".to_vec())]);
+    f[6] ^= 0xFF;
+    assert_eq!(
+        decompress_frame_with(&f, &without_checks()),
+        Err(Error::BadHeaderChecksum)
+    );
 }

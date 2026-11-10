@@ -2,7 +2,7 @@
 
 use crate::block::decode_block;
 use crate::error::{Error, Result};
-use crate::xxh32::xxh32;
+use crate::xxh32::{xxh32, Xxh32};
 use crate::{DecodeOptions, FrameKind, FrameOutput};
 
 /// The frame magic number, read little-endian (Frame format, "Magic Number").
@@ -171,6 +171,10 @@ pub(crate) struct FrameState {
     /// The last `WINDOW` bytes of this frame's decoded output; kept only when
     /// blocks are linked.
     history: Vec<u8>,
+    /// Whether block and content checksums are compared.
+    verify: bool,
+    /// XXH32 of the decoded bytes so far (fed only when verifying).
+    content_hash: Xxh32,
 }
 
 /// The LZ4 window (Frame format, "Block Independence flag": "up to LZ4 window
@@ -179,11 +183,23 @@ const WINDOW: usize = 64 << 10;
 
 impl FrameState {
     /// Start a frame from its parsed descriptor.
-    pub(crate) fn new(desc: FrameDescriptor) -> Self {
+    pub(crate) fn new(desc: FrameDescriptor, verify: bool) -> Self {
         FrameState {
             desc,
             history: Vec::new(),
+            verify,
+            content_hash: Xxh32::new(0),
         }
+    }
+
+    /// Check a block's stored checksum against its raw data, before the block
+    /// is decoded (Frame format, "Block checksum"). `data` is the block as
+    /// stored, compressed or not.
+    pub(crate) fn verify_block_checksum(&self, data: &[u8], stored: u32) -> Result<()> {
+        if self.verify && xxh32(data, 0) != stored {
+            return Err(Error::BlockChecksumMismatch);
+        }
+        Ok(())
     }
 
     /// Remember decoded bytes for the next linked block, keeping the last `WINDOW`.
@@ -215,7 +231,7 @@ impl FrameState {
         }
         if header.uncompressed {
             out.extend_from_slice(data);
-            self.remember(data);
+            self.produced(data);
             return Ok(());
         }
         let mut block = Vec::new();
@@ -232,12 +248,26 @@ impl FrameState {
             Err(e) => return Err(e),
         }
         out.extend_from_slice(&block);
-        self.remember(&block);
+        self.produced(&block);
         Ok(())
     }
 
-    /// End the frame after its EndMark.
-    pub(crate) fn finish(&mut self) -> Result<()> {
+    /// Account for newly decoded bytes: history and the content checksum.
+    fn produced(&mut self, block: &[u8]) {
+        self.remember(block);
+        if self.verify && self.desc.content_checksum {
+            self.content_hash.update(block);
+        }
+    }
+
+    /// End the frame after its EndMark, with the stored content checksum when
+    /// the descriptor has one (Frame format, "Content Checksum").
+    pub(crate) fn finish(&mut self, stored_content_checksum: Option<u32>) -> Result<()> {
+        if let Some(stored) = stored_content_checksum {
+            if self.verify && self.content_hash.digest() != stored {
+                return Err(Error::ContentChecksumMismatch);
+            }
+        }
         Ok(())
     }
 }
@@ -251,9 +281,9 @@ fn skip(input: &[u8], pos: usize, n: usize) -> Result<usize> {
 }
 
 /// Decode a complete input slice holding one regular frame.
-pub(crate) fn decode_frames(input: &[u8], _options: &DecodeOptions) -> Result<FrameOutput> {
+pub(crate) fn decode_frames(input: &[u8], options: &DecodeOptions) -> Result<FrameOutput> {
     let (desc, header_len) = parse_frame_descriptor(input)?;
-    let mut state = FrameState::new(desc);
+    let mut state = FrameState::new(desc, options.verify_checksums);
     let mut out = Vec::new();
     let mut pos = header_len;
     loop {
@@ -270,22 +300,25 @@ pub(crate) fn decode_frames(input: &[u8], _options: &DecodeOptions) -> Result<Fr
         let data = input.get(pos..end).ok_or(Error::TruncatedInput)?;
         pos = end;
         if state.descriptor().block_checksum {
-            // Read and skipped here; verified by a later task.
+            let stored = read_u32_le(input, pos).ok_or(Error::TruncatedInput)?;
             pos = skip(input, pos, 4)?;
+            state.verify_block_checksum(data, stored)?;
         }
         state.decode_data_block(header, data, &mut out)?;
     }
+    let mut stored_content = None;
     if state.descriptor().content_checksum {
+        stored_content = Some(read_u32_le(input, pos).ok_or(Error::TruncatedInput)?);
         pos = skip(input, pos, 4)?;
     }
-    state.finish()?;
+    state.finish(stored_content)?;
     if pos < input.len() {
         return Err(Error::TrailingData);
     }
     Ok(FrameOutput {
         data: out,
         consumed: pos,
-        checksums_verified: true,
+        checksums_verified: options.verify_checksums,
         descriptors: vec![desc],
         kinds: vec![FrameKind::Regular],
     })
