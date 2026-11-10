@@ -42,8 +42,8 @@ Started: 2026-11-10T00:53:38.909Z
 - [-] P3-03 Chunking-invariance property test
 - [x] P3-04 The output limit and bounded memory
 - [x] P3-05 Tune limits.max_output_bytes
-- [ ] P3-06 Tune stream.chunking_cases
-- [ ] P3-07 Phase 3 end: push and record the manual check
+- [-] P3-06 Tune stream.chunking_cases
+- [x] P3-07 Phase 3 end: push and record the manual check
 - [ ] P4-01 Fuzz targets (a): no panic on arbitrary bytes
 - [ ] P4-02 Fuzz targets (b) and (c): differential
 - [ ] P4-03 The fuzz runner, its results writer and regression replay
@@ -211,3 +211,11 @@ frame.rs: block_bound/limit_error helpers; FrameState::decode_data_block(header,
 ### P3-05 — 0d5cee5
 
 Measurement (limit_probe, release): 1 MiB -> 0.0 ms, peak 8 B; 64 MiB -> 548.2 ms, peak 83,886,070 (+16,777,206); default 1 GiB -> 5,947.8 ms, peak 1,090,519,030 (+16,777,206). Key unchanged (1073741824): the excess is 10 bytes under the 16 MiB criterion. REVIEWER NOTE: excess exceeds the bound P3-04 wrote down (limit + one block + 64 KiB); likely the linked-history Vec keeps a 4 MiB-block capacity after trimming plus scratch and output growth; fixing it is a decoder change this task disallowed. Config key tuned: no.
+
+### P3-06 — skipped
+
+SKIPPED: depends on P3-03
+
+### P3-07 — 9cfff5f
+
+Push: done. Manual check: NOT VERIFIED (human): read the streaming API in crates/cleanlz4/src/stream.rs for ergonomics; confirm DESIGN.md's Measurements has the limit table and the chunking coverage table; run cargo test -p oracle --test limits and watch the bomb test's peak figure. CAUTION: the chunking coverage table does not exist: P3-02, P3-03 and P3-06 were auto-skipped (they depend on skipped P2-08), so streaming does not yet handle skippable or legacy frames, dictionaries or the trailing-data policy beyond the regular-frame boundary, and stream.chunking_cases was not tuned.
