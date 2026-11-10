@@ -1162,3 +1162,91 @@ Derived from docs/SPEC.md v0.1 on 2026-11-09. SPEC.md wins over this file.
 - **§5.2 does not say whether the corpora are committed.** Resolution: they are not (size); the manifest's hashes stand in for them, so the conformance results can be reproduced only on a machine that fetches the same archives.
 - **`lockdown.after` is P0-03, but the oracle and fuzz crates need downloads.** Resolution: all dependencies are resolved in P0-01 and cargo is switched offline at the end of P0-03; a dependency discovered to be missing later blocks its task.
 - **§1 names a "Kūkulu 0.7.x signed bundle"**; the installed plugin and §7's guard path are 0.8.0. No plan impact.
+
+## Review fixes (round 1)
+
+### R1-01: Spike binary reads the differential cap from the config
+
+**Goal:** Stop writing diff.max_output_bytes as a literal in crates/oracle/src/bin/probe_frame.rs and add a test that catches the next large config value spelled in oracle code (REVIEW F1).
+**Files touched:** crates/oracle/src/bin/probe_frame.rs, crates/oracle/tests/config.rs
+**Design constraints:** CLAUDE.md constraint 10 and SPEC §3.5: every value in testdata/config.json is read from the config, never written elsewhere. Replace `const CAP: usize = 1 << 26;` with `Config::load()` and `cfg.diff.max_output_bytes`. Change nothing else in the spike binary's output. The invariants apply.
+**Acceptance tests:** crates/oracle/tests/config.rs: `large_config_values_are_not_spelled_in_oracle_sources`. Take every numeric leaf of testdata/config.json that is at least 1,000,000. Assert that no file under crates/oracle/src/ or crates/oracle/examples/ (except crates/oracle/src/config.rs) contains its decimal form (with or without `_` separators), or, for a power of two 2^n, `1 << n` or `1<<n`. The test must fail on the current probe_frame.rs line 6.
+**Out of scope:** docs/kukulu.json (protected); the spike's recorded table in docs/spikes/P2-09.md; other binaries' behaviour.
+**Verification:** kukulu_verify with the files touched; `cargo run -p oracle --bin probe_frame` still prints the probe table.
+**Depends on:** none
+
+### R1-02: Hold the output limit to its memory bound, and test it past several blocks
+
+**Goal:** Make the one-shot and streaming paths' peak allocation stay within the limit plus one block plus 65,536 bytes (plus the input and any dictionary), at any limit, not only at powers of two (REVIEW F2).
+**Files touched:** crates/cleanlz4/src/frame.rs, crates/cleanlz4/src/block.rs, crates/cleanlz4/tests/limits.rs, crates/oracle/tests/limits.rs, crates/oracle/examples/limit_probe.rs, docs/DESIGN.md
+**Design constraints:** SPEC §1 property 3, §2 (output limit goal), §8 Phase 3. Today frame.rs:278 grows the one-shot output by amortized doubling, with no cap at the allowance: at a 72 MiB limit the peak was 150,994,934 bytes. frame.rs:233-235 extends the history by a whole block before draining it, and Vec keeps the capacity. The per-block scratch Vec can overshoot its bound.
+Required: the output's capacity never exceeds bytes already decoded plus the remaining allowance. Grow it geometrically, capped at that, with try_reserve_exact or similar; never reserve the whole allowance up front. The history never holds more than 65,536 bytes of capacity beyond one block, so trim before extending. Any per-block buffer stays within the block bound. Nothing is ever reserved from a header field (content size included).
+The one-shot and streaming outputs must not change: every existing test, and `make conformance-check` when it is active, stays green. Follow the design-note and tuning protocols. Replace DESIGN.md's bound sentence with the measured one. State the accounting: a reallocation counts only its size change. Re-measure `limit_probe` at 1 MiB, 64 MiB, 75,497,472 (72 MiB) and `default` under that accounting, and replace the P3-05 table rows. The invariants apply.
+**Acceptance tests:** Give the counting allocator in crates/oracle/tests/limits.rs (and in limit_probe.rs) a `realloc` that forwards to `System.realloc` and adds or subtracts only the size difference.
+New crates/oracle/tests/limits.rs `bomb_peak_allocation_is_bounded_past_several_blocks`: the oracle's frame of 64 MiB of zeros with 4 MiB blocks, both linked and independent, decoded one-shot and streamed (64 KiB output buffer) with limit = 3 * 4 MiB + 1. The decode fails with OutputLimitExceeded after three whole blocks. Peak stays under limit + 4 MiB + 65,536 + the frame's length + 1 MiB. This fails on today's code (output capacity 16 MiB, plus the scratch block and history).
+New crates/cleanlz4/tests/limits.rs `one_shot_output_capacity_never_exceeds_the_limit`: a hand-built frame of four uncompressed 4 MiB blocks decoded with max_output_bytes equal to its 16 MiB output, and the same data truncated to 12 MiB + 1 bytes with the limit equal to that length. Each returned `data.capacity()` is at most the limit.
+The existing `bomb_peak_allocation_is_bounded` keeps passing.
+**Out of scope:** Changing `limits.max_output_bytes` or DEFAULT_MAX_OUTPUT_BYTES; streaming API changes; dictionary semantics (P2-08).
+**Verification:** kukulu_verify with the files touched (runs `make conformance-check` once P2-12 has run); `cargo run --release -p oracle --example limit_probe -- 1048576 67108864 75497472 default` and quote its table in DESIGN.md and the log.
+**Depends on:** none
+
+### R1-03: Test the differential module's normalizations and cap rule
+
+**Goal:** Make crates/oracle/tests/diff.rs hold the zero-offset normalization, the legacy-frame normalization's Legacy-kind guard and compare_block's oracle-over-cap rule. Each one survived a mutant (REVIEW F3).
+**Files touched:** crates/oracle/tests/diff.rs, docs/DESIGN.md
+**Design constraints:** SPEC §6.4 ("the differential test encodes it"), §1 property 2.
+Three mutants of crates/oracle/src/diff.rs survived `cargo test --workspace`:
+- deleting the `(Err(Error::ZeroOffset), Decoded::Accepted(_)) => Some("zero-offset")` arm (line 62);
+- deleting `Ok(v) if v.len() > max_output => Decoded::OverCap` in compare_block (line 170);
+- widening `ours.kinds.contains(&FrameKind::Legacy)` to `!ours.kinds.is_empty()` (line 59).
+tests/eob.rs keeps its own inline zero-offset exception and never reaches diff.rs. Change diff.rs only if a test exposes a real defect. Correct DESIGN.md's Differential rules "Held by" lists to name the new tests.
+**Acceptance tests:** crates/oracle/tests/diff.rs:
+- `zero_offset_block_is_agree_through_its_named_normalization`: a crafted block with a zero offset that the oracle accepts (build it with craft::build_block; if no crafted form is accepted, use a corruption of a small oracle block, as tests/eob.rs's sweep found). compare_block gives Agree { accepted: false }, normalization_for names "zero-offset", and the same block inside a hand-built frame through compare_frame_using gives (Agree, Some("zero-offset")).
+- `legacy_normalization_requires_a_legacy_frame`: judge of cleanlz4 Ok with kinds [Regular] and with [Skippable, Regular] against an oracle reject is Diverge.
+- `compare_block_skips_when_only_the_oracle_goes_over_the_cap`: a block the oracle accepts with more than max_output bytes while cleanlz4 rejects it with a non-limit error (for example a zero offset followed by a long match) gives Skipped("output-cap").
+Each test must fail under the mutant it targets.
+**Out of scope:** New normalizations; changing cleanlz4's verdicts; tests/eob.rs's own loop.
+**Verification:** kukulu_verify with the files touched; kukulu_mutate of each of the three mutants above is killed.
+**Depends on:** none
+
+### R1-04: Assert the Dict-ID probe's fixed verdict once dictionaries exist
+
+**Goal:** Replace the Dict-ID probe exemption in every_probe_is_agree_or_a_named_normalization with a direct check that cleanlz4 itself returns DictionaryRequired.
+**Files touched:** crates/oracle/tests/diff.rs
+**Design constraints:** SPEC §6.2 (dictionary required); PLAN P2-09's fixed verdict "Dict-ID without a dictionary → reject". tests/diff.rs:51-54 skips the verdict check for the "Dict-ID and no dictionary" probe because P2-08 had not run. Through compare_frame the retry with an empty dictionary makes the verdict "accepted" by design, so the check for this probe must call cleanlz4 directly, not read the comparison's verdict.
+**Acceptance tests:** crates/oracle/tests/diff.rs `every_probe_is_agree_or_a_named_normalization`: for the "Dict-ID and no dictionary" probe, `cleanlz4::decompress_frame_with(&p.bytes, &DecodeOptions::default())` is `Err(Error::DictionaryRequired)`, and the comparison is still Agree. Every other probe keeps its fixed-verdict assertion. This fails before P2-08 and passes after it.
+**Out of scope:** diff.rs's retry rule; docs/spikes/P2-09.md (a record).
+**Verification:** kukulu_verify with the files touched.
+**Depends on:** P2-08
+
+### R1-05: Streaming ReturnRemainder leaves a trailing magic prefix to the caller
+
+**Goal:** Under TrailingData::ReturnRemainder, make the streaming decoder leave the caller exactly the bytes the one-shot path leaves unconsumed, even when the trailing run begins with one to three bytes of a known magic number (REVIEW F4).
+**Files touched:** crates/cleanlz4/src/stream.rs, crates/cleanlz4/tests/stream.rs, docs/DESIGN.md
+**Design constraints:** SPEC §6.1 (trailing-data policy: return the remainder), §2 (identical however chunked); Frame format, "Frame Concatenation". Today stream.rs:323-344 pushes each magic-prefix byte into `buf` and advances `pos`. After a frame, a tail of `04 22 4D 00 AA` therefore ends with three tail bytes reported as consumed, while decompress_frame_with stops before them.
+Choose the mechanism: do not report prefix bytes as consumed until the magic is confirmed, or expose the held-back bytes. Record the choice in DESIGN.md with its section. Keep P3-02's other boundary rules and every existing stream test unchanged in result. Under TrailingData::Error the result stays TrailingData. The invariants apply.
+**Acceptance tests:** crates/cleanlz4/tests/stream.rs `return_remainder_leaves_a_trailing_magic_prefix_unconsumed`: a valid frame followed by each of these tails: `04 22 4D 00 AA` (regular-magic prefix), `50 2A 4D 00` (skippable prefix), `02 21 4C 00` (legacy prefix) and `04` alone with end_of_input. Feed each whole, bytewise, and in random splits; the harness keeps unconsumed bytes and re-presents them with the next piece. Under ReturnRemainder, the bytes left to the caller equal `input[one_shot.consumed..]` of decompress_frame_with with the same options, and the decoded bytes are equal. The lone `04` with end_of_input is TruncatedInput on both paths, as P2-06 decided.
+**Out of scope:** The one-shot path's rules; changing which tails are TruncatedInput.
+**Verification:** kukulu_verify with the files touched (runs `make conformance-check`).
+**Depends on:** P3-02
+
+### R1-06: Frame suites: every level meets every block size
+
+**Goal:** Reorder P2-10's 64 flag combinations so the compression level `frame_levels[i % len]` meets every block size as well as both values of every other flag, as PLAN P2-10 intended (REVIEW F5).
+**Files touched:** crates/oracle/src/corpus.rs, crates/oracle/tests/corpus.rs, testdata/MANIFEST.json, docs/DESIGN.md, docs/EVIDENCE.md
+**Design constraints:** SPEC §6.3; PLAN P2-10 ("so every level meets every flag value"). Today corpus.rs:147-160 varies block_size_id fastest, so with four levels each level is tied to one block size. Pick an order in which block size is not the fastest-varying flag. Generation stays deterministic from fuzz.seed. Regenerate with `make corpus` and commit the new MANIFEST.json. Replace DESIGN.md's P2-10 interpretation with the new rule.
+If testdata/results/conformance-P2-12.json exists when this task runs: write a fresh full result, `make conformance TASK=<this task's id> CATEGORIES=all`, in the same commit (results protocol), and add it to docs/EVIDENCE.md. If that run would take more than ten minutes in the foreground, block instead (no extraVerify entry exists for it).
+**Acceptance tests:** crates/oracle/tests/corpus.rs `every_frame_level_meets_every_block_size`: in the synthetic and frames-cantrbry suites, every (level, block_size_id) pair from conformance.frame_levels × 4..=7 appears, and every level appears with both values of linked, block checksum, content checksum and content size. This fails on today's manifest. The existing corpus tests stay green.
+**Out of scope:** frames-silesia's sampled combinations; decoder changes; P2-11's suites.
+**Verification:** kukulu_verify with the files touched; `make corpus` and `make conformance-check` exit zero; `cargo test -p oracle --test results` passes.
+**Depends on:** none
+
+### R1-07: Refresh the evidence index after the reopened tasks
+
+**Goal:** Bring docs/EVIDENCE.md's evidence list, Results table and Done checklist up to date with the result files the reopened tasks wrote.
+**Files touched:** docs/EVIDENCE.md, README.md
+**Design constraints:** SPEC §1 (Done means), §5.4, §3.6; PLAN P5-01's layout. Read every tracked file under testdata/results/ and quote its headline counts. Re-state each of SPEC §1's five Done items as met, not met or owed to the summarize stage, with its file. Name any task still blocked or skipped. Add testdata/malformed/index.json to the fenced list if it now exists. Do not call kukulu_similarity or kukulu_attest.
+**Acceptance tests:** crates/oracle/tests/results.rs `evidence_index_lists_every_result_file` passes, and every path in the fenced list exists.
+**Out of scope:** The similarity score, the attestation bundle, SUMMARY.md.
+**Verification:** kukulu_verify with the files touched.
+**Depends on:** P2-12, P2-13, P4-09

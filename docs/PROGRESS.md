@@ -18,7 +18,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-07 Align the end-of-block policy with the oracle
 - [x] P1-08 Dictionary-prefixed block decoding
 - [x] P1-09 Synthetic inputs and block round-trip tests against the oracle
-- [!] P1-10 Oracle dictionary blocks and the dictionary differential test
+- [ ] P1-10 Oracle dictionary blocks and the dictionary differential test
 - [x] P1-11 Conformance generator: the block suite and the manifest's entries
 - [x] P1-12 Conformance runner and the results for category block
 - [x] P1-13 DESIGN.md: the Phase 1 spec-rule report
@@ -30,35 +30,42 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P2-05 Content size
 - [x] P2-06 Concatenated frames, skippable frames and trailing data
 - [x] P2-07 The legacy frame
-- [-] P2-08 Preset dictionary and Dict-ID
+- [ ] P2-08 Preset dictionary and Dict-ID
 - [x] P2-09 Spike: the oracle's frame behaviour, and the differential compare module
 - [x] P2-10 Conformance generator: oracle-compressed frame suites
-- [-] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
-- [-] P2-12 The full conformance run and its results
-- [-] P2-13 The malformed corpus and its results
+- [ ] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
+- [ ] P2-12 The full conformance run and its results
+- [ ] P2-13 The malformed corpus and its results
 - [x] P2-14 Phase 2 end: push and record the manual check
 - [x] P3-01 Streaming decoder: regular frames
-- [-] P3-02 Streaming decoder: skippable, legacy and concatenated frames, dictionaries and trailing data
-- [-] P3-03 Chunking-invariance property test
+- [ ] P3-02 Streaming decoder: skippable, legacy and concatenated frames, dictionaries and trailing data
+- [ ] P3-03 Chunking-invariance property test
 - [x] P3-04 The output limit and bounded memory
 - [x] P3-05 Tune limits.max_output_bytes
-- [-] P3-06 Tune stream.chunking_cases
+- [ ] P3-06 Tune stream.chunking_cases
 - [x] P3-07 Phase 3 end: push and record the manual check
-- [-] P4-01 Fuzz targets (a): no panic on arbitrary bytes
-- [-] P4-02 Fuzz targets (b) and (c): differential
-- [-] P4-03 The fuzz runner, its results writer and regression replay
-- [-] P4-04 Run no_panic_block for the configured duration
-- [-] P4-05 Run no_panic_frame for the configured duration
-- [-] P4-06 Run no_panic_stream for the configured duration
-- [-] P4-07 Run diff_roundtrip for the configured duration
-- [-] P4-08 Run diff_accept for the configured duration
-- [-] P4-09 Triage crashes and divergences
+- [ ] P4-01 Fuzz targets (a): no panic on arbitrary bytes
+- [ ] P4-02 Fuzz targets (b) and (c): differential
+- [ ] P4-03 The fuzz runner, its results writer and regression replay
+- [ ] P4-04 Run no_panic_block for the configured duration
+- [ ] P4-05 Run no_panic_frame for the configured duration
+- [ ] P4-06 Run no_panic_stream for the configured duration
+- [ ] P4-07 Run diff_roundtrip for the configured duration
+- [ ] P4-08 Run diff_accept for the configured duration
+- [ ] P4-09 Triage crashes and divergences
 - [x] P4-10 Benchmarks against the oracle
 - [x] P4-11 Tune bench.repeats
-- [-] P4-12 Tune fuzz.seconds_per_target
+- [ ] P4-12 Tune fuzz.seconds_per_target
 - [x] P4-13 Phase 4 end: push and record the manual check
 - [x] P5-01 The evidence index and the Done checklist
 - [x] P5-02 Phase 5 end: push and record the manual check
+- [ ] R1-01 Spike binary reads the differential cap from the config
+- [ ] R1-02 Hold the output limit to its memory bound, and test it past several blocks
+- [ ] R1-03 Test the differential module's normalizations and cap rule
+- [ ] R1-04 Assert the Dict-ID probe's fixed verdict once dictionaries exist
+- [ ] R1-05 Streaming ReturnRemainder leaves a trailing magic prefix to the caller
+- [ ] R1-06 Frame suites: every level meets every block size
+- [ ] R1-07 Refresh the evidence index after the reopened tasks
 
 ## Log
 
@@ -279,3 +286,75 @@ docs/EVIDENCE.md written (evidence list: DESIGN.md, 2 spikes, MANIFEST.json, 3 r
 ### P5-02 — 58a26ec
 
 Push: done. Manual check: NOT VERIFIED (human): after the summarize stage, docs/SIMILARITY.md exists with both controls, and node docs/attestation/verify.mjs docs/attestation --key sha256:<owner's fingerprint> passes; the owner runs that verifier from a clean checkout on a second machine; SUMMARY.md quotes the result files, the denial counts and verdicts, the interventions and the similarity scores. HANDOFF.md names docs/EVIDENCE.md's fenced list as the attestation evidence.
+
+### P1-10 — unblocked (round 1)
+
+Round 1 review (docs/REVIEW.md F6): only the oracle's dictionary decoder is missing from the binding, and SPEC §9 Q2 leaves that gap to the owner (REVIEW Spec issues). Redo P1-10 without it. This reason overrides the task's line that a missing LZ4_decompress_safe_usingDict blocks: do not block on that function again, and do not declare it, or any C symbol, in ffi.rs. Build dict::dict_block exactly as written (it needs only compress_frame and decompress_safe), and drop block::decompress_safe_using_dict. Tests in crates/oracle/tests/dict.rs: (1) dict_block_decodes_with_the_oracle_using_the_dictionary: the oracle's decompress_frames of the whole [dict, data] linked frame returns dict followed by data; the oracle applying block 1 as block 2's history is its dictionary decode. (2) cleanlz4_matches_the_oracle_for_every_configured_dictionary_size: decompress_block_with_dict(block, dict) equals data for every dict.sizes_bytes size. (3) at_least_one_block_per_size_is_dictionary_dependent: unchanged. (4) wrong_dictionary_never_panics_and_agrees_with_the_oracle is renamed wrong_dictionary_never_panics_and_never_returns_the_data: for each dictionary-dependent block, the dictionary with every byte inverted gives an error or other bytes, never a panic. DESIGN.md records the method, citing Frame format 'Block Independence flag' and 'Data Blocks', and notes that the oracle cannot decode with a wrong dictionary. For every task reopened with P1-10: a new file under testdata/results/ also goes into docs/EVIDENCE.md's fenced list in the same commit, because crates/oracle/tests/results.rs evidence_index_lists_every_result_file requires it.
+
+### P2-08 — unblocked (round 1)
+
+reopened: it was skipped because of P1-10, which is open again
+
+### P2-11 — unblocked (round 1)
+
+reopened: it was skipped because of P1-10, which is open again
+
+### P2-12 — unblocked (round 1)
+
+reopened: it was skipped because of P2-08, which is open again
+
+### P2-13 — unblocked (round 1)
+
+reopened: it was skipped because of P2-08, which is open again
+
+### P3-02 — unblocked (round 1)
+
+reopened: it was skipped because of P2-08, which is open again
+
+### P3-03 — unblocked (round 1)
+
+reopened: it was skipped because of P3-02, which is open again
+
+### P3-06 — unblocked (round 1)
+
+reopened: it was skipped because of P3-03, which is open again
+
+### P4-01 — unblocked (round 1)
+
+reopened: it was skipped because of P3-02, which is open again
+
+### P4-02 — unblocked (round 1)
+
+reopened: it was skipped because of P4-01, which is open again
+
+### P4-03 — unblocked (round 1)
+
+reopened: it was skipped because of P4-02, which is open again
+
+### P4-04 — unblocked (round 1)
+
+reopened: it was skipped because of P4-03, which is open again
+
+### P4-05 — unblocked (round 1)
+
+reopened: it was skipped because of P4-03, which is open again
+
+### P4-06 — unblocked (round 1)
+
+reopened: it was skipped because of P4-03, which is open again
+
+### P4-07 — unblocked (round 1)
+
+reopened: it was skipped because of P4-03, which is open again
+
+### P4-08 — unblocked (round 1)
+
+reopened: it was skipped because of P4-03, which is open again
+
+### P4-09 — unblocked (round 1)
+
+reopened: it was skipped because of P4-03, which is open again
+
+### P4-12 — unblocked (round 1)
+
+reopened: it was skipped because of P4-03, which is open again
