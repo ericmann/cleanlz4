@@ -24,7 +24,14 @@ fn run() -> Result<(), String> {
             }
             "--only" => {
                 i += 1;
-                only = args.get(i).cloned();
+                // The Canterbury directory is named `cantrbry`; the manifest calls it `canterbury`.
+                only = args.get(i).map(|o| {
+                    if o == "cantrbry" {
+                        String::from("canterbury")
+                    } else {
+                        o.clone()
+                    }
+                });
             }
             other => return Err(format!("unknown argument {other}")),
         }

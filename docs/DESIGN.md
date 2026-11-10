@@ -99,6 +99,18 @@ Phase 1 report: every rule implemented so far, the section it implements, the fu
 
 ## Measurements
 
+### bench.repeats (P4-11)
+
+`bench_decode --only cantrbry` (Canterbury files, release build), three runs at each repeat count; spread is the largest (max - min) / max of `cleanlz4_mb_s` over the three runs, across files.
+
+| repeats | role | spread | worst file |
+|---|---|---|---|
+| 3 | below the key | 9.43% | canterbury/ptt5 (753.9, 753.0, 831.4 MB/s) |
+| 10 | the key (before) | 7.28% | canterbury/sum (595.7, 642.5, 632.6 MB/s) |
+| 30 | three times the key | 7.36% | canterbury/asyoulik.txt (541.5, 581.3, 584.5 MB/s) |
+
+Criterion: change the key only if its spread exceeds 5% and the tripled count's spread is under half of it. The key's spread is above 5%, but the tripled count's (7.36%) is not under half of 7.28%, so `bench.repeats` stays 10: tripling the repeats did not make the figures steadier. The small Canterbury files finish in microseconds, so their rates are dominated by timer and cache noise, not by the repeat count. After (key unchanged): `make bench TASK=P4-11` wrote `testdata/results/bench-P4-11.json`. Scratch runs were not committed.
+
 ### Decode throughput (P4-10)
 
 `make bench TASK=P4-10` (release, `bench.repeats` repeats, best time) wrote `testdata/results/bench-P4-10.json`. cleanlz4 ranged from 413.8 MB/s (silesia/webster) to 2,224.6 MB/s (silesia/x-ray); the oracle from 188.0 MB/s (canterbury/grammar.lsp, small-file overhead) to 1,957.9 MB/s (silesia/x-ray). On the large text-like Silesia files cleanlz4 ran at roughly a third to a half of the oracle's rate; on x-ray and ptt5 it was ahead. The per-file figures are in the result file.
