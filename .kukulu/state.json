@@ -1,197 +1,22 @@
 {
-  "round": 3,
-  "implemented": true,
-  "reviewed": true,
-  "verdict": "APPROVED",
-  "summarized": true,
+  "round": 0,
+  "implemented": false,
+  "reviewed": false,
+  "verdict": null,
+  "summarized": false,
   "halted": null,
   "preexistingUntracked": [],
   "policies": {
     "signing": "auto",
     "push": true,
     "pr": "draft",
-    "feedback": true,
-    "archive": true,
-    "finalize": "auto",
-    "mergeMethod": "merge",
-    "syncBase": true
+    "feedback": true
   },
-  "signing": "on",
-  "rounds": [
-    {
-      "round": 1,
-      "fixTasks": 7,
-      "unblocked": 1,
-      "verdict": "CHANGES REQUESTED",
-      "nonConverging": false,
-      "sources": {
-        "review": 6,
-        "mutation": 0,
-        "blocked": 1
-      },
-      "at": "2026-11-10T01:53:15.729Z"
-    },
-    {
-      "round": 2,
-      "fixTasks": 2,
-      "unblocked": 0,
-      "verdict": "CHANGES REQUESTED",
-      "nonConverging": false,
-      "sources": {
-        "review": 1,
-        "mutation": 1,
-        "blocked": 0
-      },
-      "at": "2026-11-10T02:08:58.603Z"
-    },
-    {
-      "round": 3,
-      "fixTasks": 2,
-      "unblocked": 0,
-      "verdict": "CHANGES REQUESTED",
-      "nonConverging": true,
-      "sources": {
-        "review": 0,
-        "mutation": 0,
-        "blocked": 2
-      },
-      "at": "2026-11-10T02:15:56.796Z"
-    },
-    {
-      "round": 4,
-      "fixTasks": 0,
-      "unblocked": 0,
-      "verdict": "APPROVED",
-      "sources": {
-        "review": 0,
-        "mutation": 0,
-        "blocked": 0
-      },
-      "at": "2026-11-10T09:41:59.571Z"
-    }
-  ],
-  "cleanroom": {
-    "genesis": "14925e9f9d5e69a7fe85534aa0bc4d262884f626389959fa12295d2db51c24e2",
-    "policyHash": "dc6815a9c95ed4abd79f489f6114059d1044f0f84f374ef72f164fe1dba9b740",
-    "guardHash": "f499a625f596d9cb2ffb25e4d5579a26a92ac20c969bb57f70892813bc6c94b6",
-    "loggerHash": "c1e8a950a01be6c24cab4a92b8e7e0c6d687aecbe8888a1f9db3fb6cdc9ff54e",
-    "hooksHash": "3917311222b19bf78a53e094717cf2a3501707478cc0846725e1e7524d4aa228",
-    "cleanroomHash": "5bf2e40efd0faaf935d62e40aee80daa8c9591f4587f2a6486dfb95cb4f0260b"
-  },
-  "timeline": [
-    {
-      "event": "start",
-      "stage": "plan",
-      "round": 0,
-      "at": "2026-11-10T00:06:25.154Z"
-    },
-    {
-      "event": "end",
-      "stage": "plan",
-      "round": 0,
-      "at": "2026-11-10T00:53:28.286Z"
-    },
-    {
-      "event": "start",
-      "stage": "implement",
-      "round": 0,
-      "at": "2026-11-10T00:53:28.286Z"
-    },
-    {
-      "event": "end",
-      "stage": "implement",
-      "round": 0,
-      "at": "2026-11-10T01:36:57.083Z"
-    },
-    {
-      "event": "start",
-      "stage": "review",
-      "round": 0,
-      "at": "2026-11-10T01:36:57.083Z"
-    },
-    {
-      "event": "end",
-      "stage": "review",
-      "round": 0,
-      "at": "2026-11-10T01:53:40.356Z"
-    },
-    {
-      "event": "start",
-      "stage": "implement",
-      "round": 1,
-      "at": "2026-11-10T01:53:40.356Z"
-    },
-    {
-      "event": "end",
-      "stage": "implement",
-      "round": 1,
-      "at": "2026-11-10T02:02:11.721Z"
-    },
-    {
-      "event": "start",
-      "stage": "review",
-      "round": 1,
-      "at": "2026-11-10T02:02:11.721Z"
-    },
-    {
-      "event": "end",
-      "stage": "review",
-      "round": 1,
-      "at": "2026-11-10T02:09:22.576Z"
-    },
-    {
-      "event": "start",
-      "stage": "implement",
-      "round": 2,
-      "at": "2026-11-10T02:09:22.576Z"
-    },
-    {
-      "event": "end",
-      "stage": "implement",
-      "round": 2,
-      "at": "2026-11-10T02:11:33.273Z"
-    },
-    {
-      "event": "start",
-      "stage": "review",
-      "round": 2,
-      "at": "2026-11-10T02:11:33.273Z"
-    },
-    {
-      "event": "end",
-      "stage": "review",
-      "round": 2,
-      "at": "2026-11-10T02:17:16.680Z"
-    },
-    {
-      "event": "start",
-      "stage": "implement",
-      "round": 3,
-      "at": "2026-11-10T02:17:16.680Z"
-    },
-    {
-      "event": "end",
-      "stage": "implement",
-      "round": 3,
-      "at": "2026-11-10T09:30:33.714Z"
-    },
-    {
-      "event": "start",
-      "stage": "review",
-      "round": 3,
-      "at": "2026-11-10T09:30:33.714Z"
-    },
-    {
-      "event": "end",
-      "stage": "review",
-      "round": 3,
-      "at": "2026-11-10T09:42:22.688Z"
-    },
-    {
-      "event": "start",
-      "stage": "summarize",
-      "round": 3,
-      "at": "2026-11-10T09:42:22.688Z"
-    }
-  ]
+  "signing": null,
+  "rounds": [],
+  "archived": {
+    "slug": "cleanlz4",
+    "dir": "docs/flights/cleanlz4",
+    "at": "2026-11-10T09:48:06.379Z"
+  }
 }
