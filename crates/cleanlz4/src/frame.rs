@@ -1,1 +1,296 @@
 //! Frame parsing, block sequencing, checksums and the one-shot driver.
+
+use crate::error::{Error, Result};
+use crate::xxh32::xxh32;
+
+/// The frame magic number, read little-endian (Frame format, "Magic Number").
+const FRAME_MAGIC: u32 = 0x184D_2204;
+
+/// The frame's maximum uncompressed block size (Frame format, "Block Maximum Size").
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum BlockMaxSize {
+    Max64KB,
+    Max256KB,
+    Max1MB,
+    Max4MB,
+}
+
+impl BlockMaxSize {
+    /// The size in bytes.
+    pub fn bytes(self) -> usize {
+        match self {
+            BlockMaxSize::Max64KB => 64 << 10,
+            BlockMaxSize::Max256KB => 256 << 10,
+            BlockMaxSize::Max1MB => 1 << 20,
+            BlockMaxSize::Max4MB => 4 << 20,
+        }
+    }
+
+    /// The BD byte's three-bit value (4 to 7) for this size.
+    fn from_code(code: u8) -> Result<BlockMaxSize> {
+        match code {
+            4 => Ok(BlockMaxSize::Max64KB),
+            5 => Ok(BlockMaxSize::Max256KB),
+            6 => Ok(BlockMaxSize::Max1MB),
+            7 => Ok(BlockMaxSize::Max4MB),
+            _ => Err(Error::InvalidBlockMaxSize),
+        }
+    }
+}
+
+/// A parsed frame descriptor (Frame format, "Frame Descriptor").
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct FrameDescriptor {
+    pub block_max_size: BlockMaxSize,
+    pub block_independence: bool,
+    pub block_checksum: bool,
+    pub content_checksum: bool,
+    pub content_size: Option<u64>,
+    pub dict_id: Option<u32>,
+}
+
+/// FLG bit masks (Frame format, "FLG byte").
+const FLG_DICT_ID: u8 = 1 << 0;
+const FLG_RESERVED: u8 = 1 << 1;
+const FLG_CONTENT_CHECKSUM: u8 = 1 << 2;
+const FLG_CONTENT_SIZE: u8 = 1 << 3;
+const FLG_BLOCK_CHECKSUM: u8 = 1 << 4;
+const FLG_BLOCK_INDEPENDENCE: u8 = 1 << 5;
+/// The version field's value (Frame format, "Version Number").
+const VERSION: u8 = 1;
+/// BD bits that must be zero (Frame format, "BD byte", "Reserved bits").
+const BD_RESERVED: u8 = 0b1000_1111;
+
+fn read_u32_le(input: &[u8], at: usize) -> Option<u32> {
+    let bytes = input.get(at..at.checked_add(4)?)?;
+    let mut a = [0u8; 4];
+    for (d, s) in a.iter_mut().zip(bytes.iter()) {
+        *d = *s;
+    }
+    Some(u32::from_le_bytes(a))
+}
+
+fn read_u64_le(input: &[u8], at: usize) -> Option<u64> {
+    let bytes = input.get(at..at.checked_add(8)?)?;
+    let mut a = [0u8; 8];
+    for (d, s) in a.iter_mut().zip(bytes.iter()) {
+        *d = *s;
+    }
+    Some(u64::from_le_bytes(a))
+}
+
+/// Parse the frame header at the start of `input`, which begins at the magic
+/// number. Returns the descriptor and the header's length (7 to 19 bytes).
+///
+/// The header checksum is always verified: it guards the layout the decoder is
+/// about to trust.
+pub fn parse_frame_descriptor(input: &[u8]) -> Result<(FrameDescriptor, usize)> {
+    let magic = read_u32_le(input, 0).ok_or(Error::TruncatedInput)?;
+    if magic != FRAME_MAGIC {
+        return Err(Error::BadMagic);
+    }
+    let flg = *input.get(4).ok_or(Error::TruncatedInput)?;
+    if flg >> 6 != VERSION {
+        return Err(Error::UnsupportedVersion);
+    }
+    let has_content_size = flg & FLG_CONTENT_SIZE != 0;
+    let has_dict_id = flg & FLG_DICT_ID != 0;
+    // FLG, BD, optional fields, then the checksum byte.
+    let descriptor_len = 2usize
+        .saturating_add(if has_content_size { 8 } else { 0 })
+        .saturating_add(if has_dict_id { 4 } else { 0 });
+    let header_len = 4usize.saturating_add(descriptor_len).saturating_add(1);
+    let descriptor_end = header_len.saturating_sub(1);
+    let descriptor = input.get(4..descriptor_end).ok_or(Error::TruncatedInput)?;
+    let checksum = *input.get(descriptor_end).ok_or(Error::TruncatedInput)?;
+    if flg & FLG_RESERVED != 0 {
+        return Err(Error::ReservedBitSet);
+    }
+    let bd = *input.get(5).ok_or(Error::TruncatedInput)?;
+    if bd & BD_RESERVED != 0 {
+        return Err(Error::ReservedBitSet);
+    }
+    let block_max_size = BlockMaxSize::from_code((bd >> 4) & 0x07)?;
+    if checksum != ((xxh32(descriptor, 0) >> 8) & 0xFF) as u8 {
+        return Err(Error::BadHeaderChecksum);
+    }
+    let mut at = 6usize;
+    let content_size = if has_content_size {
+        let v = read_u64_le(input, at).ok_or(Error::TruncatedInput)?;
+        at = at.saturating_add(8);
+        Some(v)
+    } else {
+        None
+    };
+    let dict_id = if has_dict_id {
+        Some(read_u32_le(input, at).ok_or(Error::TruncatedInput)?)
+    } else {
+        None
+    };
+    Ok((
+        FrameDescriptor {
+            block_max_size,
+            block_independence: flg & FLG_BLOCK_INDEPENDENCE != 0,
+            block_checksum: flg & FLG_BLOCK_CHECKSUM != 0,
+            content_checksum: flg & FLG_CONTENT_CHECKSUM != 0,
+            content_size,
+            dict_id,
+        },
+        header_len,
+    ))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Build a header by the document's layout, with a valid checksum.
+    fn header(flg: u8, bd: u8, size: Option<u64>, dict: Option<u32>) -> Vec<u8> {
+        let mut d = vec![flg, bd];
+        if let Some(s) = size {
+            d.extend_from_slice(&s.to_le_bytes());
+        }
+        if let Some(i) = dict {
+            d.extend_from_slice(&i.to_le_bytes());
+        }
+        let hc = ((xxh32(&d, 0) >> 8) & 0xFF) as u8;
+        let mut h = FRAME_MAGIC.to_le_bytes().to_vec();
+        h.extend(d);
+        h.push(hc);
+        h
+    }
+
+    /// FLG with version 01 and the given flag bits.
+    fn flg(bits: u8) -> u8 {
+        0x40 | bits
+    }
+
+    /// BD with the given Block MaxSize code.
+    fn bd(code: u8) -> u8 {
+        code << 4
+    }
+
+    #[test]
+    fn parses_the_minimal_descriptor() {
+        let h = header(flg(FLG_BLOCK_INDEPENDENCE), bd(4), None, None);
+        assert_eq!(h.len(), 7);
+        let (d, n) = parse_frame_descriptor(&h).expect("ok");
+        assert_eq!(n, 7);
+        assert_eq!(
+            d,
+            FrameDescriptor {
+                block_max_size: BlockMaxSize::Max64KB,
+                block_independence: true,
+                block_checksum: false,
+                content_checksum: false,
+                content_size: None,
+                dict_id: None,
+            }
+        );
+        // Trailing bytes after the header are left alone.
+        let mut longer = h.clone();
+        longer.extend_from_slice(&[1, 2, 3]);
+        assert_eq!(parse_frame_descriptor(&longer).expect("ok").1, 7);
+    }
+
+    #[test]
+    fn parses_content_size_and_dictionary_id() {
+        let bits = FLG_CONTENT_SIZE | FLG_DICT_ID | FLG_BLOCK_CHECKSUM | FLG_CONTENT_CHECKSUM;
+        let h = header(
+            flg(bits),
+            bd(7),
+            Some(0x0102_0304_0506_0708),
+            Some(0xA1B2_C3D4),
+        );
+        assert_eq!(h.len(), 19);
+        let (d, n) = parse_frame_descriptor(&h).expect("ok");
+        assert_eq!(n, 19);
+        assert_eq!(d.content_size, Some(0x0102_0304_0506_0708));
+        assert_eq!(d.dict_id, Some(0xA1B2_C3D4));
+        assert_eq!(d.block_max_size, BlockMaxSize::Max4MB);
+        assert!(d.block_checksum && d.content_checksum && !d.block_independence);
+        let h = header(flg(FLG_CONTENT_SIZE), bd(5), Some(9), None);
+        assert_eq!(parse_frame_descriptor(&h).expect("ok").1, 15);
+        let h = header(flg(FLG_DICT_ID), bd(6), None, Some(1));
+        assert_eq!(parse_frame_descriptor(&h).expect("ok").1, 11);
+    }
+
+    #[test]
+    fn rejects_a_bad_magic() {
+        let mut h = header(flg(0), bd(4), None, None);
+        h[0] ^= 1;
+        assert_eq!(parse_frame_descriptor(&h), Err(Error::BadMagic));
+        assert_eq!(
+            parse_frame_descriptor(&[0, 0, 0, 0, 0x40, 0x40, 0]),
+            Err(Error::BadMagic)
+        );
+    }
+
+    #[test]
+    fn rejects_versions_other_than_01() {
+        for version in [0u8, 2, 3] {
+            let h = header((version << 6) | FLG_BLOCK_INDEPENDENCE, bd(4), None, None);
+            assert_eq!(
+                parse_frame_descriptor(&h),
+                Err(Error::UnsupportedVersion),
+                "version {version}"
+            );
+        }
+    }
+
+    #[test]
+    fn rejects_the_reserved_flg_bit() {
+        let h = header(flg(FLG_RESERVED), bd(4), None, None);
+        assert_eq!(parse_frame_descriptor(&h), Err(Error::ReservedBitSet));
+    }
+
+    #[test]
+    fn rejects_reserved_bd_bits() {
+        for bit in [0x80u8, 0x08, 0x04, 0x02, 0x01] {
+            let h = header(flg(0), bd(4) | bit, None, None);
+            assert_eq!(
+                parse_frame_descriptor(&h),
+                Err(Error::ReservedBitSet),
+                "bit {bit:#x}"
+            );
+        }
+    }
+
+    #[test]
+    fn rejects_block_max_size_values_0_to_3() {
+        for code in 0u8..=3 {
+            let h = header(flg(0), bd(code), None, None);
+            assert_eq!(
+                parse_frame_descriptor(&h),
+                Err(Error::InvalidBlockMaxSize),
+                "code {code}"
+            );
+        }
+    }
+
+    #[test]
+    fn rejects_a_bad_header_checksum() {
+        let mut h = header(flg(0), bd(4), None, None);
+        let last = h.len() - 1;
+        h[last] ^= 0x55;
+        assert_eq!(parse_frame_descriptor(&h), Err(Error::BadHeaderChecksum));
+        // A flipped descriptor bit breaks it too.
+        let mut h = header(flg(0), bd(4), None, None);
+        h[5] ^= 0x10;
+        assert_eq!(parse_frame_descriptor(&h), Err(Error::BadHeaderChecksum));
+    }
+
+    #[test]
+    fn every_truncation_of_a_full_header_is_truncated_input() {
+        let bits = FLG_CONTENT_SIZE | FLG_DICT_ID;
+        let h = header(flg(bits), bd(7), Some(5), Some(6));
+        for cut in 0..h.len() {
+            assert_eq!(
+                parse_frame_descriptor(&h[..cut]),
+                Err(Error::TruncatedInput),
+                "cut {cut}"
+            );
+        }
+        assert!(parse_frame_descriptor(&h).is_ok());
+    }
+}
