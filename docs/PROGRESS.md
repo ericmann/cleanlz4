@@ -9,7 +9,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P0-02 Verify docs/spec against SOURCES.json
 - [x] P0-03 Fetch the corpora, write MANIFEST.json and go offline
 - [x] P0-04 Phase 0 end: push and record the manual check
-- [ ] P1-01 Oracle FFI: the block functions
+- [x] P1-01 Oracle FFI: the block functions
 - [ ] P1-02 Oracle FFI: frame compression and decompression
 - [ ] P1-03 The typed error enum
 - [ ] P1-04 XXH32, one-shot and streaming
@@ -79,3 +79,7 @@ Lockdown: network off from this commit. Archive SHA-256: cantrbry.tar.gz f140e8a
 ### P0-04 — 4a0c1cd
 
 Push: done (origin, build branch). Manual check: NOT VERIFIED (human): make check is green on the empty crates; the guard self-test passes; testdata/MANIFEST.json names both corpora, the binding crate's version and the lz4 CLI's version; .cargo/config.toml sets net.offline
+
+### P1-01 — 559d84d
+
+oracle::ffi has compress_bound/compress_default/compress_hc/decompress_safe (safe slice APIs, c_int); oracle::block has Rejected, compress_default, compress_hc(src, level), compress_bound, decompress_safe(src, capacity). Binding signatures guessed from convention, compiled first time. Tests: tests/ffi_block.rs x4.
