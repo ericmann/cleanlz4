@@ -25,7 +25,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-14 Phase 1 end: push and record the manual check
 - [x] P2-01 Frame descriptor parsing and introspection
 - [x] P2-02 Options, and one regular frame with independent blocks
-- [ ] P2-03 Linked blocks
+- [x] P2-03 Linked blocks
 - [ ] P2-04 Block and content checksums
 - [ ] P2-05 Content size
 - [ ] P2-06 Concatenated frames, skippable frames and trailing data
@@ -143,3 +143,7 @@ frame.rs: BlockMaxSize{bytes()}, FrameDescriptor (Copy), parse_frame_descriptor(
 ### P2-02 — d111b34
 
 lib.rs: Dictionary, TrailingData, FrameKind, DecodeOptions(Default), FrameOutput, decompress_frame, decompress_frame_with. frame.rs: BlockHeader/parse_block_header/END_MARK, FrameState{new, descriptor, decode_data_block(header,data,&mut out), finish()}, decode_frames(input,&options) (single frame; TrailingData for extra bytes; block/content checksums skipped; compressed blocks decoded via scratch Vec with dict &[] so P2-03 only needs to add history). Block size field is checked before the data is requested. Tests: cleanlz4/tests/frame.rs x9, oracle/tests/frame.rs x1.
+
+### P2-03 — a6a49f9
+
+FrameState keeps a 65,536-byte history (Vec, drained front) when linked; remember() called after every block; compressed blocks decode with history as dict. Independent frames keep none. Oracle linked round trips pass for all synth inputs and block sizes. Tests: 4 new cleanlz4 + 1 oracle.
