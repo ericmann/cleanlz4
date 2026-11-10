@@ -19,11 +19,13 @@ pub(crate) struct EndOfBlockPolicy {
     pub(crate) last_match_twelve_from_end: bool,
 }
 
-/// Strict: every rule is enforced.
+/// The policy, as observed in `docs/spikes/P1-06.md`: rules 1 and 2 are
+/// enforced; rule 3 is not, because the reference decoder accepts such blocks
+/// whenever the output buffer has room.
 const EOB: EndOfBlockPolicy = EndOfBlockPolicy {
     last_sequence_is_literals_only: true,
     last_five_are_literals: true,
-    last_match_twelve_from_end: true,
+    last_match_twelve_from_end: false,
 };
 
 /// Rule 2: the minimum size of the final literal run after a match.
@@ -342,7 +344,7 @@ mod tests {
         let mut b = seq(b"abcd", Some((4, 12)));
         b.extend(seq(b"WXYZ", None));
         assert_eq!(decode(&b), Err(Error::EndOfBlockViolation));
-        // Only rule 2 is at work: with it off, the block decodes.
+        // Rule 2 alone is at work here: with it off, the block decodes.
         let mut d = Vec::new();
         let mut p = EOB;
         p.last_five_are_literals = false;
@@ -351,16 +353,22 @@ mod tests {
 
     #[test]
     fn rule_3_last_match_within_twelve_bytes_of_the_end() {
+        // The oracle accepts these (docs/spikes/P1-06.md), so the default
+        // policy accepts them; the check itself still works when switched on.
         let mut b = seq(b"abcd", Some((4, 4)));
         b.extend(seq(b"12345", None));
-        assert_eq!(decode(&b), Err(Error::EndOfBlockViolation));
+        assert_eq!(decode(&b).expect("ok"), b"abcdabcd12345");
         let mut d = Vec::new();
         let mut p = EOB;
-        p.last_match_twelve_from_end = false;
-        decode_block_with(&b, &mut d, 1 << 20, p).expect("ok without rule 3");
+        p.last_match_twelve_from_end = true;
+        assert_eq!(
+            decode_block_with(&b, &mut d, 1 << 20, p),
+            Err(Error::EndOfBlockViolation)
+        );
         // Exactly twelve bytes from the match's start to the end is accepted.
         let mut b = seq(b"abcd", Some((4, 7)));
         b.extend(seq(b"12345", None));
-        assert!(decode(&b).is_ok());
+        let mut d = Vec::new();
+        decode_block_with(&b, &mut d, 1 << 20, p).expect("twelve is enough");
     }
 }

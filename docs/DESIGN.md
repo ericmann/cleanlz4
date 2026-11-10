@@ -21,14 +21,17 @@
 - Safe decoding (Block format, "Implementation notes", Large lengths and Safe decoding): lengths are summed with `checked_add`; an overflow, or output that would pass the limit, is `OutputLimitExceeded`, checked before any byte is copied. Running out of input inside a length, literals or offset is `TruncatedInput`, and so is an empty block. Held by `output_limit_is_enforced_before_copying`, `truncation_in_length_literals_and_offset_is_rejected`.
 - End of block rule 1 (Block format, "End of block conditions", 1): a block that ends right after a match is `EndOfBlockViolation`. Held by `rule_1_block_ending_after_a_match`.
 - End of block rule 2 (Block format, "End of block conditions", 2): a block with a match whose final literal run is under 5 bytes is `EndOfBlockViolation`; a literals-only block may be any length, including the single zero token for empty input. Held by `rule_2_fewer_than_five_final_literals`, `single_zero_token_is_the_empty_block`.
-- End of block rule 3 (Block format, "End of block conditions", 3): fewer than 12 bytes of the block's output from the last match's start to the end is `EndOfBlockViolation`. Held by `rule_3_last_match_within_twelve_bytes_of_the_end`.
-- The three rules sit behind one private policy constant, all on, so a later task may relax one in a single place. The document permits rejection ("a conformant decoder is allowed to reject the block as incorrect"); strictness is the default.
+- End of block rule 3 (Block format, "End of block conditions", 3): the check (fewer than 12 bytes of the block's output from the last match's start to the end) exists but is switched off by default; see the P1-07 entry below. Held by `rule_3_last_match_within_twelve_bytes_of_the_end`.
+- The three rules sit behind one private policy constant so a rule is relaxed in a single place. The document permits rejection ("a conformant decoder is allowed to reject the block as incorrect"), not requires it.
+- Policy decision (P1-07, from `docs/spikes/P1-06.md`, Policy): rule 1 enforced, rule 2 enforced, rule 3 not enforced (the oracle accepts rule 3 shapes given room in the output buffer; Block format, "End of block conditions": a decoder "is allowed to reject"), empty input rejected as `TruncatedInput`, the single byte 0x00 accepted as the empty block, and the final token's low four bits ignored. Held by `crates/oracle/tests/eob.rs` `end_of_block_probes_agree_with_the_oracle`, `every_prefix_of_small_oracle_blocks_agrees`, `single_byte_corruptions_of_small_oracle_blocks_agree`.
 - The low four bits of the final token are ignored: the document sets no requirement on them (Block format, "End of block conditions", 1).
 - The oracle's end-of-block behaviour was observed as a black box in `docs/spikes/P1-06.md` (cleanlz4's own measurement through `crates/oracle`): it rejects rule 1 and rule 2 violations and the empty input, accepts the single zero byte and any final-token low nibble, and rejects rule 3 shapes only at exact output capacity. Differential tests therefore decode the oracle side with slack capacity. Held by `crates/oracle/tests/craft.rs` (the builder) and the spike's table.
 
 ## Spec rules implemented
 
 ## Differential rules
+
+- Zero offset (Block format, "Compressed block format": "0 is an invalid `offset` value ... denotes an invalid (corrupted) block"): the oracle accepted a corrupted block whose offset became 0 (found by `single_byte_corruptions_of_small_oracle_blocks_agree`), while cleanlz4 returns `ZeroOffset`. In block differentials, cleanlz4 `ZeroOffset` against an oracle accept is allowed; every other accept/reject pair must agree. Decoding on the oracle side uses the original length plus 65,536 bytes of capacity (P1-06).
 
 ## Divergence triage
 
