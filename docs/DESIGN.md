@@ -297,6 +297,10 @@ Inputs slower by more than 7.28% (information only): 7 of 23. The first run of t
 
 `make conformance TASK=P2-01 CATEGORIES=all` wrote `testdata/results/conformance-P2-01.json`: 2349 of 2349 passed, 0 failed, `corpus_sha256` fd6392a28a4b239780f073ad70015c93f589163e4d232a9dd11502c24c93ba05. Per category (total, all passed): block 156, checksums 301, concatenated 6, content-size 401, dictionary 72, frame-independent 45, frame-linked 53, legacy 14, skippable 21, synthetic 1280. Identical to P2-12 apart from the task name.
 
+### Decode throughput, 0.2.0 (P2-09)
+
+`make bench TASK=P2-09` wrote `testdata/results/bench-P2-09.json` over 23 corpus files at the current `bench.repeats`. cleanlz4: slowest silesia/webster at 410.9 MB/s, fastest silesia/x-ray at 2,275 MB/s, aggregate (total decoded bytes over the sum of each input's best time) 559.6 MB/s. The oracle: slowest canterbury/grammar.lsp at 185.8 MB/s, fastest silesia/x-ray at 1,983.4 MB/s. There is no target and no judgement against one.
+
 ### bench.repeats (P4-11)
 
 `bench_decode --only cantrbry` (Canterbury files, release build), three runs at each repeat count; spread is the largest (max - min) / max of `cleanlz4_mb_s` over the three runs, across files.

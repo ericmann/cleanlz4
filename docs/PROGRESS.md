@@ -25,7 +25,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P2-06 Run diff_roundtrip for the configured duration
 - [x] P2-07 Run diff_accept for the configured duration
 - [x] P2-08 Triage crashes and divergences
-- [ ] P2-09 The final benchmark
+- [~] P2-09 The final benchmark
 - [ ] P2-10 Phase 2 end: push and record the manual check
 - [ ] P3-01 The CHANGELOG entry for 0.2.0 and the crate versions
 - [ ] P3-02 Refresh EVIDENCE.md and README.md
