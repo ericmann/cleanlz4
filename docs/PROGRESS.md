@@ -65,7 +65,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] R1-04 Assert the Dict-ID probe's fixed verdict once dictionaries exist
 - [x] R1-05 Streaming ReturnRemainder leaves a trailing magic prefix to the caller
 - [x] R1-06 Frame suites: every level meets every block size
-- [ ] R1-07 Refresh the evidence index after the reopened tasks
+- [x] R1-07 Refresh the evidence index after the reopened tasks
 - [x] R2-01 Test that a legacy frame's output capacity stays within the limit
 - [x] R2-02 Test the frame-combination generator itself, and the manifest against it
 - [ ] R3-01 Streaming decoder: skippable, legacy and concatenated frames and the trailing-data policy (no dictionaries)
@@ -634,3 +634,7 @@ tests/diff.rs: the Dict-ID probe now asserts cleanlz4::decompress_frame_with(def
 ### R1-05 — 256714b
 
 New public Decoder::remainder(): bytes of a partial magic taken before a mismatch under ReturnRemainder; caller's remainder = remainder() + unconsumed input = one-shot input[consumed..]. Chose exposing over not-consuming (the latter would stall fixed-window one-byte feeders and existing harnesses); DESIGN updated (replaces the P3-02 limitation). Test return_remainder_leaves_a_trailing_magic_prefix_unconsumed passes (3 tails x whole, 1,2,3 bytes and 20 random splits; lone 04 is TruncatedInput both paths; default policy TrailingData). make conformance-check 2349/2349.
+
+### R1-07 — 0007813
+
+EVIDENCE.md: results table covers every tracked result file (read from the files: conformance 2349/2349, malformed 144/144 0 panics, five fuzz targets 3,601 s 0 crashes, diff_accept P4-08 100 divergences then P4-09 re-run 0); fenced list sorted and complete incl. malformed index and the 100 divergence inputs; Done items 1 and 3 met, 2/4/5 owed to summarize; no blocked or skipped tasks. README updated. evidence_index test passes.
