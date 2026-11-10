@@ -65,7 +65,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [-] R1-04 Assert the Dict-ID probe's fixed verdict once dictionaries exist
 - [-] R1-05 Streaming ReturnRemainder leaves a trailing magic prefix to the caller
 - [x] R1-06 Frame suites: every level meets every block size
-- [ ] R1-07 Refresh the evidence index after the reopened tasks
+- [-] R1-07 Refresh the evidence index after the reopened tasks
 
 ## Log
 
@@ -454,3 +454,7 @@ SKIPPED: depends on P3-02
 ### R1-06 — 6a268e6
 
 New order in corpus::frame_combos (hi=i/4 gives flags, block size = 4+(hi+lo)%4, lo=i%4 picks the level with 4 levels). Test every_frame_level_meets_every_block_size failed before regeneration, passes after. make corpus regenerated MANIFEST.json (corpus_sha256 ddeb0232... -> 110a2d51...); make conformance-check 2236/2236; results test passes. No conformance-P2-12.json exists, so no fresh run; EVIDENCE.md unchanged. DESIGN.md P2-10 entry replaced.
+
+### R1-07 — skipped
+
+SKIPPED: depends on P2-12
