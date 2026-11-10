@@ -1,0 +1,897 @@
+{
+  "config": {
+    "subject": [
+      "crates/cleanlz4/src"
+    ],
+    "pairs": [
+      {
+        "id": "independent-vs-c",
+        "role": "negative",
+        "left": "/home/ericmann/Projects/prior-art/lz4_flex/src",
+        "right": "/home/ericmann/Projects/prior-art/lz4/lib"
+      },
+      {
+        "id": "derived-vs-c",
+        "role": "positive",
+        "left": "/home/ericmann/Projects/prior-art/c2rust-lz4/src",
+        "right": "/home/ericmann/Projects/prior-art/lz4/lib",
+        "control": null
+      },
+      {
+        "id": "subject-vs-c",
+        "role": "test",
+        "left": "subject",
+        "right": "/home/ericmann/Projects/prior-art/lz4/lib"
+      },
+      {
+        "id": "subject-vs-indep",
+        "role": "test",
+        "left": "subject",
+        "right": "/home/ericmann/Projects/prior-art/lz4_flex/src"
+      }
+    ],
+    "languages": {
+      ".rs": "rust",
+      ".c": "c",
+      ".h": "c",
+      ".cc": "cpp",
+      ".cpp": "cpp",
+      ".cxx": "cpp",
+      ".hpp": "cpp",
+      ".go": "go",
+      ".py": "python",
+      ".js": "javascript",
+      ".mjs": "javascript",
+      ".cjs": "javascript",
+      ".ts": "typescript",
+      ".java": "java",
+      ".php": "php"
+    },
+    "ngram": [
+      5,
+      10
+    ],
+    "minIdentLen": 6,
+    "commentNgram": 5,
+    "identExclusions": null,
+    "near": 0.25,
+    "separationMargin": 0
+  },
+  "files": [
+    {
+      "pair": "independent-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/compress.rs",
+      "sha256": "08225a806718562f053637f32e2aa7020897d569aba01b6357c7e44b747b55b1",
+      "bytes": 39129,
+      "language": "rust"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/decompress.rs",
+      "sha256": "e1c00de65ae0c8f94105b7f7dcf1ea12eba87368fb40b29eedc61716ab3d99b9",
+      "bytes": 24330,
+      "language": "rust"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/decompress_safe.rs",
+      "sha256": "0cd498a960055366fa5549b12329c85aa080def5f088111d76327382c1d817b5",
+      "bytes": 18526,
+      "language": "rust"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/hashtable.rs",
+      "sha256": "5b7cebc20eef3153b359a54528a30df31f61fcb38ea59350b592a0b02e8ac997",
+      "bytes": 5690,
+      "language": "rust"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/mod.rs",
+      "sha256": "9f48789c8a13510bea3407ec22115d8d6dea0ff614ed741dba2293ffe0a2b66f",
+      "bytes": 6195,
+      "language": "rust"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/fastcpy.rs",
+      "sha256": "c3dbe266822f115c526de7a50c4073f1f9ec26e7838ac7959443ca040cb15440",
+      "bytes": 4062,
+      "language": "rust"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/fastcpy_unsafe.rs",
+      "sha256": "cfbd64aa10a1511490ea4d67855e9b038bedafd7739335de7e062c23db1576f3",
+      "bytes": 4999,
+      "language": "rust"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/compress.rs",
+      "sha256": "e7f3b609aa20d07cea89890b006ba5ee2327fb8c3486aa3db26896cfdc6e7750",
+      "bytes": 18596,
+      "language": "rust"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/decompress.rs",
+      "sha256": "de1e237c3d7419259f47a3cec3ae0f2bf005ff59a21d929460c98bb0770a163e",
+      "bytes": 17571,
+      "language": "rust"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/header.rs",
+      "sha256": "c9926623a51e20325e717df62bdf1ad0ca24b787e7e04e8122a38d8a28587cc4",
+      "bytes": 13521,
+      "language": "rust"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/mod.rs",
+      "sha256": "97f44388951671638b517c3eeeef45a291d85bf9e51446847574b97a6c33e295",
+      "bytes": 3560,
+      "language": "rust"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/lib.rs",
+      "sha256": "a61ef4b28733e7bdd1b758387dece2d8be72059155f9b87d87916b464329b923",
+      "bytes": 5163,
+      "language": "rust"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/sink.rs",
+      "sha256": "563b4358c3185b8fc1e89ff4924b235c513a5da861e81c2c557dc29158efbc38",
+      "bytes": 10339,
+      "language": "rust"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4.c",
+      "sha256": "45061782ff932eb8cf71c3aea9495cec0d392f012395272e0550e30c8593c740",
+      "bytes": 126402,
+      "language": "c"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4.h",
+      "sha256": "6fee8f913ce3bc65bf716060f65ce890d83bea905445256c7a56da5bf4824d73",
+      "bytes": 44365,
+      "language": "c"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4file.c",
+      "sha256": "a2ceba67630ac8b3751380a56dee18d9f4f0368131628f9198464ef1d4594142",
+      "bytes": 21958,
+      "language": "c"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4file.h",
+      "sha256": "610f434c232e86880315f20f8305e8aa048c2918d5c73fe8649ba50b89756387",
+      "bytes": 6797,
+      "language": "c"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4frame.c",
+      "sha256": "d8f0567cfab22507acf4847e0cadf34e57c9f9e31a00b4f1f2f77fd54f111f23",
+      "bytes": 158084,
+      "language": "c"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4frame.h",
+      "sha256": "dfceed0f276a4139a1f49ae77113ebc1eb2d3900ea224711dcd1b7a0eb5f1e5f",
+      "bytes": 47820,
+      "language": "c"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4frame_static.h",
+      "sha256": "ddcaf4c055dbddf8778cdc8520cfde26f765bcb4012d97da9ab898f52bbfa578",
+      "bytes": 2054,
+      "language": "c"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4hc.c",
+      "sha256": "2511d51c3026999536b8cb56806a7f1b6a5bd8a81295a02ff2e1efc10ab071aa",
+      "bytes": 96913,
+      "language": "c"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4hc.h",
+      "sha256": "a92a509858c3b79afb033bfa64335d633802884e5c1d5a15aaa54cdb3e9e5103",
+      "bytes": 18575,
+      "language": "c"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/xxhash.c",
+      "sha256": "9c5498e00479217d7573b2474397a4248127f013f24d9ef98de0281d2dd30d89",
+      "bytes": 34168,
+      "language": "c"
+    },
+    {
+      "pair": "independent-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/xxhash.h",
+      "sha256": "aefdd236f35130495c18764cabed3f7b216906855fc5e6a9025cd2040bc84444",
+      "bytes": 13466,
+      "language": "c"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/c2rust-lz4/src/lz4.rs",
+      "sha256": "dc587167c359889f6988476e47aed0121b8fbbd78e666d3230f6808bfa1f1e39",
+      "bytes": 156595,
+      "language": "rust"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/c2rust-lz4/src/lz4frame.rs",
+      "sha256": "091236355f356be33a17d0537ffefbcd08d617e3a9bc42d6246484f09972f156",
+      "bytes": 181750,
+      "language": "rust"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/c2rust-lz4/src/lz4hc.rs",
+      "sha256": "138712cfa26cd5441eb2d79f1f197b069c1d5855ccf2d847eb21fa02ccc424f2",
+      "bytes": 140363,
+      "language": "rust"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/c2rust-lz4/src/xxhash.rs",
+      "sha256": "591592b612d81ffe15d1dea2a70ef5f8dd751ba1797103979c4c4741b6064426",
+      "bytes": 69246,
+      "language": "rust"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4.c",
+      "sha256": "45061782ff932eb8cf71c3aea9495cec0d392f012395272e0550e30c8593c740",
+      "bytes": 126402,
+      "language": "c"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4.h",
+      "sha256": "6fee8f913ce3bc65bf716060f65ce890d83bea905445256c7a56da5bf4824d73",
+      "bytes": 44365,
+      "language": "c"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4file.c",
+      "sha256": "a2ceba67630ac8b3751380a56dee18d9f4f0368131628f9198464ef1d4594142",
+      "bytes": 21958,
+      "language": "c"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4file.h",
+      "sha256": "610f434c232e86880315f20f8305e8aa048c2918d5c73fe8649ba50b89756387",
+      "bytes": 6797,
+      "language": "c"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4frame.c",
+      "sha256": "d8f0567cfab22507acf4847e0cadf34e57c9f9e31a00b4f1f2f77fd54f111f23",
+      "bytes": 158084,
+      "language": "c"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4frame.h",
+      "sha256": "dfceed0f276a4139a1f49ae77113ebc1eb2d3900ea224711dcd1b7a0eb5f1e5f",
+      "bytes": 47820,
+      "language": "c"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4frame_static.h",
+      "sha256": "ddcaf4c055dbddf8778cdc8520cfde26f765bcb4012d97da9ab898f52bbfa578",
+      "bytes": 2054,
+      "language": "c"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4hc.c",
+      "sha256": "2511d51c3026999536b8cb56806a7f1b6a5bd8a81295a02ff2e1efc10ab071aa",
+      "bytes": 96913,
+      "language": "c"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4hc.h",
+      "sha256": "a92a509858c3b79afb033bfa64335d633802884e5c1d5a15aaa54cdb3e9e5103",
+      "bytes": 18575,
+      "language": "c"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/xxhash.c",
+      "sha256": "9c5498e00479217d7573b2474397a4248127f013f24d9ef98de0281d2dd30d89",
+      "bytes": 34168,
+      "language": "c"
+    },
+    {
+      "pair": "derived-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/xxhash.h",
+      "sha256": "aefdd236f35130495c18764cabed3f7b216906855fc5e6a9025cd2040bc84444",
+      "bytes": 13466,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/block.rs",
+      "sha256": "11470ccad48902f95a5c34c4b08b0e2a7676191e135e0c68bed9899b83babac5",
+      "bytes": 17707,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/error.rs",
+      "sha256": "f3f7c957e0809103db70b55bbfac0cdb1d908a3aeb1c9a12577ab4756779f8a9",
+      "bytes": 4738,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/frame.rs",
+      "sha256": "2e23ae07aee0e8e69ea862dcad944d86e0fc0fe7c2b5be46c3d197ac858b20aa",
+      "bytes": 27078,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/lib.rs",
+      "sha256": "d75b321c6094d35d068c2cef22ed26629d7f800b144b2cacd08f714a3511f3f4",
+      "bytes": 3216,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/stream.rs",
+      "sha256": "b3997501a376030d3f890d6ccef21cef64b9e9414e3a301c28b3a7587ed72d5b",
+      "bytes": 18179,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/xxh32.rs",
+      "sha256": "3351028549c33df3d671dedd39c082c36ac1452612dcbeb312955ae61b8b55b3",
+      "bytes": 5726,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4.c",
+      "sha256": "45061782ff932eb8cf71c3aea9495cec0d392f012395272e0550e30c8593c740",
+      "bytes": 126402,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4.h",
+      "sha256": "6fee8f913ce3bc65bf716060f65ce890d83bea905445256c7a56da5bf4824d73",
+      "bytes": 44365,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4file.c",
+      "sha256": "a2ceba67630ac8b3751380a56dee18d9f4f0368131628f9198464ef1d4594142",
+      "bytes": 21958,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4file.h",
+      "sha256": "610f434c232e86880315f20f8305e8aa048c2918d5c73fe8649ba50b89756387",
+      "bytes": 6797,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4frame.c",
+      "sha256": "d8f0567cfab22507acf4847e0cadf34e57c9f9e31a00b4f1f2f77fd54f111f23",
+      "bytes": 158084,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4frame.h",
+      "sha256": "dfceed0f276a4139a1f49ae77113ebc1eb2d3900ea224711dcd1b7a0eb5f1e5f",
+      "bytes": 47820,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4frame_static.h",
+      "sha256": "ddcaf4c055dbddf8778cdc8520cfde26f765bcb4012d97da9ab898f52bbfa578",
+      "bytes": 2054,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4hc.c",
+      "sha256": "2511d51c3026999536b8cb56806a7f1b6a5bd8a81295a02ff2e1efc10ab071aa",
+      "bytes": 96913,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4hc.h",
+      "sha256": "a92a509858c3b79afb033bfa64335d633802884e5c1d5a15aaa54cdb3e9e5103",
+      "bytes": 18575,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/xxhash.c",
+      "sha256": "9c5498e00479217d7573b2474397a4248127f013f24d9ef98de0281d2dd30d89",
+      "bytes": 34168,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/xxhash.h",
+      "sha256": "aefdd236f35130495c18764cabed3f7b216906855fc5e6a9025cd2040bc84444",
+      "bytes": 13466,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/block.rs",
+      "sha256": "11470ccad48902f95a5c34c4b08b0e2a7676191e135e0c68bed9899b83babac5",
+      "bytes": 17707,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/error.rs",
+      "sha256": "f3f7c957e0809103db70b55bbfac0cdb1d908a3aeb1c9a12577ab4756779f8a9",
+      "bytes": 4738,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/frame.rs",
+      "sha256": "2e23ae07aee0e8e69ea862dcad944d86e0fc0fe7c2b5be46c3d197ac858b20aa",
+      "bytes": 27078,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/lib.rs",
+      "sha256": "d75b321c6094d35d068c2cef22ed26629d7f800b144b2cacd08f714a3511f3f4",
+      "bytes": 3216,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/stream.rs",
+      "sha256": "b3997501a376030d3f890d6ccef21cef64b9e9414e3a301c28b3a7587ed72d5b",
+      "bytes": 18179,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/xxh32.rs",
+      "sha256": "3351028549c33df3d671dedd39c082c36ac1452612dcbeb312955ae61b8b55b3",
+      "bytes": 5726,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/compress.rs",
+      "sha256": "08225a806718562f053637f32e2aa7020897d569aba01b6357c7e44b747b55b1",
+      "bytes": 39129,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/decompress.rs",
+      "sha256": "e1c00de65ae0c8f94105b7f7dcf1ea12eba87368fb40b29eedc61716ab3d99b9",
+      "bytes": 24330,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/decompress_safe.rs",
+      "sha256": "0cd498a960055366fa5549b12329c85aa080def5f088111d76327382c1d817b5",
+      "bytes": 18526,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/hashtable.rs",
+      "sha256": "5b7cebc20eef3153b359a54528a30df31f61fcb38ea59350b592a0b02e8ac997",
+      "bytes": 5690,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/mod.rs",
+      "sha256": "9f48789c8a13510bea3407ec22115d8d6dea0ff614ed741dba2293ffe0a2b66f",
+      "bytes": 6195,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/fastcpy.rs",
+      "sha256": "c3dbe266822f115c526de7a50c4073f1f9ec26e7838ac7959443ca040cb15440",
+      "bytes": 4062,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/fastcpy_unsafe.rs",
+      "sha256": "cfbd64aa10a1511490ea4d67855e9b038bedafd7739335de7e062c23db1576f3",
+      "bytes": 4999,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/compress.rs",
+      "sha256": "e7f3b609aa20d07cea89890b006ba5ee2327fb8c3486aa3db26896cfdc6e7750",
+      "bytes": 18596,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/decompress.rs",
+      "sha256": "de1e237c3d7419259f47a3cec3ae0f2bf005ff59a21d929460c98bb0770a163e",
+      "bytes": 17571,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/header.rs",
+      "sha256": "c9926623a51e20325e717df62bdf1ad0ca24b787e7e04e8122a38d8a28587cc4",
+      "bytes": 13521,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/mod.rs",
+      "sha256": "97f44388951671638b517c3eeeef45a291d85bf9e51446847574b97a6c33e295",
+      "bytes": 3560,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/lib.rs",
+      "sha256": "a61ef4b28733e7bdd1b758387dece2d8be72059155f9b87d87916b464329b923",
+      "bytes": 5163,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/sink.rs",
+      "sha256": "563b4358c3185b8fc1e89ff4924b235c513a5da861e81c2c557dc29158efbc38",
+      "bytes": 10339,
+      "language": "rust"
+    }
+  ],
+  "rows": [
+    {
+      "pair": "independent-vs-c",
+      "role": "negative",
+      "metric": "ngram_jaccard@5",
+      "score": 0.04475433760337279,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "independent-vs-c",
+      "role": "negative",
+      "metric": "ngram_containment@5",
+      "score": 0.10428868316644625,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "independent-vs-c",
+      "role": "negative",
+      "metric": "ngram_jaccard@10",
+      "score": 0.0018365061590145577,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "independent-vs-c",
+      "role": "negative",
+      "metric": "ngram_containment@10",
+      "score": 0.006167268351383875,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "independent-vs-c",
+      "role": "negative",
+      "metric": "ident_jaccard",
+      "score": 0.00799543118218161,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "independent-vs-c",
+      "role": "negative",
+      "metric": "ident_match_rate_left",
+      "score": 0.029723991507430998,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "independent-vs-c",
+      "role": "negative",
+      "metric": "comment_jaccard",
+      "score": 0.00025072868022690944,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "derived-vs-c",
+      "role": "positive",
+      "metric": "ngram_jaccard@5",
+      "score": 0.06871811224489796,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "derived-vs-c",
+      "role": "positive",
+      "metric": "ngram_containment@5",
+      "score": 0.14828831928436265,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "derived-vs-c",
+      "role": "positive",
+      "metric": "ngram_jaccard@10",
+      "score": 0.0075838142227026275,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "derived-vs-c",
+      "role": "positive",
+      "metric": "ngram_containment@10",
+      "score": 0.016503528340541772,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "derived-vs-c",
+      "role": "positive",
+      "metric": "ident_jaccard",
+      "score": 0.6820338983050848,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "derived-vs-c",
+      "role": "positive",
+      "metric": "ident_match_rate_left",
+      "score": 0.8475147430497051,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "derived-vs-c",
+      "role": "positive",
+      "metric": "comment_jaccard",
+      "score": 0,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "subject-vs-c",
+      "role": "test",
+      "metric": "ngram_jaccard@5",
+      "score": 0.03517155691484278,
+      "c": -0.39988611276308156,
+      "band": "below negative"
+    },
+    {
+      "pair": "subject-vs-c",
+      "role": "test",
+      "metric": "ngram_containment@5",
+      "score": 0.11365040148239654,
+      "c": 0.2127680849646447,
+      "band": "at or near negative"
+    },
+    {
+      "pair": "subject-vs-c",
+      "role": "test",
+      "metric": "ngram_jaccard@10",
+      "score": 0.0005836674618078465,
+      "c": -0.21798704425159346,
+      "band": "below negative"
+    },
+    {
+      "pair": "subject-vs-c",
+      "role": "test",
+      "metric": "ngram_containment@10",
+      "score": 0.002877517828099587,
+      "c": -0.3182728111265617,
+      "band": "below negative"
+    },
+    {
+      "pair": "subject-vs-c",
+      "role": "test",
+      "metric": "ident_jaccard",
+      "score": 0.012779552715654952,
+      "c": 0.007097698079301179,
+      "band": "at or near negative"
+    },
+    {
+      "pair": "subject-vs-c",
+      "role": "test",
+      "metric": "ident_match_rate_left",
+      "score": 0.06872852233676977,
+      "c": 0.047695001142749535,
+      "band": "at or near negative"
+    },
+    {
+      "pair": "subject-vs-c",
+      "role": "test",
+      "metric": "comment_jaccard",
+      "score": 0.00007027900766041184,
+      "c": null,
+      "band": "not separated"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "role": "test",
+      "metric": "ngram_jaccard@5",
+      "score": 0.22308243727598567,
+      "c": 7.441569716800808,
+      "band": "above positive"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "role": "test",
+      "metric": "ngram_containment@5",
+      "score": 0.48054354539839406,
+      "c": 8.551317588709308,
+      "band": "above positive"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "role": "test",
+      "metric": "ngram_jaccard@10",
+      "score": 0.05229598141466067,
+      "c": 8.779671229815037,
+      "band": "above positive"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "role": "test",
+      "metric": "ngram_containment@10",
+      "score": 0.13236582009258102,
+      "c": 12.209305094257662,
+      "band": "above positive"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "role": "test",
+      "metric": "ident_jaccard",
+      "score": 0.07932011331444759,
+      "c": 0.10581693124535092,
+      "band": "at or near negative"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "role": "test",
+      "metric": "ident_match_rate_left",
+      "score": 0.19243986254295534,
+      "c": 0.19897005527227837,
+      "band": "at or near negative"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "role": "test",
+      "metric": "comment_jaccard",
+      "score": 0.0006811215802020661,
+      "c": null,
+      "band": "not separated"
+    }
+  ],
+  "verdict": "independence not supported: subject-vs-indep: ngram_jaccard@5 is above positive; subject-vs-indep: ngram_containment@5 is above positive; subject-vs-indep: ngram_jaccard@10 is above positive; subject-vs-indep: ngram_containment@10 is above positive",
+  "limits": [
+    "This is a lexical approximation of cleanflate-bench's tree-sitter token method: the same normalization but no parse tree, so a C macro body and a Rust impl-for block are handled by rule rather than by grammar.",
+    "There is no clone detector: copied logic that was renamed and reordered below the n-gram window is not found.",
+    "Cross-language pairs score lower on token metrics by construction, as the bench found: its n-gram metrics did not separate its controls, and its identifier and comment metrics did.",
+    "A structural metric needs a same-language positive control.",
+    "One target library is n = 1: a score is evidence about this subject and this prior art, not a general property."
+  ],
+  "at": "2026-11-10T09:45:13.559Z"
+}

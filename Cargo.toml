@@ -1,0 +1,10 @@
+[workspace]
+members = ["crates/cleanlz4", "crates/oracle"]
+exclude = ["fuzz"]
+resolver = "2"
+
+[profile.dev]
+opt-level = 1
+
+[profile.test]
+opt-level = 2

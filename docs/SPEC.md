@@ -1,6 +1,8 @@
 # cleanlz4 — Specification
 
-Version: 0.1 Status: draft for owner review
+Version: 0.2 Status: draft for owner review
+
+**Changes in 0.2 (2026-11-10):** §6.5 records the owner's §9 Q2 decision from the first flight. The binding crate lacks `LZ4_decompress_safe_usingDict`, so the `lz4` command-line program, run as a black box, is the oracle for dictionary decoding (clean-room record seq 681). That function is removed from the permitted C API, which now has fifteen functions; the oracle never called it. §9 Q2 is marked resolved.
 
 The Kūkulu planner reads this file in full and derives the build plan from it. This is a clean-room flight: `docs/cleanroom.json` is committed on the base branch before the first `/kukulu:go-flight`, and every stage runs under it.
 
@@ -224,13 +226,15 @@ Each file records its expected error variant. On arbitrary bytes, cleanlz4 and t
 
 From the reference library's public API, called through a Rust binding crate in `crates/oracle` only:
 
-- **Block:** `LZ4_compress_default`, `LZ4_compress_HC`, `LZ4_compressBound`, `LZ4_decompress_safe`, `LZ4_decompress_safe_usingDict`.
+- **Block:** `LZ4_compress_default`, `LZ4_compress_HC`, `LZ4_compressBound`, `LZ4_decompress_safe`.
 - **Frame compression:** `LZ4F_createCompressionContext`, `LZ4F_compressBegin`, `LZ4F_compressUpdate`, `LZ4F_compressEnd`, `LZ4F_compressBound`, `LZ4F_freeCompressionContext`.
 - **Frame decompression:** `LZ4F_createDecompressionContext`, `LZ4F_decompress`, `LZ4F_freeDecompressionContext`.
 - **Errors:** `LZ4F_isError`, `LZ4F_getErrorName`.
 - **Preferences:** `LZ4F_preferences_t` with `frameInfo` (`blockSizeID`, `blockMode`, `contentChecksumFlag`, `frameType`, `contentSize`, `dictID`, `blockChecksumFlag`), `compressionLevel` and `autoFlush`.
 
 If the binding crate lacks one of these, the task blocks and names it. It never reads the binding crate's source. Legacy and skippable frames are produced by the `lz4` command-line program (`-l` for legacy) or built by hand from the spec.
+
+**Dictionary oracle:** the `lz4` command-line program, run as a black box (`lz4 -d -D <dict>`), is the oracle for dictionary decoding. To check a raw dictionary block, wrap it in a minimal frame built by hand from the spec. Only `crates/oracle` runs the program, and its version is recorded in `testdata/MANIFEST.json`.
 
 ## 7. Commands
 
@@ -289,7 +293,7 @@ If the binding crate lacks one of these, the task blocks and names it. It never 
 ## 9. Open questions
 
 1. **End-of-block rules on decode.** Should violations be rejected, or accepted where the oracle accepts them? The planner decides from the oracle's observed behavior, without reading its source, and records the decision in `DESIGN.md`.
-2. **The binding crate's surface.** If it lacks a §6.5 function, the task blocks. The owner either swaps the binding crate or permits the `lz4` CLI as the oracle for that case.
+2. **The binding crate's surface.** If it lacks a §6.5 function, the task blocks. The owner either swaps the binding crate or permits the `lz4` CLI as the oracle for that case. *Resolved (0.2):* the binding crate lacked `LZ4_decompress_safe_usingDict`, and the owner permitted the `lz4` CLI as the dictionary oracle (see §6.5).
 3. **Dictionary test inputs.** The oracle generates dictionaries from corpus slices. The planner fixes their sizes as config keys.
 
 ## Operator notes (read before starting the flight)

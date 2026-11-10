@@ -1,0 +1,21 @@
+{
+  "limits": { "max_output_bytes": 1073741824 },
+  "fuzz": {
+    "seconds_per_target": 3600,
+    "seed": 1,
+    "smoke_seconds": 20,
+    "max_output_bytes": 16777216,
+    "max_divergence_files": 100
+  },
+  "bench": { "repeats": 10 },
+  "stream": { "chunking_cases": 80000 },
+  "dict": { "sizes_bytes": [4096, 65536, 131072] },
+  "conformance": {
+    "hc_levels": [4, 9, 12],
+    "frame_levels": [0, 4, 9, 12],
+    "silesia_combos_per_file": 8,
+    "large_input_bytes": 8388608,
+    "random_block_cases": 2000
+  },
+  "diff": { "max_output_bytes": 67108864 }
+}

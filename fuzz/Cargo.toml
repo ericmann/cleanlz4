@@ -1,0 +1,50 @@
+[package]
+name = "cleanlz4-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+cleanlz4 = { path = "../crates/cleanlz4" }
+oracle = { path = "../crates/oracle" }
+
+[workspace]
+
+[[bin]]
+name = "no_panic_block"
+path = "fuzz_targets/no_panic_block.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "no_panic_frame"
+path = "fuzz_targets/no_panic_frame.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "no_panic_stream"
+path = "fuzz_targets/no_panic_stream.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "diff_roundtrip"
+path = "fuzz_targets/diff_roundtrip.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "diff_accept"
+path = "fuzz_targets/diff_accept.rs"
+test = false
+doc = false
+bench = false
