@@ -55,7 +55,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P4-09 Triage crashes and divergences
 - [x] P4-10 Benchmarks against the oracle
 - [x] P4-11 Tune bench.repeats
-- [ ] P4-12 Tune fuzz.seconds_per_target
+- [x] P4-12 Tune fuzz.seconds_per_target
 - [x] P4-13 Phase 4 end: push and record the manual check
 - [x] P5-01 The evidence index and the Done checklist
 - [x] P5-02 Phase 5 end: push and record the manual check
@@ -622,3 +622,7 @@ fuzz-diff_accept-P4-08.json: seconds 3601, runs 21,607,948, crashes 0, divergenc
 ### P4-09 — 3e2ffe4
 
 Read the five results: crashes 0 everywhere; divergences 0 except diff_accept (P4-08: 100 = the file cap). All 100 were one case: a block ending with four final literals after a match of 19+ bytes (end-of-block rule 2); cleanlz4 EndOfBlockViolation, oracle accepts only with spare output room (probe: accepted at +65,536 slack, rejected at exact capacity). Resolution (2): new normalization end-of-block-room in diff.rs (NORMALIZATIONS now 3), unit test end_of_block_room_is_a_named_normalization; no decoder change. 100 inputs copied to testdata/regressions/diff_accept-<name> and indexed; DESIGN Divergence triage has the 100-row table. Re-run fuzz-diff_accept-P4-09.json: seconds 3615, runs 16,184,756, crashes 0, divergences 0, corpus_entries 1,012 (originals moved aside during the run, restored). Crashes: 0 Divergences: 0. Footgun: record_divergence stops writing at the file cap, so a later run can hide divergences unless the directory is emptied first. Also: P4-08 tracked divergence .bin files under testdata/results, so evidence_index_lists_every_result_file needed them listed in docs/EVIDENCE.md (done here).
+
+### P4-12 — 98e0574
+
+Table in DESIGN Measurements. cov at 60 s -> end, last NEW second (share of 3,601 s): no_panic_block 115->115, 356 s (10%); no_panic_frame 712->761, 2501 s (69%); no_panic_stream 931->938, 1125 s (31%); diff_roundtrip 777->778, 3351 s (93%); diff_accept 647->652, 2607 s (72%). Criterion (all below 90%) fails for diff_roundtrip only, so fuzz.seconds_per_target is unchanged (3600) and the recommendation is to raise it (names diff_roundtrip), together with the protected docs/kukulu.json timeouts. All five logs were available.
