@@ -14,3 +14,7 @@ check:
 .PHONY: manifest-corpora
 manifest-corpora:
 	cargo run -p oracle --bin manifest -- corpora --fetched-at $(FETCHED_AT)
+
+.PHONY: corpus
+corpus:
+	cargo run --release -p oracle --bin gen_corpus -- --suites all

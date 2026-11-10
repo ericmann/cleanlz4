@@ -145,5 +145,2506 @@
       ]
     }
   ],
-  "conformance": null
+  "conformance": {
+    "seed": 1,
+    "corpus_sha256": "b3d9df463fc95a8fe662fd023d9c39a7415277109a096f42599e43c836ae58c8",
+    "entries": [
+      {
+        "id": "block/canterbury/alice29.txt/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/alice29.txt",
+        "input_sha256": "7467306ee0feed4971260f3c87421154a05be571d944e9cb021a5713700c38f0",
+        "input_bytes": 152089,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/canterbury/alice29.txt/default.lz4block",
+        "file_sha256": "ca6f52c2bb3358fa175eca980bf0ce7099f9fb1d13259d9767e5473c4a2b8000",
+        "file_bytes": 88699
+      },
+      {
+        "id": "block/canterbury/alice29.txt/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/alice29.txt",
+        "input_sha256": "7467306ee0feed4971260f3c87421154a05be571d944e9cb021a5713700c38f0",
+        "input_bytes": 152089,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/canterbury/alice29.txt/hc12.lz4block",
+        "file_sha256": "98dd7683344143cd261bf61f3fc5d42060fe76430e27ce81b780768f135380da",
+        "file_bytes": 62953
+      },
+      {
+        "id": "block/canterbury/alice29.txt/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/alice29.txt",
+        "input_sha256": "7467306ee0feed4971260f3c87421154a05be571d944e9cb021a5713700c38f0",
+        "input_bytes": 152089,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/canterbury/alice29.txt/hc4.lz4block",
+        "file_sha256": "e5b5baddbc3bb349cabada4f31c4b8bbaf7bec7aff3af284a78ea6b567934b6b",
+        "file_bytes": 65727
+      },
+      {
+        "id": "block/canterbury/alice29.txt/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/alice29.txt",
+        "input_sha256": "7467306ee0feed4971260f3c87421154a05be571d944e9cb021a5713700c38f0",
+        "input_bytes": 152089,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/canterbury/alice29.txt/hc9.lz4block",
+        "file_sha256": "aeb5dbd9c494485ac522bead1c59d9496a44079b9ce96d2e4ecf29d44f438348",
+        "file_bytes": 63673
+      },
+      {
+        "id": "block/canterbury/asyoulik.txt/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/asyoulik.txt",
+        "input_sha256": "eaa3526fe53859f34ecdf255712f9ecf0b2c903451d4755b2edaa2e2599cb0fc",
+        "input_bytes": 125179,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/canterbury/asyoulik.txt/default.lz4block",
+        "file_sha256": "9cf9ff22ff67d4c394f204116bd9cb853eebd585eaf65cb86ac66fc83f2c6c5d",
+        "file_bytes": 79653
+      },
+      {
+        "id": "block/canterbury/asyoulik.txt/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/asyoulik.txt",
+        "input_sha256": "eaa3526fe53859f34ecdf255712f9ecf0b2c903451d4755b2edaa2e2599cb0fc",
+        "input_bytes": 125179,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/canterbury/asyoulik.txt/hc12.lz4block",
+        "file_sha256": "52ce2c9191d78b86a540c3b2cd22dc18029838ac7292c84d8f5b4fd467e36feb",
+        "file_bytes": 58309
+      },
+      {
+        "id": "block/canterbury/asyoulik.txt/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/asyoulik.txt",
+        "input_sha256": "eaa3526fe53859f34ecdf255712f9ecf0b2c903451d4755b2edaa2e2599cb0fc",
+        "input_bytes": 125179,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/canterbury/asyoulik.txt/hc4.lz4block",
+        "file_sha256": "25ddb7d2952f1a050d3e8945bfd18e734eec6d164427946218bdbb9b84fc9ea6",
+        "file_bytes": 60442
+      },
+      {
+        "id": "block/canterbury/asyoulik.txt/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/asyoulik.txt",
+        "input_sha256": "eaa3526fe53859f34ecdf255712f9ecf0b2c903451d4755b2edaa2e2599cb0fc",
+        "input_bytes": 125179,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/canterbury/asyoulik.txt/hc9.lz4block",
+        "file_sha256": "441a96e54b2607f62429660deb5a5ed806587d3817c8f45b069b05598af08152",
+        "file_bytes": 58908
+      },
+      {
+        "id": "block/canterbury/cp.html/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/cp.html",
+        "input_sha256": "e0cd21cef5b6c4069461e949be100080c3ce887de6f1dd8626c480528efaaf61",
+        "input_bytes": 24603,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/canterbury/cp.html/default.lz4block",
+        "file_sha256": "8d1b2de2fd3d494ffa33353d50de87bd1ed2e49d8492d4b920b141bcd6088870",
+        "file_bytes": 11905
+      },
+      {
+        "id": "block/canterbury/cp.html/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/cp.html",
+        "input_sha256": "e0cd21cef5b6c4069461e949be100080c3ce887de6f1dd8626c480528efaaf61",
+        "input_bytes": 24603,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/canterbury/cp.html/hc12.lz4block",
+        "file_sha256": "7ef257c33bdcfb76c80556d2e6e569ce97e1181621776df615fefe7382d6381a",
+        "file_bytes": 10288
+      },
+      {
+        "id": "block/canterbury/cp.html/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/cp.html",
+        "input_sha256": "e0cd21cef5b6c4069461e949be100080c3ce887de6f1dd8626c480528efaaf61",
+        "input_bytes": 24603,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/canterbury/cp.html/hc4.lz4block",
+        "file_sha256": "9303c437a592622677e2cbb09fceb2479cfc0368870d66cf505d7d80eb7a859e",
+        "file_bytes": 10395
+      },
+      {
+        "id": "block/canterbury/cp.html/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/cp.html",
+        "input_sha256": "e0cd21cef5b6c4069461e949be100080c3ce887de6f1dd8626c480528efaaf61",
+        "input_bytes": 24603,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/canterbury/cp.html/hc9.lz4block",
+        "file_sha256": "2022d2e2abb4861d9759967cd94199b0911adf3496d24036e692c34af3e5dae8",
+        "file_bytes": 10338
+      },
+      {
+        "id": "block/canterbury/fields.c/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/fields.c",
+        "input_sha256": "85d73e354cc50cec76cb5a50537cf8dc035f8cbb8480f9e1cbe2f7d6c23393c7",
+        "input_bytes": 11150,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/canterbury/fields.c/default.lz4block",
+        "file_sha256": "9af3a492f4459142980dc59afe41569677d370968556e63593d3ae2543987f36",
+        "file_bytes": 5215
+      },
+      {
+        "id": "block/canterbury/fields.c/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/fields.c",
+        "input_sha256": "85d73e354cc50cec76cb5a50537cf8dc035f8cbb8480f9e1cbe2f7d6c23393c7",
+        "input_bytes": 11150,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/canterbury/fields.c/hc12.lz4block",
+        "file_sha256": "8088669e48814be4a3c9caf928b99d5b04324c370266422cdf3aed749591e224",
+        "file_bytes": 4202
+      },
+      {
+        "id": "block/canterbury/fields.c/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/fields.c",
+        "input_sha256": "85d73e354cc50cec76cb5a50537cf8dc035f8cbb8480f9e1cbe2f7d6c23393c7",
+        "input_bytes": 11150,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/canterbury/fields.c/hc4.lz4block",
+        "file_sha256": "2b90029d8b78318225279df9d8ebbec06aa7e328f056bf5a9324821e99371057",
+        "file_bytes": 4242
+      },
+      {
+        "id": "block/canterbury/fields.c/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/fields.c",
+        "input_sha256": "85d73e354cc50cec76cb5a50537cf8dc035f8cbb8480f9e1cbe2f7d6c23393c7",
+        "input_bytes": 11150,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/canterbury/fields.c/hc9.lz4block",
+        "file_sha256": "db85b3d5768a2451cda5fc264b4e30cc1cec46f81bd43b6a8cdf7ae98ac7e265",
+        "file_bytes": 4228
+      },
+      {
+        "id": "block/canterbury/grammar.lsp/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/grammar.lsp",
+        "input_sha256": "1b0805dfc0ae706b35aac2bb4e15f02485efd24dda5dbd29de7b2f84d1a88c15",
+        "input_bytes": 3721,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/canterbury/grammar.lsp/default.lz4block",
+        "file_sha256": "1f43b86efc6b57ba30c618403d0949aa401cf992aeae5db3adf1b86604bd6df9",
+        "file_bytes": 1912
+      },
+      {
+        "id": "block/canterbury/grammar.lsp/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/grammar.lsp",
+        "input_sha256": "1b0805dfc0ae706b35aac2bb4e15f02485efd24dda5dbd29de7b2f84d1a88c15",
+        "input_bytes": 3721,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/canterbury/grammar.lsp/hc12.lz4block",
+        "file_sha256": "b35d8a231743019447a2efab2af31194dccb805eb431a623eee1e938b5076dd2",
+        "file_bytes": 1718
+      },
+      {
+        "id": "block/canterbury/grammar.lsp/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/grammar.lsp",
+        "input_sha256": "1b0805dfc0ae706b35aac2bb4e15f02485efd24dda5dbd29de7b2f84d1a88c15",
+        "input_bytes": 3721,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/canterbury/grammar.lsp/hc4.lz4block",
+        "file_sha256": "0de21c7ea28a5fa68dca51b33e0ff01a707fcc12b3fc6bbdc55cefb17f1c47e0",
+        "file_bytes": 1728
+      },
+      {
+        "id": "block/canterbury/grammar.lsp/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/grammar.lsp",
+        "input_sha256": "1b0805dfc0ae706b35aac2bb4e15f02485efd24dda5dbd29de7b2f84d1a88c15",
+        "input_bytes": 3721,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/canterbury/grammar.lsp/hc9.lz4block",
+        "file_sha256": "afe1dc7801fc641b275376ce6c7ede979843bc5672bd4d592cde4ecae97b66b1",
+        "file_bytes": 1724
+      },
+      {
+        "id": "block/canterbury/kennedy.xls/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/kennedy.xls",
+        "input_sha256": "9af47239ca29dfe20e633f80bbbb9a4cc9783d0803d7b2b5626f42e4c3790420",
+        "input_bytes": 1029744,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/canterbury/kennedy.xls/default.lz4block",
+        "file_sha256": "31c7ffab8bda3251afffec40805236d812957d91809fe4b130de13eebf58276b",
+        "file_bytes": 374704
+      },
+      {
+        "id": "block/canterbury/kennedy.xls/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/kennedy.xls",
+        "input_sha256": "9af47239ca29dfe20e633f80bbbb9a4cc9783d0803d7b2b5626f42e4c3790420",
+        "input_bytes": 1029744,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/canterbury/kennedy.xls/hc12.lz4block",
+        "file_sha256": "32049efc3c0bfdc994bcf9925674adbb4f4600931433cc525d4e08f2b3c77600",
+        "file_bytes": 324117
+      },
+      {
+        "id": "block/canterbury/kennedy.xls/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/kennedy.xls",
+        "input_sha256": "9af47239ca29dfe20e633f80bbbb9a4cc9783d0803d7b2b5626f42e4c3790420",
+        "input_bytes": 1029744,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/canterbury/kennedy.xls/hc4.lz4block",
+        "file_sha256": "6963a7844a339551c63afe5938f6a4d67dfa92c709c3f077db32d92f6639becb",
+        "file_bytes": 326718
+      },
+      {
+        "id": "block/canterbury/kennedy.xls/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/kennedy.xls",
+        "input_sha256": "9af47239ca29dfe20e633f80bbbb9a4cc9783d0803d7b2b5626f42e4c3790420",
+        "input_bytes": 1029744,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/canterbury/kennedy.xls/hc9.lz4block",
+        "file_sha256": "1b604e60e59323584addfbd457d2f6661a64bad38f66a8cf43a9b1343853b659",
+        "file_bytes": 324190
+      },
+      {
+        "id": "block/canterbury/lcet10.txt/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/lcet10.txt",
+        "input_sha256": "5314ba1dbb03f471df88bec6cd120a938ef60d0fd3511c5c1dce61bf7463245f",
+        "input_bytes": 426754,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/canterbury/lcet10.txt/default.lz4block",
+        "file_sha256": "eabdb4b1ae960c0b2c8bfb3e68efa69efcf473f1158cd96013e5df7d6f7b181e",
+        "file_bytes": 233213
+      },
+      {
+        "id": "block/canterbury/lcet10.txt/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/lcet10.txt",
+        "input_sha256": "5314ba1dbb03f471df88bec6cd120a938ef60d0fd3511c5c1dce61bf7463245f",
+        "input_bytes": 426754,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/canterbury/lcet10.txt/hc12.lz4block",
+        "file_sha256": "7010916e8f8f3f0992e64a88d20e93bd1cf3b19c22f0654deed2e2f1c5b56a3f",
+        "file_bytes": 164123
+      },
+      {
+        "id": "block/canterbury/lcet10.txt/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/lcet10.txt",
+        "input_sha256": "5314ba1dbb03f471df88bec6cd120a938ef60d0fd3511c5c1dce61bf7463245f",
+        "input_bytes": 426754,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/canterbury/lcet10.txt/hc4.lz4block",
+        "file_sha256": "91ae6bf09fb28fc6dfdb8e0db56e29cb282fecf7426a7b7eccac8a54e2b5021f",
+        "file_bytes": 170712
+      },
+      {
+        "id": "block/canterbury/lcet10.txt/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/lcet10.txt",
+        "input_sha256": "5314ba1dbb03f471df88bec6cd120a938ef60d0fd3511c5c1dce61bf7463245f",
+        "input_bytes": 426754,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/canterbury/lcet10.txt/hc9.lz4block",
+        "file_sha256": "10e438596c79ee37d279b12b32f2e7df6578ece351e729f4985f1f82ada1aabd",
+        "file_bytes": 165788
+      },
+      {
+        "id": "block/canterbury/plrabn12.txt/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/plrabn12.txt",
+        "input_sha256": "07e2e0b461af78c7c647cb53dab39de560198e16f799b4516eccf0fbd69f764c",
+        "input_bytes": 481861,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/canterbury/plrabn12.txt/default.lz4block",
+        "file_sha256": "1ead10ab7c7a4aef2a044b7f972c7f6d48c64a8838a0f715f6a5b2639293d7be",
+        "file_bytes": 325589
+      },
+      {
+        "id": "block/canterbury/plrabn12.txt/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/plrabn12.txt",
+        "input_sha256": "07e2e0b461af78c7c647cb53dab39de560198e16f799b4516eccf0fbd69f764c",
+        "input_bytes": 481861,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/canterbury/plrabn12.txt/hc12.lz4block",
+        "file_sha256": "a15e173029530c52c9bac8187e6bc930cbc3d9bde83e2e9633a340d50eddaef9",
+        "file_bytes": 224655
+      },
+      {
+        "id": "block/canterbury/plrabn12.txt/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/plrabn12.txt",
+        "input_sha256": "07e2e0b461af78c7c647cb53dab39de560198e16f799b4516eccf0fbd69f764c",
+        "input_bytes": 481861,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/canterbury/plrabn12.txt/hc4.lz4block",
+        "file_sha256": "2c49e3ec597caeb2263c0888a32f19814342557916244388e7247036ad994476",
+        "file_bytes": 235900
+      },
+      {
+        "id": "block/canterbury/plrabn12.txt/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/plrabn12.txt",
+        "input_sha256": "07e2e0b461af78c7c647cb53dab39de560198e16f799b4516eccf0fbd69f764c",
+        "input_bytes": 481861,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/canterbury/plrabn12.txt/hc9.lz4block",
+        "file_sha256": "68821c32e8107ade3fef1458ef761a869b11637a8e0235bdfc821d0289b34a39",
+        "file_bytes": 227457
+      },
+      {
+        "id": "block/canterbury/ptt5/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/ptt5",
+        "input_sha256": "0ec3a75089bb52342813496b17e51377bc9eba3cb519a444d67025354841d650",
+        "input_bytes": 513216,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/canterbury/ptt5/default.lz4block",
+        "file_sha256": "4eb042bb1ab4d54bf8e21fe785cff7a33795ca8009fbaf8ffbbb219d562112a9",
+        "file_bytes": 86885
+      },
+      {
+        "id": "block/canterbury/ptt5/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/ptt5",
+        "input_sha256": "0ec3a75089bb52342813496b17e51377bc9eba3cb519a444d67025354841d650",
+        "input_bytes": 513216,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/canterbury/ptt5/hc12.lz4block",
+        "file_sha256": "90646bed63b327c9172ec507b1d0e7a2c137520983a1c2a7091c423604c6c99f",
+        "file_bytes": 66134
+      },
+      {
+        "id": "block/canterbury/ptt5/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/ptt5",
+        "input_sha256": "0ec3a75089bb52342813496b17e51377bc9eba3cb519a444d67025354841d650",
+        "input_bytes": 513216,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/canterbury/ptt5/hc4.lz4block",
+        "file_sha256": "6cb27361121ca61750598574df111f12fc4676d4cb8f05b893e3cffef1fe5941",
+        "file_bytes": 68708
+      },
+      {
+        "id": "block/canterbury/ptt5/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/ptt5",
+        "input_sha256": "0ec3a75089bb52342813496b17e51377bc9eba3cb519a444d67025354841d650",
+        "input_bytes": 513216,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/canterbury/ptt5/hc9.lz4block",
+        "file_sha256": "ac0690e23cc960b1fc5ca00565a7ab62232ff7cb303eb5d92326ad89405363eb",
+        "file_bytes": 66782
+      },
+      {
+        "id": "block/canterbury/sum/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/sum",
+        "input_sha256": "ee5733cd76ecc2f9d8ff156adc3c02a7a851051dcf43a2d56ff4ee4ff606bdb3",
+        "input_bytes": 38240,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/canterbury/sum/default.lz4block",
+        "file_sha256": "1d47c800b07798a00e1d27080c164cdfda543d21b72b78a55b42ffd38e584612",
+        "file_bytes": 18812
+      },
+      {
+        "id": "block/canterbury/sum/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/sum",
+        "input_sha256": "ee5733cd76ecc2f9d8ff156adc3c02a7a851051dcf43a2d56ff4ee4ff606bdb3",
+        "input_bytes": 38240,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/canterbury/sum/hc12.lz4block",
+        "file_sha256": "a8412fec57363e8c41340a028653dd605d8a125d2e269d0871766cd687bebfc4",
+        "file_bytes": 16289
+      },
+      {
+        "id": "block/canterbury/sum/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/sum",
+        "input_sha256": "ee5733cd76ecc2f9d8ff156adc3c02a7a851051dcf43a2d56ff4ee4ff606bdb3",
+        "input_bytes": 38240,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/canterbury/sum/hc4.lz4block",
+        "file_sha256": "7a582f6fe6e172992ad2ccc2da2747e6821685758fbe83c87efa4add19f85d91",
+        "file_bytes": 16456
+      },
+      {
+        "id": "block/canterbury/sum/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/sum",
+        "input_sha256": "ee5733cd76ecc2f9d8ff156adc3c02a7a851051dcf43a2d56ff4ee4ff606bdb3",
+        "input_bytes": 38240,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/canterbury/sum/hc9.lz4block",
+        "file_sha256": "c373080fd68339a333b04eec68cbe5677d645426f4131d9d5a12aa4173b79470",
+        "file_bytes": 16333
+      },
+      {
+        "id": "block/canterbury/xargs.1/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/xargs.1",
+        "input_sha256": "c58aeb5d2d1e12751d47e7412b45784405fc30a5671b03d480fa05776e183619",
+        "input_bytes": 4227,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/canterbury/xargs.1/default.lz4block",
+        "file_sha256": "c3ad964945492f9b2bafcd19f2bc3dfb2f3595b2bc8b0b704620f6b6756d26a0",
+        "file_bytes": 2658
+      },
+      {
+        "id": "block/canterbury/xargs.1/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/xargs.1",
+        "input_sha256": "c58aeb5d2d1e12751d47e7412b45784405fc30a5671b03d480fa05776e183619",
+        "input_bytes": 4227,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/canterbury/xargs.1/hc12.lz4block",
+        "file_sha256": "9fcd8d5d14e58edc6797909122d4bf6b0536b4769f6d0f297f77ffd6e4433ce7",
+        "file_bytes": 2401
+      },
+      {
+        "id": "block/canterbury/xargs.1/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/xargs.1",
+        "input_sha256": "c58aeb5d2d1e12751d47e7412b45784405fc30a5671b03d480fa05776e183619",
+        "input_bytes": 4227,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/canterbury/xargs.1/hc4.lz4block",
+        "file_sha256": "0ae6e9801af01cbdb052b821a59a47c800227da0efc7a4e801d5c8b5f192dc19",
+        "file_bytes": 2410
+      },
+      {
+        "id": "block/canterbury/xargs.1/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "canterbury/xargs.1",
+        "input_sha256": "c58aeb5d2d1e12751d47e7412b45784405fc30a5671b03d480fa05776e183619",
+        "input_bytes": 4227,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/canterbury/xargs.1/hc9.lz4block",
+        "file_sha256": "0ae6e9801af01cbdb052b821a59a47c800227da0efc7a4e801d5c8b5f192dc19",
+        "file_bytes": 2410
+      },
+      {
+        "id": "block/silesia/dickens/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/dickens",
+        "input_sha256": "b24c37886142e11d0ee687db6ab06f936207aa7f2ea1fd1d9a36763c7a507e6a",
+        "input_bytes": 10192446,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/silesia/dickens/default.lz4block",
+        "file_sha256": "552158bce3772fa4cf790088e77dc397d74e915958472edd5cb45febdd454487",
+        "file_bytes": 6428742
+      },
+      {
+        "id": "block/silesia/dickens/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/dickens",
+        "input_sha256": "b24c37886142e11d0ee687db6ab06f936207aa7f2ea1fd1d9a36763c7a507e6a",
+        "input_bytes": 10192446,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/silesia/dickens/hc4.lz4block",
+        "file_sha256": "f06934e556e4b36d96032f006694985b004a8e6fa8c2ac9aedf4cbd165fb7acb",
+        "file_bytes": 4607175
+      },
+      {
+        "id": "block/silesia/mozilla/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/mozilla",
+        "input_sha256": "657fc3764b0c75ac9de9623125705831ebbfbe08fed248df73bc2dc66e2a963b",
+        "input_bytes": 51220480,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/silesia/mozilla/default.lz4block",
+        "file_sha256": "c6587eda24ab60f2f3c2d089750140653951acee801ba88c016b58566a34007e",
+        "file_bytes": 26435667
+      },
+      {
+        "id": "block/silesia/mozilla/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/mozilla",
+        "input_sha256": "657fc3764b0c75ac9de9623125705831ebbfbe08fed248df73bc2dc66e2a963b",
+        "input_bytes": 51220480,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/silesia/mozilla/hc4.lz4block",
+        "file_sha256": "8197eea8c224894732866e23b91dc0870cf9d25249275afd547700c30f702c71",
+        "file_bytes": 22397915
+      },
+      {
+        "id": "block/silesia/mr/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/mr",
+        "input_sha256": "68637ed52e3e4860174ed2dc0840ac77d5f1a60abbcb13770d5754e3774d53e6",
+        "input_bytes": 9970564,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/silesia/mr/default.lz4block",
+        "file_sha256": "7eca8480c62f05478abb7b19996823bfaaaa5ed35564ff6a81fcf007b205e2f1",
+        "file_bytes": 5440937
+      },
+      {
+        "id": "block/silesia/mr/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/mr",
+        "input_sha256": "68637ed52e3e4860174ed2dc0840ac77d5f1a60abbcb13770d5754e3774d53e6",
+        "input_bytes": 9970564,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/silesia/mr/hc4.lz4block",
+        "file_sha256": "513a1c8b4e72ddea6161d4c56c5ca3f8fd816b6f9ac0199a3a41e31b09d617ad",
+        "file_bytes": 4492477
+      },
+      {
+        "id": "block/silesia/nci/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/nci",
+        "input_sha256": "fc63a31770947b8c2062d3b19ca94c00485a232bb91b502021948fee983e1635",
+        "input_bytes": 33553445,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/silesia/nci/default.lz4block",
+        "file_sha256": "b5bf87f96392faeca53c5a996cbd274defb1af88ad2aa78362f2ebc35e51abf7",
+        "file_bytes": 5533040
+      },
+      {
+        "id": "block/silesia/nci/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/nci",
+        "input_sha256": "fc63a31770947b8c2062d3b19ca94c00485a232bb91b502021948fee983e1635",
+        "input_bytes": 33553445,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/silesia/nci/hc4.lz4block",
+        "file_sha256": "cd12f288ee29288ccdc73ba81cbff0fa53a94a2dbea885b7a15689e20df895c6",
+        "file_bytes": 4034638
+      },
+      {
+        "id": "block/silesia/ooffice/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/ooffice",
+        "input_sha256": "e7ee013880d34dd5208283d0d3d91b07f442e067454276095ded14f322a656eb",
+        "input_bytes": 6152192,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/silesia/ooffice/default.lz4block",
+        "file_sha256": "8a8503b2e75186eb5f5dd0ecf773ff046cc452ca841f95afc94fa6ce429fcca9",
+        "file_bytes": 4338918
+      },
+      {
+        "id": "block/silesia/ooffice/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/ooffice",
+        "input_sha256": "e7ee013880d34dd5208283d0d3d91b07f442e067454276095ded14f322a656eb",
+        "input_bytes": 6152192,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/silesia/ooffice/hc12.lz4block",
+        "file_sha256": "4b4ed782804f0061d2185864e21a82ee60833c477ea869645e28f8dee36aad7e",
+        "file_bytes": 3535250
+      },
+      {
+        "id": "block/silesia/ooffice/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/ooffice",
+        "input_sha256": "e7ee013880d34dd5208283d0d3d91b07f442e067454276095ded14f322a656eb",
+        "input_bytes": 6152192,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/silesia/ooffice/hc4.lz4block",
+        "file_sha256": "f50fcf302a52f18857ba4a5d0d170d13903390e336d33d15937b9ff32bf24dbb",
+        "file_bytes": 3575254
+      },
+      {
+        "id": "block/silesia/ooffice/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/ooffice",
+        "input_sha256": "e7ee013880d34dd5208283d0d3d91b07f442e067454276095ded14f322a656eb",
+        "input_bytes": 6152192,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/silesia/ooffice/hc9.lz4block",
+        "file_sha256": "8a402887c5ee7fe84f4b1ae996f3e5e465316d5b4e55b1fd8eec2d879a894fa0",
+        "file_bytes": 3543764
+      },
+      {
+        "id": "block/silesia/osdb/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/osdb",
+        "input_sha256": "60f027179302ca3ad87c58ac90b6be72ec23588aaa7a3b7fe8ecc0f11def3fa3",
+        "input_bytes": 10085684,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/silesia/osdb/default.lz4block",
+        "file_sha256": "986615dd180f72e29299dce768faecdea23447f10084b147a622f0604d8cd49d",
+        "file_bytes": 5256666
+      },
+      {
+        "id": "block/silesia/osdb/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/osdb",
+        "input_sha256": "60f027179302ca3ad87c58ac90b6be72ec23588aaa7a3b7fe8ecc0f11def3fa3",
+        "input_bytes": 10085684,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/silesia/osdb/hc4.lz4block",
+        "file_sha256": "c49ff6fc114694478c86cb33199f8fa1c0275249612c870df7d6bf236588e946",
+        "file_bytes": 4004346
+      },
+      {
+        "id": "block/silesia/reymont/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/reymont",
+        "input_sha256": "0eac0114a3dfe6e2ee1f345a0f79d653cb26c3bc9f0ed79238af4933422b7578",
+        "input_bytes": 6627202,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/silesia/reymont/default.lz4block",
+        "file_sha256": "eb444677261c51d22278c788c9c34dec0363f38a3a6e44a4a49e0c6a82ee30a4",
+        "file_bytes": 3181387
+      },
+      {
+        "id": "block/silesia/reymont/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/reymont",
+        "input_sha256": "0eac0114a3dfe6e2ee1f345a0f79d653cb26c3bc9f0ed79238af4933422b7578",
+        "input_bytes": 6627202,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/silesia/reymont/hc12.lz4block",
+        "file_sha256": "fc974eda88c9125bf2e2164f0889135d2d9b74e39f3f8db4b364450fd88a34cc",
+        "file_bytes": 2063052
+      },
+      {
+        "id": "block/silesia/reymont/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/reymont",
+        "input_sha256": "0eac0114a3dfe6e2ee1f345a0f79d653cb26c3bc9f0ed79238af4933422b7578",
+        "input_bytes": 6627202,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/silesia/reymont/hc4.lz4block",
+        "file_sha256": "6bdff3fc48233a12d5ef76edd7ef07cadcbf3b856cd2363d16243ec6d7e73f3d",
+        "file_bytes": 2302024
+      },
+      {
+        "id": "block/silesia/reymont/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/reymont",
+        "input_sha256": "0eac0114a3dfe6e2ee1f345a0f79d653cb26c3bc9f0ed79238af4933422b7578",
+        "input_bytes": 6627202,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/silesia/reymont/hc9.lz4block",
+        "file_sha256": "743bc7ddd102a71f230a4825a97dd3ad244dd1832dc6e7bd0f46d49bb7d1e5cd",
+        "file_bytes": 2111095
+      },
+      {
+        "id": "block/silesia/samba/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/samba",
+        "input_sha256": "93ba07bc44d8267789c1d911992f40b089ffa2140b4a160fac11ccae9a40e7b2",
+        "input_bytes": 21606400,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/silesia/samba/default.lz4block",
+        "file_sha256": "8d661e182b4de3a615ab8b21539f0cf0afef3ccbc85f93ea296f8a170f764c0d",
+        "file_bytes": 7716839
+      },
+      {
+        "id": "block/silesia/samba/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/samba",
+        "input_sha256": "93ba07bc44d8267789c1d911992f40b089ffa2140b4a160fac11ccae9a40e7b2",
+        "input_bytes": 21606400,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/silesia/samba/hc4.lz4block",
+        "file_sha256": "4a0c16c82566fe3451938bd34adfc6540936fb53ff2da156f148afdbdf894e7f",
+        "file_bytes": 6228454
+      },
+      {
+        "id": "block/silesia/sao/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/sao",
+        "input_sha256": "c2d0ea2cc59d4c21b7fe43a71499342a00cbe530a1d5548770e91ecd6214adcc",
+        "input_bytes": 7251944,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/silesia/sao/default.lz4block",
+        "file_sha256": "35f4a226fb5a49d988e0c9219cc364e937ae6cc9a12e716864db42322656ba8e",
+        "file_bytes": 6790273
+      },
+      {
+        "id": "block/silesia/sao/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/sao",
+        "input_sha256": "c2d0ea2cc59d4c21b7fe43a71499342a00cbe530a1d5548770e91ecd6214adcc",
+        "input_bytes": 7251944,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/silesia/sao/hc12.lz4block",
+        "file_sha256": "d1d1d72ee02f3f0166365d2b1ed475e73f8812268674a06a65de3a2c300ced8c",
+        "file_bytes": 5668734
+      },
+      {
+        "id": "block/silesia/sao/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/sao",
+        "input_sha256": "c2d0ea2cc59d4c21b7fe43a71499342a00cbe530a1d5548770e91ecd6214adcc",
+        "input_bytes": 7251944,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/silesia/sao/hc4.lz4block",
+        "file_sha256": "c93aae55274783e2064b964163f818cf49eda250d22027e2898a96d399115a73",
+        "file_bytes": 5807229
+      },
+      {
+        "id": "block/silesia/sao/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/sao",
+        "input_sha256": "c2d0ea2cc59d4c21b7fe43a71499342a00cbe530a1d5548770e91ecd6214adcc",
+        "input_bytes": 7251944,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/silesia/sao/hc9.lz4block",
+        "file_sha256": "7d195bc194afe1994952ddbf4df1c56031a1cc8acf837778853fb1eacff25c01",
+        "file_bytes": 5735258
+      },
+      {
+        "id": "block/silesia/webster/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/webster",
+        "input_sha256": "6a68f69b26daf09f9dd84f7470368553194a0b294fcfa80f1604efb11143a383",
+        "input_bytes": 41458703,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/silesia/webster/default.lz4block",
+        "file_sha256": "509bd8ed7805c6f374818549cef11af1d39635cdff4347c38a0690144373ab4b",
+        "file_bytes": 20139988
+      },
+      {
+        "id": "block/silesia/webster/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/webster",
+        "input_sha256": "6a68f69b26daf09f9dd84f7470368553194a0b294fcfa80f1604efb11143a383",
+        "input_bytes": 41458703,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/silesia/webster/hc4.lz4block",
+        "file_sha256": "0cf1747155f8c391a5db5259d7e99759bdd5619044fafa256c9254bcc1a92e4d",
+        "file_bytes": 14365936
+      },
+      {
+        "id": "block/silesia/x-ray/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/x-ray",
+        "input_sha256": "7de9fce1405dc44ae5e6813ed21cd5751e761bd4265655a005d39b9685d1c9ad",
+        "input_bytes": 8474240,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/silesia/x-ray/default.lz4block",
+        "file_sha256": "6d4389f735d3d3bb7da2ff715f77753e4a3a5640cd031119af3ff3a2b4d653e5",
+        "file_bytes": 8390195
+      },
+      {
+        "id": "block/silesia/x-ray/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/x-ray",
+        "input_sha256": "7de9fce1405dc44ae5e6813ed21cd5751e761bd4265655a005d39b9685d1c9ad",
+        "input_bytes": 8474240,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/silesia/x-ray/hc4.lz4block",
+        "file_sha256": "1914fcfb32f63fdb3c7180f958fd7fa902d41ae9e3f58ee00b20f52eb8cd2e18",
+        "file_bytes": 7176654
+      },
+      {
+        "id": "block/silesia/xml/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/xml",
+        "input_sha256": "0e82e54e695c1938e4193448022543845b33020c8be6bf3bf3ead2224903e08c",
+        "input_bytes": 5345280,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/silesia/xml/default.lz4block",
+        "file_sha256": "d1641a0917d42558c45bb956789fd800dc1cfab5c278d796d7a80e4eac700101",
+        "file_bytes": 1227495
+      },
+      {
+        "id": "block/silesia/xml/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/xml",
+        "input_sha256": "0e82e54e695c1938e4193448022543845b33020c8be6bf3bf3ead2224903e08c",
+        "input_bytes": 5345280,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/silesia/xml/hc12.lz4block",
+        "file_sha256": "396409cda0a9a784ea72bf665d6c961f583fcb092272416756210e4fa3a73e0a",
+        "file_bytes": 759893
+      },
+      {
+        "id": "block/silesia/xml/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/xml",
+        "input_sha256": "0e82e54e695c1938e4193448022543845b33020c8be6bf3bf3ead2224903e08c",
+        "input_bytes": 5345280,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/silesia/xml/hc4.lz4block",
+        "file_sha256": "8d88b29b052c4df427c547b073aa6c6d175bff29e3db0635031a054a0d06602a",
+        "file_bytes": 815510
+      },
+      {
+        "id": "block/silesia/xml/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "silesia/xml",
+        "input_sha256": "0e82e54e695c1938e4193448022543845b33020c8be6bf3bf3ead2224903e08c",
+        "input_bytes": 5345280,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/silesia/xml/hc9.lz4block",
+        "file_sha256": "1bb22ea76ae848bba225ee3f97a8bc7006797fb906124d38c3579d4dcb51a5c7",
+        "file_bytes": 770055
+      },
+      {
+        "id": "block/synthetic/empty/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/empty",
+        "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "input_bytes": 0,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/empty/default.lz4block",
+        "file_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+        "file_bytes": 1
+      },
+      {
+        "id": "block/synthetic/empty/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/empty",
+        "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "input_bytes": 0,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/empty/hc12.lz4block",
+        "file_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+        "file_bytes": 1
+      },
+      {
+        "id": "block/synthetic/empty/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/empty",
+        "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "input_bytes": 0,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/empty/hc4.lz4block",
+        "file_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+        "file_bytes": 1
+      },
+      {
+        "id": "block/synthetic/empty/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/empty",
+        "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "input_bytes": 0,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/empty/hc9.lz4block",
+        "file_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+        "file_bytes": 1
+      },
+      {
+        "id": "block/synthetic/incompressible-1m/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/incompressible-1m",
+        "input_sha256": "1d8866864b810bfb367522f9ce9c7af414274ac200cfa6972ea420cd8f01a801",
+        "input_bytes": 1048576,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/incompressible-1m/default.lz4block",
+        "file_sha256": "a9ce978bed512160170588d0660e29a3714b73de9c053f977e8252a4de545eb9",
+        "file_bytes": 1052690
+      },
+      {
+        "id": "block/synthetic/incompressible-1m/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/incompressible-1m",
+        "input_sha256": "1d8866864b810bfb367522f9ce9c7af414274ac200cfa6972ea420cd8f01a801",
+        "input_bytes": 1048576,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/incompressible-1m/hc12.lz4block",
+        "file_sha256": "ece1c2ca909f03e653eab995167d536fff664441b320ec2cb8cf080b5a253a15",
+        "file_bytes": 1052681
+      },
+      {
+        "id": "block/synthetic/incompressible-1m/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/incompressible-1m",
+        "input_sha256": "1d8866864b810bfb367522f9ce9c7af414274ac200cfa6972ea420cd8f01a801",
+        "input_bytes": 1048576,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/incompressible-1m/hc4.lz4block",
+        "file_sha256": "ece1c2ca909f03e653eab995167d536fff664441b320ec2cb8cf080b5a253a15",
+        "file_bytes": 1052681
+      },
+      {
+        "id": "block/synthetic/incompressible-1m/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/incompressible-1m",
+        "input_sha256": "1d8866864b810bfb367522f9ce9c7af414274ac200cfa6972ea420cd8f01a801",
+        "input_bytes": 1048576,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/incompressible-1m/hc9.lz4block",
+        "file_sha256": "ece1c2ca909f03e653eab995167d536fff664441b320ec2cb8cf080b5a253a15",
+        "file_bytes": 1052681
+      },
+      {
+        "id": "block/synthetic/incompressible-64k/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/incompressible-64k",
+        "input_sha256": "ae9f996abe25338eb57895c2b533bf48c2e722cb9558b3e6f99dd0f066bb6ed7",
+        "input_bytes": 65553,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/incompressible-64k/default.lz4block",
+        "file_sha256": "0dce3398a78852d03ab20382ba6b0d19d263d47634ef7d3bce73ab2a95758050",
+        "file_bytes": 65812
+      },
+      {
+        "id": "block/synthetic/incompressible-64k/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/incompressible-64k",
+        "input_sha256": "ae9f996abe25338eb57895c2b533bf48c2e722cb9558b3e6f99dd0f066bb6ed7",
+        "input_bytes": 65553,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/incompressible-64k/hc12.lz4block",
+        "file_sha256": "0dce3398a78852d03ab20382ba6b0d19d263d47634ef7d3bce73ab2a95758050",
+        "file_bytes": 65812
+      },
+      {
+        "id": "block/synthetic/incompressible-64k/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/incompressible-64k",
+        "input_sha256": "ae9f996abe25338eb57895c2b533bf48c2e722cb9558b3e6f99dd0f066bb6ed7",
+        "input_bytes": 65553,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/incompressible-64k/hc4.lz4block",
+        "file_sha256": "0dce3398a78852d03ab20382ba6b0d19d263d47634ef7d3bce73ab2a95758050",
+        "file_bytes": 65812
+      },
+      {
+        "id": "block/synthetic/incompressible-64k/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/incompressible-64k",
+        "input_sha256": "ae9f996abe25338eb57895c2b533bf48c2e722cb9558b3e6f99dd0f066bb6ed7",
+        "input_bytes": 65553,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/incompressible-64k/hc9.lz4block",
+        "file_sha256": "0dce3398a78852d03ab20382ba6b0d19d263d47634ef7d3bce73ab2a95758050",
+        "file_bytes": 65812
+      },
+      {
+        "id": "block/synthetic/long-match/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/long-match",
+        "input_sha256": "3eacfea0a03e52011997086bf8a8e92d2bfe8c20a404563f30cf515ac2c46c01",
+        "input_bytes": 2097152,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/long-match/default.lz4block",
+        "file_sha256": "132294be4e8ad5dda075690c9b6946038bbcf76cdffacbc13eca7d455f30e523",
+        "file_bytes": 8534
+      },
+      {
+        "id": "block/synthetic/long-match/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/long-match",
+        "input_sha256": "3eacfea0a03e52011997086bf8a8e92d2bfe8c20a404563f30cf515ac2c46c01",
+        "input_bytes": 2097152,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/long-match/hc12.lz4block",
+        "file_sha256": "132294be4e8ad5dda075690c9b6946038bbcf76cdffacbc13eca7d455f30e523",
+        "file_bytes": 8534
+      },
+      {
+        "id": "block/synthetic/long-match/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/long-match",
+        "input_sha256": "3eacfea0a03e52011997086bf8a8e92d2bfe8c20a404563f30cf515ac2c46c01",
+        "input_bytes": 2097152,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/long-match/hc4.lz4block",
+        "file_sha256": "132294be4e8ad5dda075690c9b6946038bbcf76cdffacbc13eca7d455f30e523",
+        "file_bytes": 8534
+      },
+      {
+        "id": "block/synthetic/long-match/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/long-match",
+        "input_sha256": "3eacfea0a03e52011997086bf8a8e92d2bfe8c20a404563f30cf515ac2c46c01",
+        "input_bytes": 2097152,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/long-match/hc9.lz4block",
+        "file_sha256": "132294be4e8ad5dda075690c9b6946038bbcf76cdffacbc13eca7d455f30e523",
+        "file_bytes": 8534
+      },
+      {
+        "id": "block/synthetic/min-match/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/min-match",
+        "input_sha256": "3e3a989ede61d98124e70c318f54fa0d0b806221418c53c4000dc67512abf89b",
+        "input_bytes": 68126,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/min-match/default.lz4block",
+        "file_sha256": "3b7f77e090bd43ca8365638baef1673c8804545f6db872823d7c54c92a4731d0",
+        "file_bytes": 54581
+      },
+      {
+        "id": "block/synthetic/min-match/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/min-match",
+        "input_sha256": "3e3a989ede61d98124e70c318f54fa0d0b806221418c53c4000dc67512abf89b",
+        "input_bytes": 68126,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/min-match/hc12.lz4block",
+        "file_sha256": "135c75fae15698692ee3270511560b68db189c9c44108faacb03345da59ec314",
+        "file_bytes": 49959
+      },
+      {
+        "id": "block/synthetic/min-match/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/min-match",
+        "input_sha256": "3e3a989ede61d98124e70c318f54fa0d0b806221418c53c4000dc67512abf89b",
+        "input_bytes": 68126,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/min-match/hc4.lz4block",
+        "file_sha256": "a37a7eff11ac3b81b001a754a2f21bc392caacef641cb0886ad8b14340d52400",
+        "file_bytes": 50283
+      },
+      {
+        "id": "block/synthetic/min-match/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/min-match",
+        "input_sha256": "3e3a989ede61d98124e70c318f54fa0d0b806221418c53c4000dc67512abf89b",
+        "input_bytes": 68126,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/min-match/hc9.lz4block",
+        "file_sha256": "3fdc7e43c3d54e87bef422aa7cdbad24eab41f8f38b37e1dcb656ecba983d818",
+        "file_bytes": 49999
+      },
+      {
+        "id": "block/synthetic/one-byte/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/one-byte",
+        "input_sha256": "d1bbd73bb09190bfb883056771e22e997541ed20079793bf33975fe1654581c3",
+        "input_bytes": 1,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/one-byte/default.lz4block",
+        "file_sha256": "8db2a73bb5372d8c615a8d54564d6c3f0b0e36f4ac965c49b89514844e9caebc",
+        "file_bytes": 2
+      },
+      {
+        "id": "block/synthetic/one-byte/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/one-byte",
+        "input_sha256": "d1bbd73bb09190bfb883056771e22e997541ed20079793bf33975fe1654581c3",
+        "input_bytes": 1,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/one-byte/hc12.lz4block",
+        "file_sha256": "8db2a73bb5372d8c615a8d54564d6c3f0b0e36f4ac965c49b89514844e9caebc",
+        "file_bytes": 2
+      },
+      {
+        "id": "block/synthetic/one-byte/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/one-byte",
+        "input_sha256": "d1bbd73bb09190bfb883056771e22e997541ed20079793bf33975fe1654581c3",
+        "input_bytes": 1,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/one-byte/hc4.lz4block",
+        "file_sha256": "8db2a73bb5372d8c615a8d54564d6c3f0b0e36f4ac965c49b89514844e9caebc",
+        "file_bytes": 2
+      },
+      {
+        "id": "block/synthetic/one-byte/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/one-byte",
+        "input_sha256": "d1bbd73bb09190bfb883056771e22e997541ed20079793bf33975fe1654581c3",
+        "input_bytes": 1,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/one-byte/hc9.lz4block",
+        "file_sha256": "8db2a73bb5372d8c615a8d54564d6c3f0b0e36f4ac965c49b89514844e9caebc",
+        "file_bytes": 2
+      },
+      {
+        "id": "block/synthetic/repetitive-text/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/repetitive-text",
+        "input_sha256": "a610655bc8d9412967889e025fcd9bfefb5060475908cba5849890fc8e5c23da",
+        "input_bytes": 300000,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/repetitive-text/default.lz4block",
+        "file_sha256": "685fde337716b5bc703cf8004f9d823f379b7d0a6845acfce560ea2e17d67424",
+        "file_bytes": 1225
+      },
+      {
+        "id": "block/synthetic/repetitive-text/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/repetitive-text",
+        "input_sha256": "a610655bc8d9412967889e025fcd9bfefb5060475908cba5849890fc8e5c23da",
+        "input_bytes": 300000,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/repetitive-text/hc12.lz4block",
+        "file_sha256": "685fde337716b5bc703cf8004f9d823f379b7d0a6845acfce560ea2e17d67424",
+        "file_bytes": 1225
+      },
+      {
+        "id": "block/synthetic/repetitive-text/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/repetitive-text",
+        "input_sha256": "a610655bc8d9412967889e025fcd9bfefb5060475908cba5849890fc8e5c23da",
+        "input_bytes": 300000,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/repetitive-text/hc4.lz4block",
+        "file_sha256": "685fde337716b5bc703cf8004f9d823f379b7d0a6845acfce560ea2e17d67424",
+        "file_bytes": 1225
+      },
+      {
+        "id": "block/synthetic/repetitive-text/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/repetitive-text",
+        "input_sha256": "a610655bc8d9412967889e025fcd9bfefb5060475908cba5849890fc8e5c23da",
+        "input_bytes": 300000,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/repetitive-text/hc9.lz4block",
+        "file_sha256": "685fde337716b5bc703cf8004f9d823f379b7d0a6845acfce560ea2e17d67424",
+        "file_bytes": 1225
+      },
+      {
+        "id": "block/synthetic/tiny-10/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-10",
+        "input_sha256": "28fbc31bb7bc66fcf1504ba43246a81046182ee5620368ea850d54ca468124ae",
+        "input_bytes": 10,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/tiny-10/default.lz4block",
+        "file_sha256": "a7edfc460238a390cb735fc9426dade13dc75f1f6093d8f379732ac6d7d6f1e4",
+        "file_bytes": 11
+      },
+      {
+        "id": "block/synthetic/tiny-10/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-10",
+        "input_sha256": "28fbc31bb7bc66fcf1504ba43246a81046182ee5620368ea850d54ca468124ae",
+        "input_bytes": 10,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/tiny-10/hc12.lz4block",
+        "file_sha256": "a7edfc460238a390cb735fc9426dade13dc75f1f6093d8f379732ac6d7d6f1e4",
+        "file_bytes": 11
+      },
+      {
+        "id": "block/synthetic/tiny-10/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-10",
+        "input_sha256": "28fbc31bb7bc66fcf1504ba43246a81046182ee5620368ea850d54ca468124ae",
+        "input_bytes": 10,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/tiny-10/hc4.lz4block",
+        "file_sha256": "a7edfc460238a390cb735fc9426dade13dc75f1f6093d8f379732ac6d7d6f1e4",
+        "file_bytes": 11
+      },
+      {
+        "id": "block/synthetic/tiny-10/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-10",
+        "input_sha256": "28fbc31bb7bc66fcf1504ba43246a81046182ee5620368ea850d54ca468124ae",
+        "input_bytes": 10,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/tiny-10/hc9.lz4block",
+        "file_sha256": "a7edfc460238a390cb735fc9426dade13dc75f1f6093d8f379732ac6d7d6f1e4",
+        "file_bytes": 11
+      },
+      {
+        "id": "block/synthetic/tiny-11/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-11",
+        "input_sha256": "1508e5bf64da1310f975b51fbad2d99a97a20313736f06158587ac467d9d1730",
+        "input_bytes": 11,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/tiny-11/default.lz4block",
+        "file_sha256": "3538c7cb4f05cd7432741a344a581061a7604833b010431d9fca4f32eefd8981",
+        "file_bytes": 12
+      },
+      {
+        "id": "block/synthetic/tiny-11/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-11",
+        "input_sha256": "1508e5bf64da1310f975b51fbad2d99a97a20313736f06158587ac467d9d1730",
+        "input_bytes": 11,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/tiny-11/hc12.lz4block",
+        "file_sha256": "3538c7cb4f05cd7432741a344a581061a7604833b010431d9fca4f32eefd8981",
+        "file_bytes": 12
+      },
+      {
+        "id": "block/synthetic/tiny-11/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-11",
+        "input_sha256": "1508e5bf64da1310f975b51fbad2d99a97a20313736f06158587ac467d9d1730",
+        "input_bytes": 11,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/tiny-11/hc4.lz4block",
+        "file_sha256": "3538c7cb4f05cd7432741a344a581061a7604833b010431d9fca4f32eefd8981",
+        "file_bytes": 12
+      },
+      {
+        "id": "block/synthetic/tiny-11/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-11",
+        "input_sha256": "1508e5bf64da1310f975b51fbad2d99a97a20313736f06158587ac467d9d1730",
+        "input_bytes": 11,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/tiny-11/hc9.lz4block",
+        "file_sha256": "3538c7cb4f05cd7432741a344a581061a7604833b010431d9fca4f32eefd8981",
+        "file_bytes": 12
+      },
+      {
+        "id": "block/synthetic/tiny-12/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-12",
+        "input_sha256": "2c97e1b7b38a66f2ef3cd34cca760fd7fbad873dcfec5ea8443cc228918da28b",
+        "input_bytes": 12,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/tiny-12/default.lz4block",
+        "file_sha256": "ba610c4dc174756b94a3d4618499a1693869ba276c2562cb8bdaddd284d5297d",
+        "file_bytes": 13
+      },
+      {
+        "id": "block/synthetic/tiny-12/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-12",
+        "input_sha256": "2c97e1b7b38a66f2ef3cd34cca760fd7fbad873dcfec5ea8443cc228918da28b",
+        "input_bytes": 12,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/tiny-12/hc12.lz4block",
+        "file_sha256": "ba610c4dc174756b94a3d4618499a1693869ba276c2562cb8bdaddd284d5297d",
+        "file_bytes": 13
+      },
+      {
+        "id": "block/synthetic/tiny-12/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-12",
+        "input_sha256": "2c97e1b7b38a66f2ef3cd34cca760fd7fbad873dcfec5ea8443cc228918da28b",
+        "input_bytes": 12,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/tiny-12/hc4.lz4block",
+        "file_sha256": "ba610c4dc174756b94a3d4618499a1693869ba276c2562cb8bdaddd284d5297d",
+        "file_bytes": 13
+      },
+      {
+        "id": "block/synthetic/tiny-12/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-12",
+        "input_sha256": "2c97e1b7b38a66f2ef3cd34cca760fd7fbad873dcfec5ea8443cc228918da28b",
+        "input_bytes": 12,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/tiny-12/hc9.lz4block",
+        "file_sha256": "ba610c4dc174756b94a3d4618499a1693869ba276c2562cb8bdaddd284d5297d",
+        "file_bytes": 13
+      },
+      {
+        "id": "block/synthetic/tiny-2/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-2",
+        "input_sha256": "6133fddcddb2457a6907cdd350d01f087262fba58c125e2b1c54be85d33621a0",
+        "input_bytes": 2,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/tiny-2/default.lz4block",
+        "file_sha256": "62976c4838449d546bef15a38471bd46cce08bd5db99d248ec82eea11f6c43d3",
+        "file_bytes": 3
+      },
+      {
+        "id": "block/synthetic/tiny-2/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-2",
+        "input_sha256": "6133fddcddb2457a6907cdd350d01f087262fba58c125e2b1c54be85d33621a0",
+        "input_bytes": 2,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/tiny-2/hc12.lz4block",
+        "file_sha256": "62976c4838449d546bef15a38471bd46cce08bd5db99d248ec82eea11f6c43d3",
+        "file_bytes": 3
+      },
+      {
+        "id": "block/synthetic/tiny-2/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-2",
+        "input_sha256": "6133fddcddb2457a6907cdd350d01f087262fba58c125e2b1c54be85d33621a0",
+        "input_bytes": 2,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/tiny-2/hc4.lz4block",
+        "file_sha256": "62976c4838449d546bef15a38471bd46cce08bd5db99d248ec82eea11f6c43d3",
+        "file_bytes": 3
+      },
+      {
+        "id": "block/synthetic/tiny-2/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-2",
+        "input_sha256": "6133fddcddb2457a6907cdd350d01f087262fba58c125e2b1c54be85d33621a0",
+        "input_bytes": 2,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/tiny-2/hc9.lz4block",
+        "file_sha256": "62976c4838449d546bef15a38471bd46cce08bd5db99d248ec82eea11f6c43d3",
+        "file_bytes": 3
+      },
+      {
+        "id": "block/synthetic/tiny-3/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-3",
+        "input_sha256": "8a8c00136c4697005707b529c3403b16fdf5c61b898fe3bf0633e0a1a4782211",
+        "input_bytes": 3,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/tiny-3/default.lz4block",
+        "file_sha256": "9a621f34f476afff5e39bb634bf3c2fac43bfdcf175541e36f808f3dcd74efde",
+        "file_bytes": 4
+      },
+      {
+        "id": "block/synthetic/tiny-3/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-3",
+        "input_sha256": "8a8c00136c4697005707b529c3403b16fdf5c61b898fe3bf0633e0a1a4782211",
+        "input_bytes": 3,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/tiny-3/hc12.lz4block",
+        "file_sha256": "9a621f34f476afff5e39bb634bf3c2fac43bfdcf175541e36f808f3dcd74efde",
+        "file_bytes": 4
+      },
+      {
+        "id": "block/synthetic/tiny-3/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-3",
+        "input_sha256": "8a8c00136c4697005707b529c3403b16fdf5c61b898fe3bf0633e0a1a4782211",
+        "input_bytes": 3,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/tiny-3/hc4.lz4block",
+        "file_sha256": "9a621f34f476afff5e39bb634bf3c2fac43bfdcf175541e36f808f3dcd74efde",
+        "file_bytes": 4
+      },
+      {
+        "id": "block/synthetic/tiny-3/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-3",
+        "input_sha256": "8a8c00136c4697005707b529c3403b16fdf5c61b898fe3bf0633e0a1a4782211",
+        "input_bytes": 3,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/tiny-3/hc9.lz4block",
+        "file_sha256": "9a621f34f476afff5e39bb634bf3c2fac43bfdcf175541e36f808f3dcd74efde",
+        "file_bytes": 4
+      },
+      {
+        "id": "block/synthetic/tiny-4/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-4",
+        "input_sha256": "58a50b7954adb0a02240eff6f229b9ef9c0b64c3b7c60460be89409dcb9b0cd1",
+        "input_bytes": 4,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/tiny-4/default.lz4block",
+        "file_sha256": "b2e35d789abd4c934f808e153823d06be33cd39a2418dc6551c272993c9ad5dd",
+        "file_bytes": 5
+      },
+      {
+        "id": "block/synthetic/tiny-4/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-4",
+        "input_sha256": "58a50b7954adb0a02240eff6f229b9ef9c0b64c3b7c60460be89409dcb9b0cd1",
+        "input_bytes": 4,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/tiny-4/hc12.lz4block",
+        "file_sha256": "b2e35d789abd4c934f808e153823d06be33cd39a2418dc6551c272993c9ad5dd",
+        "file_bytes": 5
+      },
+      {
+        "id": "block/synthetic/tiny-4/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-4",
+        "input_sha256": "58a50b7954adb0a02240eff6f229b9ef9c0b64c3b7c60460be89409dcb9b0cd1",
+        "input_bytes": 4,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/tiny-4/hc4.lz4block",
+        "file_sha256": "b2e35d789abd4c934f808e153823d06be33cd39a2418dc6551c272993c9ad5dd",
+        "file_bytes": 5
+      },
+      {
+        "id": "block/synthetic/tiny-4/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-4",
+        "input_sha256": "58a50b7954adb0a02240eff6f229b9ef9c0b64c3b7c60460be89409dcb9b0cd1",
+        "input_bytes": 4,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/tiny-4/hc9.lz4block",
+        "file_sha256": "b2e35d789abd4c934f808e153823d06be33cd39a2418dc6551c272993c9ad5dd",
+        "file_bytes": 5
+      },
+      {
+        "id": "block/synthetic/tiny-5/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-5",
+        "input_sha256": "b09c20a58f152242fac661021bbac2433da047d77dfca33e8b8988d496430b2d",
+        "input_bytes": 5,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/tiny-5/default.lz4block",
+        "file_sha256": "8361e858486a80673e6a8a883f8d71c69d50c5b2aba79f937e8f11a25aefb14a",
+        "file_bytes": 6
+      },
+      {
+        "id": "block/synthetic/tiny-5/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-5",
+        "input_sha256": "b09c20a58f152242fac661021bbac2433da047d77dfca33e8b8988d496430b2d",
+        "input_bytes": 5,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/tiny-5/hc12.lz4block",
+        "file_sha256": "8361e858486a80673e6a8a883f8d71c69d50c5b2aba79f937e8f11a25aefb14a",
+        "file_bytes": 6
+      },
+      {
+        "id": "block/synthetic/tiny-5/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-5",
+        "input_sha256": "b09c20a58f152242fac661021bbac2433da047d77dfca33e8b8988d496430b2d",
+        "input_bytes": 5,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/tiny-5/hc4.lz4block",
+        "file_sha256": "8361e858486a80673e6a8a883f8d71c69d50c5b2aba79f937e8f11a25aefb14a",
+        "file_bytes": 6
+      },
+      {
+        "id": "block/synthetic/tiny-5/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-5",
+        "input_sha256": "b09c20a58f152242fac661021bbac2433da047d77dfca33e8b8988d496430b2d",
+        "input_bytes": 5,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/tiny-5/hc9.lz4block",
+        "file_sha256": "8361e858486a80673e6a8a883f8d71c69d50c5b2aba79f937e8f11a25aefb14a",
+        "file_bytes": 6
+      },
+      {
+        "id": "block/synthetic/tiny-6/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-6",
+        "input_sha256": "a88e14a2e564ada9445ca39da27b8e9466f407b5b9ab2106cd68101d74f47ed5",
+        "input_bytes": 6,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/tiny-6/default.lz4block",
+        "file_sha256": "abece220dd2710bacc8b76d832babb88d1c72252ef08e5068cd6a259abe527cf",
+        "file_bytes": 7
+      },
+      {
+        "id": "block/synthetic/tiny-6/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-6",
+        "input_sha256": "a88e14a2e564ada9445ca39da27b8e9466f407b5b9ab2106cd68101d74f47ed5",
+        "input_bytes": 6,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/tiny-6/hc12.lz4block",
+        "file_sha256": "abece220dd2710bacc8b76d832babb88d1c72252ef08e5068cd6a259abe527cf",
+        "file_bytes": 7
+      },
+      {
+        "id": "block/synthetic/tiny-6/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-6",
+        "input_sha256": "a88e14a2e564ada9445ca39da27b8e9466f407b5b9ab2106cd68101d74f47ed5",
+        "input_bytes": 6,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/tiny-6/hc4.lz4block",
+        "file_sha256": "abece220dd2710bacc8b76d832babb88d1c72252ef08e5068cd6a259abe527cf",
+        "file_bytes": 7
+      },
+      {
+        "id": "block/synthetic/tiny-6/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-6",
+        "input_sha256": "a88e14a2e564ada9445ca39da27b8e9466f407b5b9ab2106cd68101d74f47ed5",
+        "input_bytes": 6,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/tiny-6/hc9.lz4block",
+        "file_sha256": "abece220dd2710bacc8b76d832babb88d1c72252ef08e5068cd6a259abe527cf",
+        "file_bytes": 7
+      },
+      {
+        "id": "block/synthetic/tiny-7/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-7",
+        "input_sha256": "a82df0b9bad3d52f5818878662a4d5b913f8b2d85e03e8982d87110959cb9ca7",
+        "input_bytes": 7,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/tiny-7/default.lz4block",
+        "file_sha256": "c117949c23d13ada38f73805637e03a950f54a708560a389dd472c8850a29191",
+        "file_bytes": 8
+      },
+      {
+        "id": "block/synthetic/tiny-7/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-7",
+        "input_sha256": "a82df0b9bad3d52f5818878662a4d5b913f8b2d85e03e8982d87110959cb9ca7",
+        "input_bytes": 7,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/tiny-7/hc12.lz4block",
+        "file_sha256": "c117949c23d13ada38f73805637e03a950f54a708560a389dd472c8850a29191",
+        "file_bytes": 8
+      },
+      {
+        "id": "block/synthetic/tiny-7/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-7",
+        "input_sha256": "a82df0b9bad3d52f5818878662a4d5b913f8b2d85e03e8982d87110959cb9ca7",
+        "input_bytes": 7,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/tiny-7/hc4.lz4block",
+        "file_sha256": "c117949c23d13ada38f73805637e03a950f54a708560a389dd472c8850a29191",
+        "file_bytes": 8
+      },
+      {
+        "id": "block/synthetic/tiny-7/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-7",
+        "input_sha256": "a82df0b9bad3d52f5818878662a4d5b913f8b2d85e03e8982d87110959cb9ca7",
+        "input_bytes": 7,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/tiny-7/hc9.lz4block",
+        "file_sha256": "c117949c23d13ada38f73805637e03a950f54a708560a389dd472c8850a29191",
+        "file_bytes": 8
+      },
+      {
+        "id": "block/synthetic/tiny-8/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-8",
+        "input_sha256": "567060504d5ecdbb45291e13485fdcc7d0974aa3712153cb51f7e2f7f13a537d",
+        "input_bytes": 8,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/tiny-8/default.lz4block",
+        "file_sha256": "c143b4af883c7e23b7ffe47e15af191417ac006280f7a271a02a761473ba15bb",
+        "file_bytes": 9
+      },
+      {
+        "id": "block/synthetic/tiny-8/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-8",
+        "input_sha256": "567060504d5ecdbb45291e13485fdcc7d0974aa3712153cb51f7e2f7f13a537d",
+        "input_bytes": 8,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/tiny-8/hc12.lz4block",
+        "file_sha256": "c143b4af883c7e23b7ffe47e15af191417ac006280f7a271a02a761473ba15bb",
+        "file_bytes": 9
+      },
+      {
+        "id": "block/synthetic/tiny-8/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-8",
+        "input_sha256": "567060504d5ecdbb45291e13485fdcc7d0974aa3712153cb51f7e2f7f13a537d",
+        "input_bytes": 8,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/tiny-8/hc4.lz4block",
+        "file_sha256": "c143b4af883c7e23b7ffe47e15af191417ac006280f7a271a02a761473ba15bb",
+        "file_bytes": 9
+      },
+      {
+        "id": "block/synthetic/tiny-8/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-8",
+        "input_sha256": "567060504d5ecdbb45291e13485fdcc7d0974aa3712153cb51f7e2f7f13a537d",
+        "input_bytes": 8,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/tiny-8/hc9.lz4block",
+        "file_sha256": "c143b4af883c7e23b7ffe47e15af191417ac006280f7a271a02a761473ba15bb",
+        "file_bytes": 9
+      },
+      {
+        "id": "block/synthetic/tiny-9/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-9",
+        "input_sha256": "9014115b643af04994aac6ce58d4d057a6f28f9c1cd45ec07d96d2f26d12bd64",
+        "input_bytes": 9,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/tiny-9/default.lz4block",
+        "file_sha256": "ab93b961f2200e6623ffa421daef6071fd7eb25d5c019ef26692efa088a280a5",
+        "file_bytes": 10
+      },
+      {
+        "id": "block/synthetic/tiny-9/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-9",
+        "input_sha256": "9014115b643af04994aac6ce58d4d057a6f28f9c1cd45ec07d96d2f26d12bd64",
+        "input_bytes": 9,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/tiny-9/hc12.lz4block",
+        "file_sha256": "ab93b961f2200e6623ffa421daef6071fd7eb25d5c019ef26692efa088a280a5",
+        "file_bytes": 10
+      },
+      {
+        "id": "block/synthetic/tiny-9/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-9",
+        "input_sha256": "9014115b643af04994aac6ce58d4d057a6f28f9c1cd45ec07d96d2f26d12bd64",
+        "input_bytes": 9,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/tiny-9/hc4.lz4block",
+        "file_sha256": "ab93b961f2200e6623ffa421daef6071fd7eb25d5c019ef26692efa088a280a5",
+        "file_bytes": 10
+      },
+      {
+        "id": "block/synthetic/tiny-9/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/tiny-9",
+        "input_sha256": "9014115b643af04994aac6ce58d4d057a6f28f9c1cd45ec07d96d2f26d12bd64",
+        "input_bytes": 9,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/tiny-9/hc9.lz4block",
+        "file_sha256": "ab93b961f2200e6623ffa421daef6071fd7eb25d5c019ef26692efa088a280a5",
+        "file_bytes": 10
+      },
+      {
+        "id": "block/synthetic/window-boundary/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/window-boundary",
+        "input_sha256": "339dfcf1b00e8b710ba12c7adb707262ccbc55ba157ca744f7fbf6ace8890a79",
+        "input_bytes": 262654,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/window-boundary/default.lz4block",
+        "file_sha256": "e9a5faefdccad4369803eb8e8ad2495b6503f2ce14da80eac5dcf6e681430b19",
+        "file_bytes": 263176
+      },
+      {
+        "id": "block/synthetic/window-boundary/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/window-boundary",
+        "input_sha256": "339dfcf1b00e8b710ba12c7adb707262ccbc55ba157ca744f7fbf6ace8890a79",
+        "input_bytes": 262654,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/window-boundary/hc12.lz4block",
+        "file_sha256": "94e5bc04c1755d9a859829b198f160a735deac74184d891aded6d7c5164afd10",
+        "file_bytes": 262664
+      },
+      {
+        "id": "block/synthetic/window-boundary/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/window-boundary",
+        "input_sha256": "339dfcf1b00e8b710ba12c7adb707262ccbc55ba157ca744f7fbf6ace8890a79",
+        "input_bytes": 262654,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/window-boundary/hc4.lz4block",
+        "file_sha256": "94e5bc04c1755d9a859829b198f160a735deac74184d891aded6d7c5164afd10",
+        "file_bytes": 262664
+      },
+      {
+        "id": "block/synthetic/window-boundary/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/window-boundary",
+        "input_sha256": "339dfcf1b00e8b710ba12c7adb707262ccbc55ba157ca744f7fbf6ace8890a79",
+        "input_bytes": 262654,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/window-boundary/hc9.lz4block",
+        "file_sha256": "94e5bc04c1755d9a859829b198f160a735deac74184d891aded6d7c5164afd10",
+        "file_bytes": 262664
+      },
+      {
+        "id": "block/synthetic/zeros-1m/default",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/zeros-1m",
+        "input_sha256": "30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58",
+        "input_bytes": 1048576,
+        "params": {
+          "mode": "default"
+        },
+        "file": "block/synthetic/zeros-1m/default.lz4block",
+        "file_sha256": "2e15352a1b4e6adbed0021e20e9cfb293b041251ccc5bfcf0513486bb4e3d728",
+        "file_bytes": 4122
+      },
+      {
+        "id": "block/synthetic/zeros-1m/hc12",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/zeros-1m",
+        "input_sha256": "30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58",
+        "input_bytes": 1048576,
+        "params": {
+          "mode": "hc12"
+        },
+        "file": "block/synthetic/zeros-1m/hc12.lz4block",
+        "file_sha256": "2e15352a1b4e6adbed0021e20e9cfb293b041251ccc5bfcf0513486bb4e3d728",
+        "file_bytes": 4122
+      },
+      {
+        "id": "block/synthetic/zeros-1m/hc4",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/zeros-1m",
+        "input_sha256": "30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58",
+        "input_bytes": 1048576,
+        "params": {
+          "mode": "hc4"
+        },
+        "file": "block/synthetic/zeros-1m/hc4.lz4block",
+        "file_sha256": "2e15352a1b4e6adbed0021e20e9cfb293b041251ccc5bfcf0513486bb4e3d728",
+        "file_bytes": 4122
+      },
+      {
+        "id": "block/synthetic/zeros-1m/hc9",
+        "suite": "block",
+        "category": "block",
+        "kind": "block",
+        "tool": "lz4",
+        "input": "synthetic/zeros-1m",
+        "input_sha256": "30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58",
+        "input_bytes": 1048576,
+        "params": {
+          "mode": "hc9"
+        },
+        "file": "block/synthetic/zeros-1m/hc9.lz4block",
+        "file_sha256": "2e15352a1b4e6adbed0021e20e9cfb293b041251ccc5bfcf0513486bb4e3d728",
+        "file_bytes": 4122
+      }
+    ]
+  }
 }

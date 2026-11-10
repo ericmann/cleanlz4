@@ -52,13 +52,58 @@ pub struct Corpus {
     pub files: Vec<FileEntry>,
 }
 
+/// One generated conformance file (SPEC section 5.4's corpus record).
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct Entry {
+    pub id: String,
+    pub suite: String,
+    pub category: String,
+    pub kind: String,
+    pub tool: String,
+    pub input: String,
+    pub input_sha256: String,
+    pub input_bytes: u64,
+    pub params: serde_json::Value,
+    /// Path relative to `testdata/conformance/`.
+    pub file: String,
+    pub file_sha256: String,
+    pub file_bytes: u64,
+    /// Suite-specific keys added by later tasks.
+    #[serde(flatten)]
+    pub extra: serde_json::Map<String, serde_json::Value>,
+}
+
+/// The generated conformance corpus.
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct Conformance {
+    pub seed: u64,
+    pub corpus_sha256: String,
+    pub entries: Vec<Entry>,
+}
+
+impl Conformance {
+    /// Sort the entries by id and recompute `corpus_sha256`: the SHA-256 of
+    /// every `id`, a newline, `file_sha256`, a newline, in that order.
+    pub fn finalize(&mut self) {
+        self.entries.sort_by(|a, b| a.id.cmp(&b.id));
+        let mut text = String::new();
+        for e in &self.entries {
+            text.push_str(&e.id);
+            text.push('\n');
+            text.push_str(&e.file_sha256);
+            text.push('\n');
+        }
+        self.corpus_sha256 = sha256_hex(text.as_bytes());
+    }
+}
+
 /// The manifest.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Manifest {
     pub version: u32,
     pub tools: Tools,
     pub corpora: Vec<Corpus>,
-    pub conformance: Option<serde_json::Value>,
+    pub conformance: Option<Conformance>,
 }
 
 /// Path of `testdata/MANIFEST.json`.

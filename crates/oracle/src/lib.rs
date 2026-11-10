@@ -2,6 +2,7 @@
 
 pub mod block;
 pub mod config;
+pub mod corpus;
 pub mod craft;
 pub mod ffi;
 pub mod frame;
