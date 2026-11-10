@@ -18,7 +18,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-07 Align the end-of-block policy with the oracle
 - [x] P1-08 Dictionary-prefixed block decoding
 - [x] P1-09 Synthetic inputs and block round-trip tests against the oracle
-- [!] P1-10 Oracle dictionary blocks and the dictionary differential test
+- [ ] P1-10 Oracle dictionary blocks and the dictionary differential test
 - [x] P1-11 Conformance generator: the block suite and the manifest's entries
 - [x] P1-12 Conformance runner and the results for category block
 - [x] P1-13 DESIGN.md: the Phase 1 spec-rule report
@@ -30,42 +30,42 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P2-05 Content size
 - [x] P2-06 Concatenated frames, skippable frames and trailing data
 - [x] P2-07 The legacy frame
-- [-] P2-08 Preset dictionary and Dict-ID
+- [ ] P2-08 Preset dictionary and Dict-ID
 - [x] P2-09 Spike: the oracle's frame behaviour, and the differential compare module
 - [x] P2-10 Conformance generator: oracle-compressed frame suites
-- [-] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
-- [-] P2-12 The full conformance run and its results
-- [-] P2-13 The malformed corpus and its results
+- [ ] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
+- [ ] P2-12 The full conformance run and its results
+- [ ] P2-13 The malformed corpus and its results
 - [x] P2-14 Phase 2 end: push and record the manual check
 - [x] P3-01 Streaming decoder: regular frames
-- [-] P3-02 Streaming decoder: skippable, legacy and concatenated frames, dictionaries and trailing data
-- [-] P3-03 Chunking-invariance property test
+- [ ] P3-02 Streaming decoder: skippable, legacy and concatenated frames, dictionaries and trailing data
+- [ ] P3-03 Chunking-invariance property test
 - [x] P3-04 The output limit and bounded memory
 - [x] P3-05 Tune limits.max_output_bytes
-- [-] P3-06 Tune stream.chunking_cases
+- [ ] P3-06 Tune stream.chunking_cases
 - [x] P3-07 Phase 3 end: push and record the manual check
-- [-] P4-01 Fuzz targets (a): no panic on arbitrary bytes
-- [-] P4-02 Fuzz targets (b) and (c): differential
-- [-] P4-03 The fuzz runner, its results writer and regression replay
-- [-] P4-04 Run no_panic_block for the configured duration
-- [-] P4-05 Run no_panic_frame for the configured duration
-- [-] P4-06 Run no_panic_stream for the configured duration
-- [-] P4-07 Run diff_roundtrip for the configured duration
-- [-] P4-08 Run diff_accept for the configured duration
-- [-] P4-09 Triage crashes and divergences
+- [ ] P4-01 Fuzz targets (a): no panic on arbitrary bytes
+- [ ] P4-02 Fuzz targets (b) and (c): differential
+- [ ] P4-03 The fuzz runner, its results writer and regression replay
+- [ ] P4-04 Run no_panic_block for the configured duration
+- [ ] P4-05 Run no_panic_frame for the configured duration
+- [ ] P4-06 Run no_panic_stream for the configured duration
+- [ ] P4-07 Run diff_roundtrip for the configured duration
+- [ ] P4-08 Run diff_accept for the configured duration
+- [ ] P4-09 Triage crashes and divergences
 - [x] P4-10 Benchmarks against the oracle
 - [x] P4-11 Tune bench.repeats
-- [-] P4-12 Tune fuzz.seconds_per_target
+- [ ] P4-12 Tune fuzz.seconds_per_target
 - [x] P4-13 Phase 4 end: push and record the manual check
 - [x] P5-01 The evidence index and the Done checklist
 - [x] P5-02 Phase 5 end: push and record the manual check
 - [x] R1-01 Spike binary reads the differential cap from the config
 - [x] R1-02 Hold the output limit to its memory bound, and test it past several blocks
 - [x] R1-03 Test the differential module's normalizations and cap rule
-- [-] R1-04 Assert the Dict-ID probe's fixed verdict once dictionaries exist
-- [-] R1-05 Streaming ReturnRemainder leaves a trailing magic prefix to the caller
+- [ ] R1-04 Assert the Dict-ID probe's fixed verdict once dictionaries exist
+- [ ] R1-05 Streaming ReturnRemainder leaves a trailing magic prefix to the caller
 - [x] R1-06 Frame suites: every level meets every block size
-- [-] R1-07 Refresh the evidence index after the reopened tasks
+- [ ] R1-07 Refresh the evidence index after the reopened tasks
 - [x] R2-01 Test that a legacy frame's output capacity stays within the limit
 - [x] R2-02 Test the frame-combination generator itself, and the manifest against it
 - [ ] R3-01 Streaming decoder: skippable, legacy and concatenated frames and the trailing-data policy (no dictionaries)
@@ -470,3 +470,87 @@ Added limits.rs legacy_output_capacity_never_exceeds_the_limit (hand-built legac
 ### R2-02 — 78cb123
 
 Added corpus.rs tests frame_combos_are_distinct_and_every_level_meets_every_block_size and manifest_frame_entries_match_the_generator. Both fail under each of the two corpus.rs mutants (hand-run). corpus.rs and MANIFEST.json unchanged. Levels read from Config.
+
+### P1-10 — reopened
+
+REOPENED: Owner decision under SPEC §9 Q2 (clean-room record seq 681; PLAN.md P1-10 amended in commit 9461374): the lz4 CLI, run as a black box, is the oracle for dictionary decoding. Do not block on LZ4_decompress_safe_usingDict again, and do not declare it or any other C symbol in ffi.rs. Follow PLAN.md P1-10 as amended: add crates/oracle/src/cli.rs with decompress_frame_with_dict, which runs `lz4 -d -D <dict>` on a minimal hand-built frame around the block, and use it for the four acceptance tests, including wrong_dictionary_never_panics_and_agrees_with_the_oracle. Record the method in DESIGN.md. For every task reopened with P1-10: a new file under testdata/results/ also goes into docs/EVIDENCE.md's fenced list in the same commit, because evidence_index_lists_every_result_file requires it. Where R3-01 and R3-02 already did part of P3-02 or P2-13, build on that work instead of redoing it.
+
+### P2-08 — reopened
+
+reopened: it was skipped because of P1-10, which is open again
+
+### P2-11 — reopened
+
+reopened: it was skipped because of P1-10, which is open again
+
+### P2-12 — reopened
+
+reopened: it was skipped because of P2-08, which is open again
+
+### P2-13 — reopened
+
+reopened: it was skipped because of P2-08, which is open again
+
+### P3-02 — reopened
+
+reopened: it was skipped because of P2-08, which is open again
+
+### P3-03 — reopened
+
+reopened: it was skipped because of P3-02, which is open again
+
+### P3-06 — reopened
+
+reopened: it was skipped because of P3-03, which is open again
+
+### P4-01 — reopened
+
+reopened: it was skipped because of P3-02, which is open again
+
+### P4-02 — reopened
+
+reopened: it was skipped because of P4-01, which is open again
+
+### P4-03 — reopened
+
+reopened: it was skipped because of P4-02, which is open again
+
+### P4-04 — reopened
+
+reopened: it was skipped because of P4-03, which is open again
+
+### P4-05 — reopened
+
+reopened: it was skipped because of P4-03, which is open again
+
+### P4-06 — reopened
+
+reopened: it was skipped because of P4-03, which is open again
+
+### P4-07 — reopened
+
+reopened: it was skipped because of P4-03, which is open again
+
+### P4-08 — reopened
+
+reopened: it was skipped because of P4-03, which is open again
+
+### P4-09 — reopened
+
+reopened: it was skipped because of P4-03, which is open again
+
+### P4-12 — reopened
+
+reopened: it was skipped because of P4-03, which is open again
+
+### R1-04 — reopened
+
+reopened: it was skipped because of P2-08, which is open again
+
+### R1-05 — reopened
+
+reopened: it was skipped because of P3-02, which is open again
+
+### R1-07 — reopened
+
+reopened: it was skipped because of P2-12, which is open again
