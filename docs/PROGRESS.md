@@ -30,36 +30,36 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P2-05 Content size
 - [x] P2-06 Concatenated frames, skippable frames and trailing data
 - [x] P2-07 The legacy frame
-- [ ] P2-08 Preset dictionary and Dict-ID
+- [-] P2-08 Preset dictionary and Dict-ID
 - [x] P2-09 Spike: the oracle's frame behaviour, and the differential compare module
 - [x] P2-10 Conformance generator: oracle-compressed frame suites
-- [ ] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
-- [ ] P2-12 The full conformance run and its results
-- [ ] P2-13 The malformed corpus and its results
+- [-] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
+- [-] P2-12 The full conformance run and its results
+- [-] P2-13 The malformed corpus and its results
 - [x] P2-14 Phase 2 end: push and record the manual check
 - [x] P3-01 Streaming decoder: regular frames
-- [ ] P3-02 Streaming decoder: skippable, legacy and concatenated frames, dictionaries and trailing data
-- [ ] P3-03 Chunking-invariance property test
+- [-] P3-02 Streaming decoder: skippable, legacy and concatenated frames, dictionaries and trailing data
+- [-] P3-03 Chunking-invariance property test
 - [x] P3-04 The output limit and bounded memory
 - [x] P3-05 Tune limits.max_output_bytes
-- [ ] P3-06 Tune stream.chunking_cases
+- [-] P3-06 Tune stream.chunking_cases
 - [x] P3-07 Phase 3 end: push and record the manual check
-- [ ] P4-01 Fuzz targets (a): no panic on arbitrary bytes
-- [ ] P4-02 Fuzz targets (b) and (c): differential
-- [ ] P4-03 The fuzz runner, its results writer and regression replay
-- [ ] P4-04 Run no_panic_block for the configured duration
-- [ ] P4-05 Run no_panic_frame for the configured duration
-- [ ] P4-06 Run no_panic_stream for the configured duration
-- [ ] P4-07 Run diff_roundtrip for the configured duration
-- [ ] P4-08 Run diff_accept for the configured duration
-- [ ] P4-09 Triage crashes and divergences
+- [-] P4-01 Fuzz targets (a): no panic on arbitrary bytes
+- [-] P4-02 Fuzz targets (b) and (c): differential
+- [-] P4-03 The fuzz runner, its results writer and regression replay
+- [-] P4-04 Run no_panic_block for the configured duration
+- [-] P4-05 Run no_panic_frame for the configured duration
+- [-] P4-06 Run no_panic_stream for the configured duration
+- [-] P4-07 Run diff_roundtrip for the configured duration
+- [-] P4-08 Run diff_accept for the configured duration
+- [-] P4-09 Triage crashes and divergences
 - [x] P4-10 Benchmarks against the oracle
 - [x] P4-11 Tune bench.repeats
-- [ ] P4-12 Tune fuzz.seconds_per_target
+- [-] P4-12 Tune fuzz.seconds_per_target
 - [x] P4-13 Phase 4 end: push and record the manual check
 - [x] P5-01 The evidence index and the Done checklist
 - [x] P5-02 Phase 5 end: push and record the manual check
-- [ ] R1-01 Spike binary reads the differential cap from the config
+- [x] R1-01 Spike binary reads the differential cap from the config
 - [ ] R1-02 Hold the output limit to its memory bound, and test it past several blocks
 - [ ] R1-03 Test the differential module's normalizations and cap rule
 - [ ] R1-04 Assert the Dict-ID probe's fixed verdict once dictionaries exist
@@ -362,3 +362,75 @@ reopened: it was skipped because of P4-03, which is open again
 ### P1-10 — blocked
 
 BLOCKED: Oracle protocol: the binding crate has no LZ4_decompress_safe_usingDict (compiler: cannot find function in crate lz4_sys; only a similarly named continue-style function is offered). Tried the direct call in ffi.rs; it does not compile. Fix: a human supplies the missing declaration or amends SPEC 6.5 / the task.
+
+### P2-08 — skipped
+
+SKIPPED: depends on P1-10
+
+### P2-11 — skipped
+
+SKIPPED: depends on P1-10
+
+### P2-12 — skipped
+
+SKIPPED: depends on P2-08
+
+### P2-13 — skipped
+
+SKIPPED: depends on P2-08
+
+### P3-02 — skipped
+
+SKIPPED: depends on P2-08
+
+### P3-03 — skipped
+
+SKIPPED: depends on P3-02
+
+### P3-06 — skipped
+
+SKIPPED: depends on P3-03
+
+### P4-01 — skipped
+
+SKIPPED: depends on P3-02
+
+### P4-02 — skipped
+
+SKIPPED: depends on P4-01
+
+### P4-03 — skipped
+
+SKIPPED: depends on P4-02
+
+### P4-04 — skipped
+
+SKIPPED: depends on P4-03
+
+### P4-05 — skipped
+
+SKIPPED: depends on P4-03
+
+### P4-06 — skipped
+
+SKIPPED: depends on P4-03
+
+### P4-07 — skipped
+
+SKIPPED: depends on P4-03
+
+### P4-08 — skipped
+
+SKIPPED: depends on P4-03
+
+### P4-09 — skipped
+
+SKIPPED: depends on P4-03
+
+### P4-12 — skipped
+
+SKIPPED: depends on P4-03
+
+### R1-01 — 8ab6a26
+
+Test large_config_values_are_not_spelled_in_oracle_sources added (failed on old probe_frame line, passes now). probe_frame reads cfg.diff.max_output_bytes. Verified probe table still prints. Fmt/clippy fixed (is_multiple_of).
