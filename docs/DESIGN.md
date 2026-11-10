@@ -103,6 +103,10 @@ Phase 1 report: every rule implemented so far, the section it implements, the fu
 
 ## Measurements
 
+### Full conformance run (P2-12)
+
+`make conformance TASK=P2-12 CATEGORIES=all` wrote `testdata/results/conformance-P2-12.json`: 2349 of 2349 passed. Per category (total, all passed): block 156, checksums 301, concatenated 6, content-size 401, dictionary 72, frame-independent 45, frame-linked 53, legacy 14, skippable 21, synthetic 1280.
+
 ### bench.repeats (P4-11)
 
 `bench_decode --only cantrbry` (Canterbury files, release build), three runs at each repeat count; spread is the largest (max - min) / max of `cleanlz4_mb_s` over the three runs, across files.
