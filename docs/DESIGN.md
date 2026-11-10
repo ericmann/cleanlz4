@@ -217,6 +217,20 @@ All 100 divergence inputs are one case: a compressed block that ends with a fina
 
 ## Measurements
 
+### fuzz.seconds_per_target (P4-12)
+
+From the one-hour runs' logs (`fuzz/logs/<target>-P4-0x.log`, untracked; each line carries the elapsed second). `cov` is libFuzzer's coverage-point figure (`ft` in brackets is its feature count); "last NEW" is the elapsed second of the last line reporting new coverage (a `NEW` event). Before = the 60 s column, after = the end column.
+
+| target | cov at 60 s (before) | cov at 600 s | cov at end (after) | last NEW (s) | share of the 3,601 s run |
+|---|---|---|---|---|---|
+| no_panic_block | 115 (357) | 115 (364) | 115 (367) | 356 | 10% |
+| no_panic_frame | 712 (1738) | 760 (1997) | 761 (2054) | 2501 | 69% |
+| no_panic_stream | 931 (2604) | 934 (3023) | 938 (3094) | 1125 | 31% |
+| diff_roundtrip | 777 (1768) | 777 (1778) | 778 (1785) | 3351 | 93% |
+| diff_accept | 647 (1540) | 652 (2136) | 652 (2318) | 2607 | 72% |
+
+Criterion: the key stands when every target's last new coverage came before 90% of the run (3,241 s). `diff_roundtrip` reported new coverage at 3,351 s, 93% of the run, so the criterion is not met for it. The key is not changed (the hour-long verify commands' timeouts in the protected `docs/kukulu.json` are sized for 3,600 s). Recommendation: raise `fuzz.seconds_per_target` for `diff_roundtrip` (and, if one key serves all, for every target), together with the matching timeouts in `docs/kukulu.json`; `diff_roundtrip` is the slow target (58,050 runs in the hour, because the oracle compresses up to 300 KiB per input), so it gains least per second and is the one most likely to still be finding coverage. The other four targets passed the criterion; coverage growth after 600 s was at most 49 points (`no_panic_frame`) and none for `no_panic_block`.
+
 ### stream.chunking_cases (P3-06)
 
 `CHUNKING_CASES_OVERRIDE=<n> cargo test -p oracle --test chunking -- --ignored --nocapture` runs `chunking_coverage_report`: the same generator and the full streamed-versus-one-shot check, counting distinct shapes (input regime x output regime x linked or independent x frame kind mix; 7 x 7 x 2 x 4 = 392, all reachable because the one-byte regimes only need an input up to 4 KiB).
