@@ -18,7 +18,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P1-07 Measure the scratch-buffer change and decide
 - [x] P1-08 Phase 1 end: push and record the manual check
 - [x] P2-01 The full conformance run
-- [ ] P2-02 The full malformed run
+- [x] P2-02 The full malformed run
 - [ ] P2-03 Run no_panic_block for the configured duration
 - [ ] P2-04 Run no_panic_frame for the configured duration
 - [ ] P2-05 Run no_panic_stream for the configured duration
@@ -86,3 +86,7 @@ Push: done. Manual check: NOT VERIFIED (human): read crates/oracle/tests/dict_co
 ### P2-01 — d406151
 
 conformance-P2-01.json: passed 2349, total 2349, failed 0; corpus_sha256 fd6392a28a4b239780f073ad70015c93f589163e4d232a9dd11502c24c93ba05; identical to P2-12 apart from task; MANIFEST.json unchanged by make corpus. Per category: block 156, checksums 301, concatenated 6, content-size 401, dictionary 72, frame-independent 45, frame-linked 53, legacy 14, skippable 21, synthetic 1280. DESIGN Measurements section and EVIDENCE (sorted list + table) updated.
+
+### P2-02 — c507c2b
+
+malformed-P2-02.json: total 144, matched_expected_error 144, panics 0. testdata/malformed untouched. EVIDENCE.md list and table updated.
