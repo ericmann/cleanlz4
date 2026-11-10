@@ -121,6 +121,7 @@ testdata/results/divergences/f4698c73893221d8.bin
 testdata/results/divergences/fbfe04d41d9fbf88.bin
 testdata/results/fuzz-diff_accept-P4-08.json
 testdata/results/fuzz-diff_accept-P4-09.json
+testdata/results/fuzz-diff_roundtrip-P2-06.json
 testdata/results/fuzz-diff_roundtrip-P4-07.json
 testdata/results/fuzz-no_panic_block-P2-03.json
 testdata/results/fuzz-no_panic_block-P4-04.json
@@ -151,6 +152,7 @@ The 100 `testdata/results/divergences/*.bin` files are the `diff_accept` diverge
 | `testdata/results/fuzz-no_panic_stream-P4-06.json` | target `no_panic_stream`, 3,601 s, 21,051,494 runs, 0 crashes, 0 divergences, 895 corpus entries, seed 1 |
 | `testdata/results/fuzz-diff_accept-P4-08.json` | target `diff_accept`, 3,601 s, 21,607,948 runs, 0 crashes, 100 divergences (the file cap; inputs in `testdata/results/divergences/`, untriaged), 820 corpus entries, seed 1 |
 | `testdata/results/fuzz-diff_accept-P4-09.json` | target `diff_accept` re-run after triage, 3,615 s, 16,184,756 runs, 0 crashes, 0 divergences, 1,012 corpus entries, seed 1 |
+| `testdata/results/fuzz-diff_roundtrip-P2-06.json` | target `diff_roundtrip`, 3,601 s, 61,410 runs, 0 crashes, 0 divergences, 437 corpus entries, seed 1 (0.2.0 code) |
 | `testdata/results/fuzz-diff_roundtrip-P4-07.json` | target `diff_roundtrip`, 3,601 s, 58,050 runs, 0 crashes, 0 divergences, 444 corpus entries, seed 1 |
 | `testdata/results/malformed-P2-02.json` | 144 of 144 matched their expected error, 0 panics (0.2.0 code) |
 | `testdata/results/malformed-P2-13.json` | 144 of 144 matched their expected error, 0 panics |
