@@ -15,7 +15,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-04 XXH32, one-shot and streaming
 - [x] P1-05 Block decoder: sequences, overlap copies and strict end-of-block rules
 - [x] P1-06 Spike: the oracle's end-of-block behaviour
-- [ ] P1-07 Align the end-of-block policy with the oracle
+- [x] P1-07 Align the end-of-block policy with the oracle
 - [ ] P1-08 Dictionary-prefixed block decoding
 - [ ] P1-09 Synthetic inputs and block round-trip tests against the oracle
 - [ ] P1-10 Oracle dictionary blocks and the dictionary differential test
@@ -103,3 +103,7 @@ block.rs: pub(crate) decode_block(src,&mut Vec,max_len), decode_block_with(.., E
 ### P1-06 — 8245176
 
 Spike docs/spikes/P1-06.md. Policy observed: rule 1 enforce; rule 2 enforce; rule 3 DO NOT enforce (R3/9..11 and L1/11,12 rejected at exact capacity, accepted with +65536 slack); empty input enforce (reject); single 0x00 accepted; final low nibble not enforced (accepted). Oracle-side differentials must decode with slack capacity. craft.rs: Seq, build_block(seqs, final, nibble), build_block_without_final, expected_output. Note: oracle rejects short-final-run test blocks, so crafted tests need >=12 bytes from last match start to end.
+
+### P1-07 — 9ffab37
+
+EOB policy now: rule1 on, rule2 on, rule3 OFF (per spike); empty input rejected; low nibble ignored. Differentials agree on probes, all prefixes and single-byte corruptions (3 inputs). Interpretation / differential rule: oracle ACCEPTS a zero offset (found by corruption sweep) while cleanlz4 returns ZeroOffset per the document's "invalid"; allowed divergence recorded in DESIGN Differential rules; P2-09 diff.rs must carry it.
