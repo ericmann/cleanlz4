@@ -468,13 +468,6 @@ fn decode_regular_frame(
     Ok((desc, pos))
 }
 
-/// Whether `word` is a known frame magic number.
-fn is_magic(word: u32) -> bool {
-    word == FRAME_MAGIC
-        || word == LEGACY_MAGIC
-        || word & SKIPPABLE_MAGIC_MASK == SKIPPABLE_MAGIC_BASE
-}
-
 /// Decode one legacy frame at the start of `input` (Frame format, "Legacy
 /// frame"), appending to `out`; returns the bytes it used. The frame ends at
 /// the end of input, at a known magic number (left unconsumed) or at a zero
@@ -489,7 +482,7 @@ fn decode_legacy_frame(input: &[u8], out: &mut Vec<u8>, remaining: &mut u64) -> 
         if word == 0 {
             return Ok(pos.saturating_add(4));
         }
-        if is_magic(word) {
+        if magic_kind(word).is_some() {
             return Ok(pos);
         }
         let size = word as usize;
@@ -595,6 +588,26 @@ pub(crate) fn decode_frames(input: &[u8], options: &DecodeOptions) -> Result<Fra
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn magic_kind_names_the_three_kinds_and_nothing_else() {
+        assert_eq!(magic_kind(0x184D_2204), Some(FrameKind::Regular));
+        assert_eq!(magic_kind(0x184C_2102), Some(FrameKind::Legacy));
+        for word in 0x184D_2A50..=0x184D_2A5F_u32 {
+            assert_eq!(magic_kind(word), Some(FrameKind::Skippable), "{word:#x}");
+        }
+        for word in [
+            0,
+            0x184D_2203,
+            0x184D_2205,
+            0x184D_2A4F,
+            0x184D_2A60,
+            0x184C_2101,
+            u32::MAX,
+        ] {
+            assert_eq!(magic_kind(word), None, "{word:#x}");
+        }
+    }
 
     /// Build a header by the document's layout, with a valid checksum.
     fn header(flg: u8, bd: u8, size: Option<u64>, dict: Option<u32>) -> Vec<u8> {
