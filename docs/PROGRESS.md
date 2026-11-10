@@ -18,7 +18,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-07 Align the end-of-block policy with the oracle
 - [x] P1-08 Dictionary-prefixed block decoding
 - [x] P1-09 Synthetic inputs and block round-trip tests against the oracle
-- [ ] P1-10 Oracle dictionary blocks and the dictionary differential test
+- [!] P1-10 Oracle dictionary blocks and the dictionary differential test
 - [x] P1-11 Conformance generator: the block suite and the manifest's entries
 - [x] P1-12 Conformance runner and the results for category block
 - [x] P1-13 DESIGN.md: the Phase 1 spec-rule report
@@ -358,3 +358,7 @@ reopened: it was skipped because of P4-03, which is open again
 ### P4-12 — unblocked (round 1)
 
 reopened: it was skipped because of P4-03, which is open again
+
+### P1-10 — blocked
+
+BLOCKED: Oracle protocol: the binding crate has no LZ4_decompress_safe_usingDict (compiler: cannot find function in crate lz4_sys; only a similarly named continue-style function is offered). Tried the direct call in ffi.rs; it does not compile. Fix: a human supplies the missing declaration or amends SPEC 6.5 / the task.
