@@ -53,3 +53,9 @@ Similarity: docs/kukulu.json holds one negative pair (rust-independent-vs-indep)
 - The decoder changes are small: `frame.rs` (`is_magic` removed, `FrameState.scratch`, `decode_legacy_block` takes a scratch buffer) and `stream.rs` (`Decoder.scratch`, replaced where a legacy frame ends). `lib.rs`, the public API and `Error` are untouched. The rest of the flight is tests, result files, docs, the version bump (both crates and both lockfiles, version lines only) and the CHANGELOG.
 - Every result file under `testdata/results/` was written by its tool in the commit of the work that produced it; none was typed by hand.
 - Friction logged with `kukulu_feedback_log`: the MCP idle timeout during long fuzz runs (see above).
+
+## Round 1
+
+- Task R1-01 done (commit 1b9d5b0): tests only, no change under crates/cleanlz4/src/. Added a live-bytes counter to the counting allocator in crates/oracle/tests/scratch.rs and two tests, `streaming_legacy_scratch_is_freed_at_the_end_mark` and `streaming_legacy_scratch_is_freed_at_the_next_magic`. Each failed when its mutant (stream.rs line 237, line 372) was applied by hand; both mutants were undone.
+- DESIGN.md "One scratch buffer per frame" now names both tests.
+- Counts: 26 done, 0 blocked, 0 skipped. kukulu_verify green. Interpretation choices: none. Manual check: none.
