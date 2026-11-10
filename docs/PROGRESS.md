@@ -54,7 +54,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [-] P4-08 Run diff_accept for the configured duration
 - [-] P4-09 Triage crashes and divergences
 - [x] P4-10 Benchmarks against the oracle
-- [ ] P4-11 Tune bench.repeats
+- [x] P4-11 Tune bench.repeats
 - [ ] P4-12 Tune fuzz.seconds_per_target
 - [ ] P4-13 Phase 4 end: push and record the manual check
 - [ ] P5-01 The evidence index and the Done checklist
@@ -259,3 +259,7 @@ SKIPPED: depends on P4-03
 ### P4-10 — 5445530
 
 bench-P4-10.json: 23 corpus files, repeats = bench.repeats (10), best time. cleanlz4 slowest 413.8 MB/s (silesia/webster), fastest 2224.6 MB/s (silesia/x-ray); oracle 188.0 (canterbury/grammar.lsp, small-file overhead of decompress_frames) to 1957.9. Large text files: cleanlz4 about a third to a half of the oracle's rate. oracle::bench: rate_mb_s, best_seconds, measure; example bench_decode (--task, --repeats, --only); make bench TASK=. No decoder change. Tests bench.rs x2.
+
+### P4-11 — 2950d3c
+
+Spread (Canterbury, 3 runs each): repeats 3 -> 9.43%; 10 (key, before) -> 7.28%; 30 (tripled) -> 7.36%. Criterion: key spread >5% but tripled spread not under half, so bench.repeats stays 10 (tuned: no). After: make bench TASK=P4-11 at 10 -> bench-P4-11.json (cleanlz4 437.6 to 2048.7 MB/s). Interpretation: the three counts compared are 3, 10, 30. bench_decode.rs touched (not in listed files): --only cantrbry aliases to canterbury. Scratch result files were deleted, not committed.
