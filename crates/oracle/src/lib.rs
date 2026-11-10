@@ -2,4 +2,5 @@
 
 pub mod config;
 pub mod ffi;
+pub mod manifest;
 pub mod prng;

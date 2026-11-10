@@ -10,3 +10,7 @@ check:
 	bash scripts/test-check-deps.sh
 	node scripts/verify-spec-sources.mjs
 	node scripts/test-verify-spec-sources.mjs
+
+.PHONY: manifest-corpora
+manifest-corpora:
+	cargo run -p oracle --bin manifest -- corpora --fetched-at $(FETCHED_AT)
