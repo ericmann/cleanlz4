@@ -25,7 +25,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P2-06 Run diff_roundtrip for the configured duration
 - [x] P2-07 Run diff_accept for the configured duration
 - [x] P2-08 Triage crashes and divergences
-- [~] P2-09 The final benchmark
+- [x] P2-09 The final benchmark
 - [ ] P2-10 Phase 2 end: push and record the manual check
 - [ ] P3-01 The CHANGELOG entry for 0.2.0 and the crate versions
 - [ ] P3-02 Refresh EVIDENCE.md and README.md
@@ -114,3 +114,7 @@ fuzz-diff_accept-P2-07.json: seconds 3601, runs 14818411, crashes 0, divergences
 ### P2-08 — 9b93d4c
 
 Crashes: 0 Divergences: 0 over the five runs (P2-03 to P2-07). Nothing to triage; added DESIGN.md "### 0.2.0 re-verification (P2-08)" with "none" and the five run counts (37,841,791 / 142,651,039 / 30,891,817 / 61,410 / 14,818,411). No code, regressions or results changes.
+
+### P2-09 — c7a4853
+
+bench-P2-09.json: cleanlz4 slowest silesia/webster 410.9 MB/s, fastest silesia/x-ray 2275 MB/s, aggregate 559.6 MB/s; oracle slowest canterbury/grammar.lsp 185.8, fastest silesia/x-ray 1983.4. No target. DESIGN Measurements section and EVIDENCE.md updated. No fuzz run was active.
