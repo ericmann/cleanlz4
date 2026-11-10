@@ -24,7 +24,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P2-05 Run no_panic_stream for the configured duration
 - [x] P2-06 Run diff_roundtrip for the configured duration
 - [x] P2-07 Run diff_accept for the configured duration
-- [ ] P2-08 Triage crashes and divergences
+- [x] P2-08 Triage crashes and divergences
 - [ ] P2-09 The final benchmark
 - [ ] P2-10 Phase 2 end: push and record the manual check
 - [ ] P3-01 The CHANGELOG entry for 0.2.0 and the crate versions
@@ -110,3 +110,7 @@ fuzz-diff_roundtrip-P2-06.json: seconds 3601, runs 61410, crashes 0, divergences
 ### P2-07 — e05db52
 
 fuzz-diff_accept-P2-07.json: seconds 3601, runs 14818411, crashes 0, divergences 0, corpus_entries 738, seed 1. Crashes: 0 Divergences: 0. Committed divergence inputs moved aside and restored; no deleted or new divergence files.
+
+### P2-08 — 9b93d4c
+
+Crashes: 0 Divergences: 0 over the five runs (P2-03 to P2-07). Nothing to triage; added DESIGN.md "### 0.2.0 re-verification (P2-08)" with "none" and the five run counts (37,841,791 / 142,651,039 / 30,891,817 / 61,410 / 14,818,411). No code, regressions or results changes.
