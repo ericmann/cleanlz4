@@ -126,3 +126,26 @@ None. No survivor was placed outside the round's diff. Round 1's `block.rs` zero
 ## Breaking call
 
 Breaking: no — CHANGELOG.md's newest entry ([0.2.0]) has no `### Breaking changes` section. The public API, the `Error` variants and every config key are unchanged.
+
+## Contamination score
+
+The verdict is: **independence supported on every separable metric**
+
+The band comes from the Rust-vs-Rust controls only, and it applies to `subject-vs-indep`. It does not apply to `subject-vs-c`; for that pair, use the Rust-vs-C reading in 0.1.0's `docs/flights/cleanlz4/SIMILARITY.md`. The Rust-vs-C controls were not scored in this run (SPEC 5.3, 9 Q4).
+
+- subject-vs-indep, ngram_jaccard@5: 0.2245 (c = -0.0010, below negative)
+- subject-vs-indep, ngram_containment@5: 0.4817 (c = -0.0206, below negative)
+- subject-vs-indep, ngram_jaccard@10: 0.0529 (c = 0.0016, at or near negative)
+- subject-vs-indep, ngram_containment@10: 0.1328 (c = -0.0356, below negative)
+- subject-vs-indep, ident_jaccard: 0.0792 (c = 0.0506, at or near negative)
+- subject-vs-indep, ident_match_rate_left: 0.1918 (c = 0.1288, at or near negative)
+- subject-vs-indep, comment_jaccard: 0.0007 (c = n/a, not separated)
+- subject-vs-c, ngram_jaccard@5: 0.0349 (c = -0.2516, below negative)
+- subject-vs-c, ngram_containment@5: 0.1125 (c = -0.7605, below negative)
+- subject-vs-c, ngram_jaccard@10: 0.0006 (c = -0.0553, below negative)
+- subject-vs-c, ngram_containment@10: 0.0027 (c = -0.1935, below negative)
+- subject-vs-c, ident_jaccard: 0.0128 (c = -0.0670, below negative)
+- subject-vs-c, ident_match_rate_left: 0.0685 (c = -0.0041, below negative)
+- subject-vs-c, comment_jaccard: 0.0001 (c = n/a, not separated)
+
+Controls: rust-independent-vs-indep (negative) and rust-derived-vs-indep (positive). Raw scores and limits are in `docs/SIMILARITY.md`.
