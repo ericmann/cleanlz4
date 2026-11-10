@@ -218,6 +218,10 @@ All 100 divergence inputs are one case: a compressed block that ends with a fina
 | `diff_accept-f4698c73893221d8.bin` (214 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 52169 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
 | `diff_accept-fbfe04d41d9fbf88.bin` (13 bytes) | diff_accept | `EndOfBlockViolation` | accepts, 914 bytes | Block format, End of block conditions, rule 2 | (2) `end-of-block-room` |
 
+### 0.2.0 re-verification (P2-08)
+
+Nothing to triage: none. The five runs on the 0.2.0 code found 0 crashes and 0 divergences (`testdata/results/fuzz-<target>-P2-03.json` to `-P2-07.json`): `no_panic_block` 37,841,791 runs, `no_panic_frame` 142,651,039 runs, `no_panic_stream` 30,891,817 runs, `diff_roundtrip` 61,410 runs, `diff_accept` 14,818,411 runs. The 100 divergence inputs triaged above were moved aside for the two `diff_*` runs and restored afterwards; neither run wrote a new one, so the end-of-block normalization above is still the only one in force and no new input joined `testdata/regressions/`.
+
 ## Measurements
 
 ### fuzz.seconds_per_target (P4-12)
