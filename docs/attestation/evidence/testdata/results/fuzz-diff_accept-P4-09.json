@@ -1,0 +1,10 @@
+{
+  "task": "P4-09",
+  "target": "diff_accept",
+  "seconds": 3615,
+  "runs": 16184756,
+  "crashes": 0,
+  "divergences": 0,
+  "corpus_entries": 1012,
+  "seed": 1
+}

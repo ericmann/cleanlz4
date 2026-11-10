@@ -1,0 +1,174 @@
+055e84a075d0574ad0764c287a377babee4534a9Gchore: similarity scoredsummarize-
+e9d21648ee31b7678dd309ea8a2a9a3d82ef97aaGchore: build summarysummarize-
+19792574702d30f616135d1bb362df1025d17bc7Gchore: stage summarizecontroller-
+1006fc1ebc1d70556b6f733cf7e3fd2929ed69b7Greview: round 4 approvedreview-
+eee904e448fad076883577db317e83fd4c130b1cGchore: pipeline friction (review)review-
+610d4440555fdd27f846ce1f12b26f7c0f240e88Gchore: stage reviewcontroller-
+2647ec1772b707ccbce1fc0cb00717709afb80e5Gchore: round 3 implementedfix-
+45f476bf77d6c0fb393d5b9f13710de1d5cbb81eGchore: handoff for reviewfix-
+393fbf2dc4f7d97fdafa82c0fa9ffb8ed2cc4e17Gprogress: R3-02 donefixR3-02
+1e3a656508fddbca7c8ed8d71fbf7fbe13cae63dGR3-02: The malformed corpus and its results, without the Dict-ID casefixR3-02
+42d9ca23831218287225c2419fbaa74ab944d79eGprogress: R3-01 donefixR3-01
+dd4c98d1d8ef62e15054fd13af4d220e3fe00b22GR3-01: Streaming decoder: skippable, legacy and concatenated frames and the trailing-data policy (no dictionaries)fixR3-01
+ad77846298701b5b9624a80eb171c03f7f07611dGprogress: R1-07 donefixR1-07
+000781387ec5e27bb6b559796f468b378935e3e7GR1-07: Refresh the evidence index after the reopened tasksfixR1-07
+5cfc3341cb3ac76760626b56f555da2a823de935Gprogress: R1-05 donefixR1-05
+256714b56cceebef53245762d0d3189bb08ba444GR1-05: Streaming ReturnRemainder leaves a trailing magic prefix to the callerfixR1-05
+8a4ceac0646bb6d6a3d96f3a444c6e258e884b92Gprogress: R1-04 donefixR1-04
+0f4915ed53d0774e3c91311c832712a2fbe341dfGR1-04: Assert the Dict-ID probe's fixed verdict once dictionaries existfixR1-04
+dfef199e82abe5e5f0e12cb1a48f9d54879d9913Gprogress: P4-12 donefixP4-12
+98e0574926ab29f2669f1c27cce7d6f45c22ee9eGP4-12: Tune fuzz.seconds_per_targetfixP4-12
+20a624280a50ac69e5adb55940f80993c7fbcdf5Gprogress: P4-09 donefixP4-09
+3e2ffe489c75a5a5039a57a6525ef4e7e732fc20GP4-09: Triage crashes and divergencesfixP4-09
+205d3187e1023c23ec81cf13b5ebc6efe74be0ecGprogress: P4-08 donefixP4-08
+ab53cd7b83477af49908c6d1f7b049452e6b9916GP4-08: Run diff_accept for the configured durationfixP4-08
+bb5e2f6f565095c5095627ad1b663b939fdd315fGprogress: P4-07 donefixP4-07
+776276f0bc625a554d9c827e6b762f731c4e44fbGP4-07: Run diff_roundtrip for the configured durationfixP4-07
+98dd080055d70700833fc1948a72f6c1aee9913dGprogress: P4-06 donefixP4-06
+6521e1c0aec6c7303dc82dd7a05e41861ebfd976GP4-06: Run no_panic_stream for the configured durationfixP4-06
+e8bc2ce319a6c7f8c855226a992c48eb3afeeebaGprogress: P4-05 donefixP4-05
+4c708b330a68ef6cd49cb84402794bbf05c2c791GP4-05: Run no_panic_frame for the configured durationfixP4-05
+f70d033d436272c900d35c613dcf535950917364Gprogress: P4-04 donefixP4-04
+cc5ee9a15c2de6cba919f3dd8a7811e526247c7fGP4-04: Run no_panic_block for the configured duration (record)fixP4-04
+3354cbb00da7d67bf2b35932f6fd67fce6476941Gchore: pipeline friction (implement)fixP4-04
+e85cbea0bc719538e17302dcc3f6ac22fb5bd54bGP4-04: Run no_panic_block for the configured durationfixP4-04
+024be73228ed42349002aaa94900d80cf14c4de0Gprogress: P4-03 donefixP4-03
+5915567dbb829429199762344960fcd985394738GP4-03: The fuzz runner, its results writer and regression replayfixP4-03
+e9f6ef1695e6c564ef43125be99e6b668d456f2cGprogress: P4-02 donefixP4-02
+4dc91f9bbb23bbd0d065f98d9c874f2fbba52c32GP4-02: Fuzz targets (b) and (c): differentialfixP4-02
+e906a4efd7c929b8003bd6ef17565efc110c3993Gprogress: P4-01 donefixP4-01
+bc64d449fe8df40a370cc6fdf87a4bb7ae1b68dcGP4-01: Fuzz targets (a): no panic on arbitrary bytesfixP4-01
+5c938363f851df381240763db0be056ffabd223dGprogress: P3-06 donefixP3-06
+aa5d1b7a982ae40bd4132f73376bf4326b12924aGP3-06: Tune stream.chunking_casesfixP3-06
+e937216502e958a3ffc5381de34c61105788d94bGprogress: P3-03 donefixP3-03
+227d1d1833cd7824abc87775b30980f6ce4d1556GP3-03: Chunking-invariance property testfixP3-03
+e7d905316066d89542fc56796c4cbd94e52c7e7fGprogress: P3-02 donefixP3-02
+4cb0eed363c2f81815819a7c4ab36d7eac84ed14GP3-02: Streaming decoder: skippable, legacy and concatenated frames, dictionaries and trailing datafixP3-02
+9168d54546482c6a979cd3f437024bc4a5fff3e9Gprogress: P2-13 donefixP2-13
+2903308bf8e80290cf8f8d5c310b4508ccef1334GP2-13: The malformed corpus and its resultsfixP2-13
+82b7138e738e33c40b7b75205a0b518febf239bbGprogress: P2-12 donefixP2-12
+c52d095b99fdcda99f006e6232a3cc7ce4dd1b09GP2-12: The full conformance run and its resultsfixP2-12
+c4eea49834c0c616304d0b6da9163d5ce70ea021Gprogress: P2-11 donefixP2-11
+ae17c4088dec75561a39bbbd7168ed701e3f63ccGP2-11: Conformance generator: dictionary, skippable, legacy and concatenated suitesfixP2-11
+d8ccb99affff811b0936f4bcc541e8033496a034Gprogress: P2-08 donefixP2-08
+4ea31e1d221b67d5684ae62881eccaf113dacf3dGP2-08: Preset dictionary and Dict-IDfixP2-08
+106091c708c9675fd9e568b71faecfe4463ff076Gprogress: P1-10 donefixP1-10
+2acaaa6f3a7c3ca99821b357d484ae0c351b2d83GP1-10: Oracle dictionary blocks and the dictionary differential testfixP1-10
+bdd7a8771dd60061b9bd6b5447de788765e1bcaeGchore: start review-fix round 3fix-
+8c27b1fa3ea2eb9de3c5ed42390da1288d16b54bGchore: flight options (maxRounds=6, maxRoundsHard=8)controller-
+565b0ebf949ed1a4979d3981592dbb5f91719ce1Gchore: stage implementcontroller-
+75c60ec801caa539912e146a06e9ca4881e96646Gprogress: reopen P1-10 (+20 dependents)fixP1-10
+fd9ceb66e8e39fe093729a113a6a6bbb04cd605eGchore: clean-room recordcontroller-
+9461374328de730dbff9c5e5f898ff71e96b8ef2Gplan: P1-10 uses the lz4 CLI as the dictionary oracle (owner decision, SPEC §9 Q2)
+6a474e8897224b4bdcd5cf35d9fc89f4b4e1852cGchore: clean-room recordcontroller-
+daed4914238716ebe8d8094ff45e9b95595c9643Greview: round 3review-
+8fb40432ab45ba3c68f2333dfc4e50aaeb5a45baGchore: pipeline friction (review)review-
+8e2d942133a890e818cc4e2788ae5e125ccd4cf5Gchore: pipeline friction (review)review-
+b3b841173a7d80f2a0808d5e4b115543441a0226Gchore: pipeline friction (review)review-
+0e7fd0a0bd8ac00621e0259dfa8e2dfb216831d8Gchore: pipeline friction (review)review-
+4b95488a2174e4e728ee13c58f24711fd9cab2f6Gchore: stage reviewcontroller-
+fed7cd3f4656373347d1d23c01d2b6e9dab8ebdfGchore: round 2 implementedfix-
+2594153a115e225c34715f78b55c4c5bbe5b641dGchore: round 2 handoff
+f2ae84d0a98b008a9547599eccb759019fae8b8fGprogress: R2-02 donefixR2-02
+78cb1237251b26d10e1fe94d0d9cc01e6c0d64b3GR2-02: Test the frame-combination generator itself, and the manifest against itfixR2-02
+611f2fdef169f5efb436005335b594c5a06533e6Gprogress: R2-01 donefixR2-01
+455d695b010552c38d69d81eb2aefb25485a5fefGR2-01: Test that a legacy frame's output capacity stays within the limitfixR2-01
+a4650f65262094076fa9f728c3efd1d45d030ccaGchore: start review-fix round 2fix-
+77ea2f11029a77552020dcad81254bc6330c59a4Gchore: stage implementcontroller-
+d56b9035fb1ee0d985255eddb104daf1e7291fbaGreview: round 2review-
+b3f3bd35eae994b418b0dfb59d3d0c2448ff8659Gchore: pipeline friction (review)review-
+d981f18e1052fe85865d1a4088799847dc5a629dGchore: pipeline friction (review)review-
+edf7459fdf54c55bb022a5da4162e4f811278a89Gchore: stage reviewcontroller-
+c533a52e80bdb49d184d3088e95dc4ed9bef38ddGchore: round 1 implementedfix-
+507c6a76f11fa27265cb6b65b39fc3e9857e5727Gchore: handoff for reviewfix-
+08a3987a65a1fc3a965ae1ea18a445b946afa84aGprogress: skip R1-07fix-
+7b1bda4df3c89a4e0d390ab8125dd60a9981fc33Gprogress: R1-06 donefixR1-06
+6a268e664c2bb7ae3f8ca422fd3fc181b71e3a1eGR1-06: Frame suites: every level meets every block sizefixR1-06
+1cf59c8e20d991c490f01118eb32d7d2fbcedb40Gprogress: R1-03 donefixR1-03
+3770b7256cf9155c45bfcffe1cc17a3c109d3febGR1-03: Test the differential module's normalizations and cap rulefixR1-03
+1bf2f26bd1dae75926f5a589c2dad2a0b823c6e8Gprogress: R1-02 donefixR1-02
+75e6bf618f81ad9c5869732ba9beb881c7cb9d46GR1-02: Hold the output limit to its memory bound, and test it past several blocksfixR1-02
+253fa2ccdc7632f9876258d14b55812fbe7c846aGprogress: R1-01 donefixR1-01
+8ab6a260f799e193e23538e2a8581ec1e5fbcb08GR1-01: Spike binary reads the differential cap from the configfixR1-01
+592a25d25b944984d145058dd5f29fdd3e9231d9Gprogress: P1-10 blockedfixP1-10
+7ad550d04effe3b691345a8a928aa54abc87ef8cGchore: start review-fix round 1fix-
+879c2baf0c889819f405ca9037682e8f21027f6cGchore: stage implementcontroller-
+669a2d19d6c025073543b89c46f78b385f882f3fGreview: round 1review-
+a6328b1dfffc2732442de9ca08e4e8163d9b68eaGchore: pipeline friction (review)review-
+df589cf0b5194503b3919bec291b988bc8e10694Gchore: stage reviewcontroller-
+073bd01eb424f6b80b7c0b604cfd9ebef0ed2ed8Gchore: round 0 implementedimplement-
+d098fc2453a565ba55bb7e8e52fcd186c8975547Gchore: handoff for reviewimplement-
+7db4d9a12a078ad2198bf271a623efc93ea482b8Gprogress: P5-02 doneimplementP5-02
+58a26ec743aee39ce12465a5ec0c31c47ca9a0c3GP5-02: Phase 5 end: push and record the manual checkimplementP5-02
+8042b70cdd937ee161887499432c189cb45d5156Gprogress: P5-01 doneimplementP5-01
+f289cc4ff6c3e69a9021d029147b4bf611b0215cGP5-01: The evidence index and the Done checklistimplementP5-01
+091161479d64721cdf6a1e9095ba0001c521c140Gprogress: P4-13 doneimplementP4-13
+c188920fc8b90a0759917f4a10d5dba95b4fb6e0GP4-13: Phase 4 end: push and record the manual checkimplementP4-13
+fb04b8ecce3fd0ac4b4e828b588f9c26c46f4ddeGprogress: P4-11 doneimplementP4-11
+2950d3c576d2e82af0c59745f6148fef2e1de4eeGP4-11: Tune bench.repeatsimplementP4-11
+f635565d96c498316202bec90cba0907f3e1df53Gprogress: P4-10 doneimplementP4-10
+5445530f0e4527ac3742b80bd4cf0cff4d20c67aGP4-10: Benchmarks against the oracleimplementP4-10
+afa3fad5748ee843e12e212a5980e835f1661008Gprogress: P3-07 doneimplementP3-07
+9cfff5f0cfb3805e6795b422f79deffae8ddff48GP3-07: Phase 3 end: push and record the manual checkimplementP3-07
+003e6e095d7af1c2b435c957f7e5723f01b68569Gprogress: P3-05 doneimplementP3-05
+0d5cee5fa2fc54fa4a0099d5232627fd68e24603GP3-05: Tune limits.max_output_bytesimplementP3-05
+530d7b80b5f07cf8fcaf4febf7b449c5b7949588Gprogress: P3-04 doneimplementP3-04
+8f7d2482917cd36ed31d1125bd3c4382bfb89965GP3-04: The output limit and bounded memoryimplementP3-04
+699e93df64f0b94d4990971cddc275cb4263a68fGprogress: P3-01 doneimplementP3-01
+cae1d4e70d02c97d39c9e2c8c7fcd64646e95bb3GP3-01: Streaming decoder: regular framesimplementP3-01
+de6306760416d47cbc5a0b11ca13d4352c31abbbGprogress: P2-14 doneimplementP2-14
+7b9a92491d2ff308d3e89a4a6e25af4eead4b4adGP2-14: Phase 2 end: push and record the manual checkimplementP2-14
+9d21ea41ee2705311a45f7f8b46fe2d8007b62e3Gprogress: P2-10 doneimplementP2-10
+afe24557fa7d56ff642b8f5e6da5070e2941778cGP2-10: Conformance generator: oracle-compressed frame suitesimplementP2-10
+7cc2b50b0023c51352a352bce7470d1a88a92f91Gprogress: P2-09 doneimplementP2-09
+2ac0ed6680245ff0ab2f092c0b265798daf5cf10GP2-09: Spike: the oracle's frame behaviour, and the differential compare moduleimplementP2-09
+93b8192a393430ebf3b5ba43ec6d9a2fbafe083bGprogress: P2-07 doneimplementP2-07
+7cdf7d99cc7dbfae64630730516a0f7d95cfbb71GP2-07: The legacy frameimplementP2-07
+e764a39388dec4eff62f253ae781d0c0f5444ab5Gprogress: P2-06 doneimplementP2-06
+a554e4919fd115d2153cab562af010d6795668b2GP2-06: Concatenated frames, skippable frames and trailing dataimplementP2-06
+1db636bc199d1e357c1c7b98d1ff7dc13ff5dc86Gprogress: P2-05 doneimplementP2-05
+08141a498390dea23270de339fe4e50dc23ccb18GP2-05: Content sizeimplementP2-05
+d8265e37cc2063cc260c35b19fca8f8e7a8e571cGprogress: P2-04 doneimplementP2-04
+b5e45cb38a56333abd908b81ef1148928cf3a10cGP2-04: Block and content checksumsimplementP2-04
+c9684f9f1056a9a5a2d611ca91ccd2ca91f22146Gprogress: P2-03 doneimplementP2-03
+a6a49f907da05b0e9421d56993f0686ca5ad657fGP2-03: Linked blocksimplementP2-03
+1fa27c1e349b05ddf52edfb1b0bf48c553dbe31dGprogress: P2-02 doneimplementP2-02
+d111b3454008d8b19d5d55112c9b22935c01cdc4GP2-02: Options, and one regular frame with independent blocksimplementP2-02
+7db469a0e097e2b74bada80f37d82779e45bcd4bGprogress: P2-01 doneimplementP2-01
+530414f9e5b9a6da2eb940363cf96dc537de9e14GP2-01: Frame descriptor parsing and introspectionimplementP2-01
+382585f1d45406ca0e5a23a34295378f797da11cGprogress: P1-14 doneimplementP1-14
+865200723f9bb657e59f8f22410477c7a45b9d57GP1-14: Phase 1 end: push and record the manual checkimplementP1-14
+8a7111a7639e75aa56351c9ca28e742c14469680Gprogress: P1-13 doneimplementP1-13
+db1bbf831b1475bb17953b175d9bcd9f479baf0bGP1-13: DESIGN.md: the Phase 1 spec-rule reportimplementP1-13
+380d31e706013134a36e40fbebc725342febba4fGprogress: P1-12 doneimplementP1-12
+7343356d4be506081d07eb897258d534c2b8ae98GP1-12: Conformance runner and the results for category blockimplementP1-12
+d4f33bbec593eac8ca72ed67dba74320b9a29b5dGprogress: P1-11 doneimplementP1-11
+5d1f4087fa3a92edf4f242fa38ca50b4e849b210GP1-11: Conformance generator: the block suite and the manifest's entriesimplementP1-11
+bd60d461457e02c47335719f5da0e2f0606c57bbGprogress: P1-10 blockedimplementP1-10
+0b438cba17a5e6a27d6172231e67799731f5f6f6Gprogress: P1-09 doneimplementP1-09
+cfabc11045773741cba6c87f6b5e25944ba396b0GP1-09: Synthetic inputs and block round-trip tests against the oracleimplementP1-09
+a6552a5f1232b4347e410985c8f73f79e4c5e5dfGprogress: P1-08 doneimplementP1-08
+ac70d1d3ccef937485afc620de27d761a8339631GP1-08: Dictionary-prefixed block decodingimplementP1-08
+844708a12e500ce395f58148b4b19dff9d663ff3Gprogress: P1-07 doneimplementP1-07
+9ffab3700be26036601564c0337a030af3379356GP1-07: Align the end-of-block policy with the oracleimplementP1-07
+56068d0b246c799975965a3c99dcac07b2b2a48fGprogress: P1-06 doneimplementP1-06
+8245176e0bb67d5042891610adf24869351510e7GP1-06: Spike: the oracle's end-of-block behaviourimplementP1-06
+2a8598a579cfb5ef8e96a70dbfb587177b075083Gprogress: P1-05 doneimplementP1-05
+13b602bd8758b7d64a33512487d9ba87501ff4c9GP1-05: Block decoder: sequences, overlap copies and strict end-of-block rulesimplementP1-05
+3266bac577819e02fa25fc40a078f56b455863ffGprogress: P1-04 doneimplementP1-04
+103574e27c69dee13a2f74589f853720028c393aGP1-04: XXH32, one-shot and streamingimplementP1-04
+a310ff86ccce444e4eef399d4694fc6c34d5de28Gprogress: P1-03 doneimplementP1-03
+26e5f1642c3234fe0acf96a2151870a8dcd7dcd9GP1-03: The typed error enumimplementP1-03
+bef5c62ab7fb86db80430e43e819e3360bac4d4dGprogress: P1-02 doneimplementP1-02
+dbc95aee65c843f229e1877b6a64a373bc9082feGP1-02: Oracle FFI: frame compression and decompressionimplementP1-02
+1a1573cb673891a9b91e0fcdef841e7c6f3d90f2Gprogress: P1-01 doneimplementP1-01
+559d84db2115251cfe045f2a3f87d04b0b6683d8GP1-01: Oracle FFI: the block functionsimplementP1-01
+49913a23c0c36c79ffe7b35ad6e1f38ac6ea4fb1Gprogress: P0-04 doneimplementP0-04
+4a0c1cdc849244817a730f8775c53acd2f9b194bGP0-04: Phase 0 end: push and record the manual checkimplementP0-04
+5e0ee34489a892c735e29264ac47a96608efd0dbGprogress: P0-03 doneimplementP0-03
+cb81e133f60930b1780ce3138324ba5a0a1fb62dGP0-03: Fetch the corpora, write MANIFEST.json and go offlineimplementP0-03
+6ba28184849ec8e0ae088d736543edc46755f1e4Gprogress: P0-02 doneimplementP0-02
+e26b6357df7f98be6b688170c1e651fe0fd703c2GP0-02: Verify docs/spec against SOURCES.jsonimplementP0-02
+a84ef54db8adf4e48f02855313d2cd8ee2229057Gprogress: P0-01 doneimplementP0-01
+143d24b3d3a73992c45a59bb29e14bc388bad2a0GP0-01: Cargo workspace, make check, the deps script and the config fileimplementP0-01
+9c143800abc3f997682d8480d87f83b5db6c20a7Gchore: start implementation runimplement-
