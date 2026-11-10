@@ -7,6 +7,7 @@
 - The manifest is written by the `manifest` binary, never by hand; cleanlz4's own measurement (a SHA-256 over each downloaded archive and each extracted file) is the provenance. Held by `corpus_files_on_disk_match_manifest`.
 - The oracle's block functions are wrapped in `crates/oracle/src/ffi.rs` as safe slice-taking functions, the only place with `unsafe`; `crates/oracle/src/block.rs` adds length checks (lengths beyond a C `int` panic, as this is test tooling) and a unit `Rejected` error. Implements: SPEC section 6.5 (Block); cleanlz4's own tooling decision. Held by `crates/oracle/tests/ffi_block.rs`.
 - The oracle's frame functions are wrapped by RAII contexts in `crates/oracle/src/ffi.rs`; `crates/oracle/src/frame.rs` offers `compress_frame`, `decompress_frames` and `content_checksum_of`. The context version argument is the constant the binding exports. XXH32 vectors come only from the last four bytes of a frame written with the content checksum on. Implements: Frame format, Content Checksum; SPEC section 6.5 (Frame compression, Frame decompression). Held by `crates/oracle/tests/ffi_frame.rs`.
+- `Error::BlockSizeExceeded` exists as a seventeenth variant because the frame format forbids a data block larger than the frame's maximum block size and SPEC section 6.2's list has no variant for it. Implements: Frame format, Data Blocks ("Block_Size shall never be larger than Block_Maximum_Size"). Held by `error.rs` unit tests; later by the frame tests.
 
 ## Spec rules implemented
 
