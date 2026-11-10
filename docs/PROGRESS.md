@@ -66,6 +66,8 @@ Started: 2026-11-10T00:53:38.909Z
 - [-] R1-05 Streaming ReturnRemainder leaves a trailing magic prefix to the caller
 - [x] R1-06 Frame suites: every level meets every block size
 - [-] R1-07 Refresh the evidence index after the reopened tasks
+- [ ] R2-01 Test that a legacy frame's output capacity stays within the limit
+- [ ] R2-02 Test the frame-combination generator itself, and the manifest against it
 
 ## Log
 

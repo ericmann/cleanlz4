@@ -1250,3 +1250,25 @@ If testdata/results/conformance-P2-12.json exists when this task runs: write a f
 **Out of scope:** The similarity score, the attestation bundle, SUMMARY.md.
 **Verification:** kukulu_verify with the files touched.
 **Depends on:** P2-12, P2-13, P4-09
+
+## Review fixes (round 2)
+
+### R2-01: Test that a legacy frame's output capacity stays within the limit
+
+**Goal:** Hold SPEC §1 property 3 and §2 (bounded memory under the output limit) for legacy frames with a test, so the capacity cap R1-02 put in decode_legacy_frame cannot be removed silently (REVIEW round 2 F1).
+**Files touched:** crates/cleanlz4/tests/limits.rs, docs/DESIGN.md
+**Design constraints:** SPEC §1 property 3, §2 (output limit goal); Frame format, "Legacy frame". crates/cleanlz4/src/frame.rs:467 `append_capped(out, &block, *remaining)?;` in decode_legacy_frame survived the mutant `out.extend_from_slice(&block);` because every R1-02 test uses regular frames. Build the legacy frame by hand in the test file (magic 0x184C2102, then 4-byte little-endian compressed sizes each followed by a compressed block; cleanlz4 has no dev-dependencies). A block that decodes to exactly 8 MiB can be one literal followed by a long offset-1 match and a final literal-only sequence that satisfies the end-of-block rules DESIGN.md records. Change frame.rs only if the test exposes a real defect. Add the new test to the 'Held by' list of DESIGN.md's Output limit entry. The invariants apply.
+**Acceptance tests:** crates/cleanlz4/tests/limits.rs `legacy_output_capacity_never_exceeds_the_limit`: a hand-built legacy frame of three blocks that each decode to 8 MiB plus a fourth that decodes to a few bytes, decoded with decompress_frame_with and max_output_bytes equal to the total output length (24 MiB plus those bytes). The output equals the expected bytes and `data.capacity()` is at most the limit. The test must fail under the mutant above (amortized doubling reaches 32 MiB).
+**Out of scope:** Streaming legacy frames (P3-02); the decoder's scratch-buffer reuse; changing limits.max_output_bytes.
+**Verification:** kukulu_verify with the files touched; kukulu_mutate of crates/cleanlz4/src/frame.rs replacing `        append_capped(out, &block, *remaining)?;` with `        out.extend_from_slice(&block);` is killed by the new test.
+**Depends on:** none
+
+### R2-02: Test the frame-combination generator itself, and the manifest against it
+
+**Goal:** Make crates/oracle/tests/corpus.rs check frame_combos() and frame_level() directly, and check that the committed manifest's frame entries match what they generate, so a generator change or a stale MANIFEST.json fails cargo test (REVIEW round 2 F2).
+**Files touched:** crates/oracle/tests/corpus.rs
+**Design constraints:** SPEC §6.3 ("Every combination is recorded in testdata/MANIFEST.json"); PLAN P2-10 and R1-06. Two mutants of crates/oracle/src/corpus.rs frame_combos survived because every coverage test reads the committed manifest, which cargo test never regenerates: `block_size_id: 4 + ((hi + lo) % 4) as u8` to `4 + (hi % 4) as u8`, and `linked: hi & 8 != 0` to `hi & 4 != 0`. Read levels from Config (conformance.frame_levels); write no level or count as a literal. Do not regenerate the manifest unless a test shows it is stale. The invariants apply.
+**Acceptance tests:** crates/oracle/tests/corpus.rs: (1) `frame_combos_are_distinct_and_every_level_meets_every_block_size`: frame_combos() has 64 pairwise-distinct entries, and for each level index k, the combinations i with frame_level(&cfg, i) equal to that level cover every block_size_id 4..=7 and both values of linked, block_checksum, content_checksum and content_size. This test calls no manifest. (2) `manifest_frame_entries_match_the_generator`: for each input of the synthetic and frames-cantrbry suites, the set of (level, block_size_id, linked, block_checksum, content_checksum, content_size) in its manifest entries equals the set {(frame_level(&cfg, i), frame_combos()[i] fields) for i in 0..64}. Both tests must fail under each mutant above.
+**Out of scope:** frames-silesia's sampled combinations beyond what draw_combinations already tests; changing the order R1-06 chose; corpus.rs itself.
+**Verification:** kukulu_verify with the files touched; kukulu_mutate (targeted cargo, filter frame_combos_are_distinct_and_every_level_meets_every_block_size, then manifest_frame_entries_match_the_generator) of each of the two corpus.rs mutants above is killed.
+**Depends on:** none
