@@ -29,7 +29,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P2-04 Block and content checksums
 - [x] P2-05 Content size
 - [x] P2-06 Concatenated frames, skippable frames and trailing data
-- [ ] P2-07 The legacy frame
+- [x] P2-07 The legacy frame
 - [ ] P2-08 Preset dictionary and Dict-ID
 - [ ] P2-09 Spike: the oracle's frame behaviour, and the differential compare module
 - [ ] P2-10 Conformance generator: oracle-compressed frame suites
@@ -159,3 +159,7 @@ FrameState counts decoded bytes (account() before extending out); error as soon 
 ### P2-06 — a554e49
 
 frame.rs: decode_frames is now the frame loop (classify() -> Boundary{Regular,Skippable,Legacy,PartialMagic,Unknown}); decode_regular_frame(input, options, &mut out) -> (desc, used); skip_skippable_frame. Legacy magic currently returns BadMagic (P2-07 replaces the Legacy arm). Partial magic is TruncatedInput under either policy. Tests 10 + 1.
+
+### P2-07 — 7cdf7d9
+
+decode_legacy_frame in frame.rs; LEGACY_BLOCK_BYTES 8 MiB, LEGACY_MAX_COMPRESSED = 8MiB+8MiB/255+16. Independent legacy blocks suffice: lz4 CLI 20 MiB legacy output decodes (no OffsetOutOfRange), so no history added. oracle::cli: compress_legacy (lz4 -l -f -q in out), cli_version. Tests 6 + 3.
