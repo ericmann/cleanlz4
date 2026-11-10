@@ -18,6 +18,7 @@ pub mod xxh32;
 
 pub use error::{Error, Result};
 pub use frame::{parse_frame_descriptor, BlockMaxSize, FrameDescriptor};
+pub use stream::{Decoder, Progress, Status};
 
 /// Default cap on decoded output, in bytes. Config key `limits.max_output_bytes`.
 pub const DEFAULT_MAX_OUTPUT_BYTES: u64 = 1 << 30;

@@ -6,7 +6,7 @@ use crate::xxh32::{xxh32, Xxh32};
 use crate::{DecodeOptions, FrameKind, FrameOutput, TrailingData};
 
 /// The frame magic number, read little-endian (Frame format, "Magic Number").
-const FRAME_MAGIC: u32 = 0x184D_2204;
+pub(crate) const FRAME_MAGIC: u32 = 0x184D_2204;
 
 /// The frame's maximum uncompressed block size (Frame format, "Block Maximum Size").
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -63,7 +63,7 @@ const VERSION: u8 = 1;
 /// BD bits that must be zero (Frame format, "BD byte", "Reserved bits").
 const BD_RESERVED: u8 = 0b1000_1111;
 
-fn read_u32_le(input: &[u8], at: usize) -> Option<u32> {
+pub(crate) fn read_u32_le(input: &[u8], at: usize) -> Option<u32> {
     let bytes = input.get(at..at.checked_add(4)?)?;
     let mut a = [0u8; 4];
     for (d, s) in a.iter_mut().zip(bytes.iter()) {
@@ -328,7 +328,7 @@ enum Boundary {
 }
 
 /// Whether `bytes` (at most three) begin the little-endian form of a known magic number.
-fn is_magic_prefix(bytes: &[u8]) -> bool {
+pub(crate) fn is_magic_prefix(bytes: &[u8]) -> bool {
     let n = bytes.len();
     let begins = |magic: u32| magic.to_le_bytes().get(..n) == Some(bytes);
     begins(FRAME_MAGIC)
