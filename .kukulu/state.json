@@ -180,6 +180,18 @@
       "stage": "review",
       "round": 3,
       "at": "2026-11-10T09:30:33.714Z"
+    },
+    {
+      "event": "end",
+      "stage": "review",
+      "round": 3,
+      "at": "2026-11-10T09:42:22.688Z"
+    },
+    {
+      "event": "start",
+      "stage": "summarize",
+      "round": 3,
+      "at": "2026-11-10T09:42:22.688Z"
     }
   ]
 }
