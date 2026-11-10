@@ -3,6 +3,8 @@
 
 use crate::block::{compress_default, compress_hc};
 use crate::config::{repo_root, Config};
+use crate::craft_frame::{build, legacy, skippable, BlockSpec, FrameSpec};
+use crate::dict::{dict_block, dict_frame};
 use crate::frame::{compress_frame, Prefs};
 use crate::manifest::{sha256_hex, Conformance, Entry, Manifest};
 use crate::prng::Prng;
@@ -19,13 +21,33 @@ pub const SUITE_FRAMES_CANTRBRY: &str = "frames-cantrbry";
 /// The Silesia frame suite.
 pub const SUITE_FRAMES_SILESIA: &str = "frames-silesia";
 
+/// The dictionary suite (category `dictionary`).
+pub const SUITE_DICTIONARY: &str = "dictionary";
+/// The skippable-frame suite (category `skippable`).
+pub const SUITE_SKIPPABLE: &str = "skippable";
+/// The legacy-frame suite (category `legacy`).
+pub const SUITE_LEGACY: &str = "legacy";
+/// The concatenated-frame suite (category `concatenated`).
+pub const SUITE_CONCATENATED: &str = "concatenated";
+
 /// Every suite this generator knows, in the order `--suites all` runs them.
-pub const SUITES: [&str; 4] = [
+pub const SUITES: [&str; 8] = [
     SUITE_BLOCK,
     SUITE_SYNTHETIC,
     SUITE_FRAMES_CANTRBRY,
     SUITE_FRAMES_SILESIA,
+    SUITE_DICTIONARY,
+    SUITE_SKIPPABLE,
+    SUITE_LEGACY,
+    SUITE_CONCATENATED,
 ];
+
+/// The data after a dictionary is at most this many bytes (SPEC section 6.3, P2-11).
+const DICT_DATA_BYTES: usize = 256 << 10;
+/// Dictionary frames are assembled from chunks of this size, so they hold several blocks.
+const DICT_CHUNK_BYTES: usize = 64 << 10;
+/// The legacy suite's synthetic input.
+const LEGACY_SYNTHETIC_BYTES: usize = 20 << 20;
 
 /// Inputs over this size are fed to the frame compressor in chunks of this size.
 const FRAME_CHUNK: usize = 1 << 20;
@@ -346,6 +368,359 @@ pub fn corpus_frame_suite(
     Ok(entries)
 }
 
+/// A hand-assembled entry: `expected` is the decoded output, `file` the stored bytes.
+#[allow(clippy::too_many_arguments)]
+fn hand_entry(
+    root: &Path,
+    suite: &str,
+    tail: &str,
+    kind: &str,
+    tool: &str,
+    input: &str,
+    expected: &[u8],
+    bytes: &[u8],
+    params: serde_json::Value,
+    extra: serde_json::Map<String, serde_json::Value>,
+) -> Result<Entry, String> {
+    let rel = format!("{suite}/{tail}.lz4");
+    write_file(root, &rel, bytes)?;
+    Ok(Entry {
+        id: format!("{suite}/{tail}"),
+        suite: suite.into(),
+        category: suite.into(),
+        kind: kind.into(),
+        tool: tool.into(),
+        input: input.into(),
+        input_sha256: sha256_hex(expected),
+        input_bytes: expected.len() as u64,
+        params,
+        file: rel,
+        file_sha256: sha256_hex(bytes),
+        file_bytes: bytes.len() as u64,
+        extra,
+    })
+}
+
+fn extra_of(pairs: Vec<(&str, serde_json::Value)>) -> serde_json::Map<String, serde_json::Value> {
+    pairs.into_iter().map(|(k, v)| (k.to_string(), v)).collect()
+}
+
+/// The dictionary suite: for each configured size and each Canterbury file of
+/// at least twice that size, the dictionary is the file's first `size` bytes
+/// and the data its next 256 KiB (or what remains).
+pub fn dictionary_suite(
+    root: &Path,
+    cfg: &Config,
+    manifest: &Manifest,
+) -> Result<Vec<Entry>, String> {
+    let mut entries = Vec::new();
+    for (name, path) in corpus_file_inputs(manifest)? {
+        if !name.starts_with("canterbury/") {
+            continue;
+        }
+        let file = std::fs::read(&path).map_err(|e| format!("{}: {e}", path.display()))?;
+        for &size in &cfg.dict.sizes_bytes {
+            let size = size as usize;
+            if file.len() < size * 2 {
+                continue;
+            }
+            let dict = &file[..size];
+            let data = &file[size..file.len().min(size + DICT_DATA_BYTES)];
+            let dict_rel = format!("{SUITE_DICTIONARY}/{name}/dict-{size}.bin");
+            write_file(root, &dict_rel, dict)?;
+            let dict_sha = sha256_hex(dict);
+            let chunks: Vec<&[u8]> = data.chunks(DICT_CHUNK_BYTES).collect();
+            let id = name_hash(&format!("{name}/{size}")) as u32;
+            let base = |id_used: Option<u32>, dependent: bool| {
+                let mut pairs = vec![
+                    ("dict_file", serde_json::json!(dict_rel)),
+                    ("dict_sha256", serde_json::json!(dict_sha)),
+                    ("dict_bytes", serde_json::json!(size)),
+                    ("dict_source", serde_json::json!(name)),
+                    ("dict_offset", serde_json::json!(0)),
+                    ("dict_dependent", serde_json::json!(dependent)),
+                ];
+                if let Some(i) = id_used {
+                    pairs.push(("dict_id", serde_json::json!(i)));
+                }
+                extra_of(pairs)
+            };
+            let stem = format!("{name}/d{size}");
+            let block = dict_block(dict, data);
+            let dependent = block.as_ref().is_some_and(|b| b.dict_dependent);
+            if let Some(b) = block {
+                entries.push(hand_entry(
+                    root,
+                    SUITE_DICTIONARY,
+                    &format!("{stem}/block"),
+                    "block-dict",
+                    "hand",
+                    &name,
+                    data,
+                    &b.block,
+                    serde_json::json!({ "mode": "block" }),
+                    base(None, dependent),
+                )?);
+            }
+            for (slug, independent, with_id) in [
+                ("linked-id", false, true),
+                ("indep-id", true, true),
+                ("linked", false, false),
+            ] {
+                let used = with_id.then_some(id);
+                let frame = dict_frame(dict, &chunks, independent, used);
+                entries.push(hand_entry(
+                    root,
+                    SUITE_DICTIONARY,
+                    &format!("{stem}/{slug}"),
+                    "frame",
+                    "hand",
+                    &name,
+                    data,
+                    &frame,
+                    serde_json::json!({
+                        "linked": !independent,
+                        "dict_id": used,
+                    }),
+                    // Whether the blocks need the dictionary is that of the raw block.
+                    base(used, dependent),
+                )?);
+            }
+        }
+    }
+    Ok(entries)
+}
+
+/// The regular frame of `data` for flag combination `i` at its level.
+fn regular_frame(cfg: &Config, data: &[u8], i: usize) -> Vec<u8> {
+    let combos = frame_combos();
+    let combo = combos[i % combos.len()];
+    make_frame(data, &combo, frame_level(cfg, i))
+}
+
+/// Small deterministic contents for the hand-assembled suites.
+fn small_contents(seed: u64) -> Vec<Vec<u8>> {
+    [3_000usize, 70_000, 200_000, 11]
+        .iter()
+        .enumerate()
+        .map(|(k, &len)| synth::word_salad(seed.wrapping_add(k as u64), len))
+        .collect()
+}
+
+/// The skippable suite, by hand with `craft_frame`.
+pub fn skippable_suite(root: &Path, cfg: &Config) -> Result<Vec<Entry>, String> {
+    let mut entries = Vec::new();
+    let none = serde_json::Map::new;
+    for nibble in 0u8..16 {
+        let frame = skippable(nibble, b"user data");
+        entries.push(hand_entry(
+            root,
+            SUITE_SKIPPABLE,
+            &format!("alone/magic-{nibble:x}"),
+            "frame",
+            "hand",
+            "empty",
+            &[],
+            &frame,
+            serde_json::json!({ "magic_low_nibble": nibble }),
+            none(),
+        )?);
+    }
+    let frame = skippable(0, &[]);
+    entries.push(hand_entry(
+        root,
+        SUITE_SKIPPABLE,
+        "alone/zero-length",
+        "frame",
+        "hand",
+        "empty",
+        &[],
+        &frame,
+        serde_json::json!({ "magic_low_nibble": 0 }),
+        none(),
+    )?);
+    let contents = small_contents(cfg.fuzz.seed);
+    let (a, b) = (&contents[0], &contents[1]);
+    let (fa, fb) = (regular_frame(cfg, a, 0), regular_frame(cfg, b, 37));
+    let skip = skippable(7, b"between");
+    let expected_two = [a.as_slice(), b.as_slice()].concat();
+    let cases: Vec<(&str, Vec<u8>, Vec<u8>)> = vec![
+        ("before", [skip.clone(), fa.clone()].concat(), a.clone()),
+        ("after", [fa.clone(), skip.clone()].concat(), a.clone()),
+        (
+            "between",
+            [fa.clone(), skip.clone(), fb.clone()].concat(),
+            expected_two.clone(),
+        ),
+        (
+            "everywhere",
+            [
+                skippable(1, b"x"),
+                fa.clone(),
+                skippable(15, &[]),
+                fb.clone(),
+                skip.clone(),
+            ]
+            .concat(),
+            expected_two,
+        ),
+    ];
+    for (slug, bytes, expected) in cases {
+        entries.push(hand_entry(
+            root,
+            SUITE_SKIPPABLE,
+            &format!("with-regular/{slug}"),
+            "frame",
+            "hand",
+            "synthetic/word-salad",
+            &expected,
+            &bytes,
+            serde_json::json!({ "position": slug }),
+            none(),
+        )?);
+    }
+    Ok(entries)
+}
+
+/// The legacy suite: the CLI over every Canterbury file and 20 MiB of word
+/// salad, plus two hand-built frames.
+pub fn legacy_suite(root: &Path, cfg: &Config, manifest: &Manifest) -> Result<Vec<Entry>, String> {
+    let version = crate::cli::cli_version();
+    let mut entries = Vec::new();
+    let mut inputs: Vec<(String, Vec<u8>)> = Vec::new();
+    for (name, path) in corpus_file_inputs(manifest)? {
+        if name.starts_with("canterbury/") {
+            let data = std::fs::read(&path).map_err(|e| format!("{}: {e}", path.display()))?;
+            inputs.push((name, data));
+        }
+    }
+    inputs.push((
+        "synthetic/word-salad-20m".into(),
+        synth::word_salad(cfg.fuzz.seed, LEGACY_SYNTHETIC_BYTES),
+    ));
+    for (name, data) in &inputs {
+        let frame = crate::cli::compress_legacy(data);
+        entries.push(hand_entry(
+            root,
+            SUITE_LEGACY,
+            &format!("cli/{name}"),
+            "frame",
+            "cli",
+            name,
+            data,
+            &frame,
+            serde_json::json!({ "mode": "cli" }),
+            extra_of(vec![("cli_version", serde_json::json!(version))]),
+        )?);
+    }
+    let contents = small_contents(cfg.fuzz.seed);
+    let blocks: Vec<Vec<u8>> = contents[..2].iter().map(|c| compress_default(c)).collect();
+    let expected = [contents[0].as_slice(), contents[1].as_slice()].concat();
+    for (slug, terminated) in [("two-blocks", false), ("zero-terminated", true)] {
+        let frame = legacy(&blocks, terminated);
+        entries.push(hand_entry(
+            root,
+            SUITE_LEGACY,
+            &format!("hand/{slug}"),
+            "frame",
+            "hand",
+            "synthetic/word-salad",
+            &expected,
+            &frame,
+            serde_json::json!({ "mode": slug }),
+            serde_json::Map::new(),
+        )?);
+    }
+    Ok(entries)
+}
+
+/// The concatenated suite: several frames in one input.
+pub fn concatenated_suite(root: &Path, cfg: &Config) -> Result<Vec<Entry>, String> {
+    let contents = small_contents(cfg.fuzz.seed);
+    // Different preferences for each frame: distinct combination indices.
+    let picks = [5usize, 22, 41, 60];
+    let mut entries = Vec::new();
+    for count in 2..=4usize {
+        let mut bytes = Vec::new();
+        let mut expected = Vec::new();
+        for k in 0..count {
+            bytes.extend(regular_frame(cfg, &contents[k], picks[k]));
+            expected.extend_from_slice(&contents[k]);
+        }
+        entries.push(hand_entry(
+            root,
+            SUITE_CONCATENATED,
+            &format!("regular-x{count}"),
+            "frame",
+            "hand",
+            "synthetic/word-salad",
+            &expected,
+            &bytes,
+            serde_json::json!({ "frames": count, "combinations": &picks[..count] }),
+            serde_json::Map::new(),
+        )?);
+    }
+    // A legacy frame, then a regular frame.
+    let legacy_frame = legacy(&[compress_default(&contents[0])], false);
+    let bytes = [legacy_frame, regular_frame(cfg, &contents[1], picks[0])].concat();
+    let expected = [contents[0].as_slice(), contents[1].as_slice()].concat();
+    entries.push(hand_entry(
+        root,
+        SUITE_CONCATENATED,
+        "legacy-then-regular",
+        "frame",
+        "hand",
+        "synthetic/word-salad",
+        &expected,
+        &bytes,
+        serde_json::json!({ "contains_legacy": true }),
+        serde_json::Map::new(),
+    )?);
+    // A regular frame, a skippable frame and a regular frame.
+    let bytes = [
+        regular_frame(cfg, &contents[0], picks[1]),
+        skippable(3, b"between"),
+        regular_frame(cfg, &contents[2], picks[2]),
+    ]
+    .concat();
+    let expected = [contents[0].as_slice(), contents[2].as_slice()].concat();
+    entries.push(hand_entry(
+        root,
+        SUITE_CONCATENATED,
+        "regular-skippable-regular",
+        "frame",
+        "hand",
+        "synthetic/word-salad",
+        &expected,
+        &bytes,
+        serde_json::json!({ "contains_legacy": false }),
+        serde_json::Map::new(),
+    )?);
+    // A hand-built regular frame with raw blocks, to keep one frame the
+    // compressor did not write.
+    let raw = build(&FrameSpec {
+        blocks: vec![BlockSpec::raw(&contents[3])],
+        content: contents[3].clone(),
+        content_checksum: true,
+        ..FrameSpec::default()
+    });
+    let bytes = [raw, regular_frame(cfg, &contents[3], picks[3])].concat();
+    let expected = [contents[3].as_slice(), contents[3].as_slice()].concat();
+    entries.push(hand_entry(
+        root,
+        SUITE_CONCATENATED,
+        "raw-then-regular",
+        "frame",
+        "hand",
+        "synthetic/word-salad",
+        &expected,
+        &bytes,
+        serde_json::json!({ "contains_legacy": false }),
+        serde_json::Map::new(),
+    )?);
+    Ok(entries)
+}
+
 /// Regenerate the named suites and rewrite the manifest's conformance section,
 /// keeping other suites' entries.
 pub fn generate(suites: &[String]) -> Result<(), String> {
@@ -370,6 +745,12 @@ pub fn generate(suites: &[String]) -> Result<(), String> {
             SUITE_FRAMES_SILESIA => conf
                 .entries
                 .extend(corpus_frame_suite(&root, &cfg, &manifest, "silesia")?),
+            SUITE_DICTIONARY => conf
+                .entries
+                .extend(dictionary_suite(&root, &cfg, &manifest)?),
+            SUITE_SKIPPABLE => conf.entries.extend(skippable_suite(&root, &cfg)?),
+            SUITE_LEGACY => conf.entries.extend(legacy_suite(&root, &cfg, &manifest)?),
+            SUITE_CONCATENATED => conf.entries.extend(concatenated_suite(&root, &cfg)?),
             other => return Err(format!("unknown suite {other}")),
         }
     }

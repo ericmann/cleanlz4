@@ -20,17 +20,43 @@ pub struct Report {
     pub failures: Vec<(String, String)>,
 }
 
-/// Decode with cleanlz4: blocks only for now.
+/// The dictionary an entry names: its bytes and its id, when the entry has one.
+pub fn entry_dictionary(entry: &Entry) -> Result<(Vec<u8>, Option<u32>), String> {
+    let rel = entry
+        .extra
+        .get("dict_file")
+        .and_then(|v| v.as_str())
+        .ok_or("entry has no dict_file")?;
+    let path = crate::corpus::conformance_dir().join(rel);
+    let bytes = std::fs::read(&path).map_err(|e| format!("{}: {e}", path.display()))?;
+    let id = entry
+        .extra
+        .get("dict_id")
+        .and_then(|v| v.as_u64())
+        .and_then(|v| u32::try_from(v).ok());
+    Ok((bytes, id))
+}
+
+/// Decode with cleanlz4: blocks, dictionary blocks and frames.
 pub fn cleanlz4_decoder(entry: &Entry, bytes: &[u8]) -> Result<Vec<u8>, String> {
     match entry.kind.as_str() {
         "block" => {
             cleanlz4::decompress_block(bytes, entry.input_bytes as usize).map_err(|e| e.to_string())
         }
+        "block-dict" => {
+            let (dict, _) = entry_dictionary(entry)?;
+            cleanlz4::decompress_block_with_dict(bytes, &dict, entry.input_bytes as usize)
+                .map_err(|e| e.to_string())
+        }
         "frame" => {
-            let options = cleanlz4::DecodeOptions {
+            let mut options = cleanlz4::DecodeOptions {
                 max_output_bytes: entry.input_bytes,
                 ..cleanlz4::DecodeOptions::default()
             };
+            if entry.extra.contains_key("dict_file") {
+                let (bytes, id) = entry_dictionary(entry)?;
+                options.dictionary = Some(cleanlz4::Dictionary { bytes, id });
+            }
             cleanlz4::decompress_frame_with(bytes, &options)
                 .map(|o| o.data)
                 .map_err(|e| e.to_string())

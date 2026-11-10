@@ -165,7 +165,7 @@ fn every_frame_level_and_block_size_appears() {
 #[test]
 fn categories_follow_the_precedence_rule() {
     let c = conformance();
-    for e in c.entries.iter().filter(|e| e.kind == "frame") {
+    for e in c.entries.iter().filter(|e| e.tool == "lz4f") {
         if e.suite == "synthetic" {
             assert_eq!(e.category, "synthetic");
             continue;
@@ -326,4 +326,85 @@ fn manifest_frame_entries_match_the_generator() {
             assert_eq!(got, want, "{suite} {input}");
         }
     }
+}
+
+#[test]
+fn the_four_special_suites_each_have_entries() {
+    let c = conformance();
+    for suite in ["dictionary", "skippable", "legacy", "concatenated"] {
+        let n = c
+            .entries
+            .iter()
+            .filter(|e| e.suite == suite && e.category == suite)
+            .count();
+        assert!(n > 0, "{suite}");
+    }
+    let skippable = c.entries.iter().filter(|e| e.suite == "skippable");
+    assert!(skippable.clone().count() >= 16 + 1 + 3);
+    let nibbles: std::collections::BTreeSet<u64> = skippable
+        .filter_map(|e| e.params.get("magic_low_nibble").and_then(|v| v.as_u64()))
+        .collect();
+    assert_eq!(nibbles.len(), 16);
+}
+
+#[test]
+fn dictionary_entries_exist_for_every_configured_size() {
+    let cfg = Config::load().expect("config");
+    let c = conformance();
+    for size in &cfg.dict.sizes_bytes {
+        let at_size: Vec<_> = c
+            .entries
+            .iter()
+            .filter(|e| e.suite == "dictionary" && e.extra["dict_bytes"] == *size)
+            .collect();
+        assert!(!at_size.is_empty(), "size {size}");
+        for e in &at_size {
+            assert!(e.extra.contains_key("dict_sha256") && e.extra.contains_key("dict_dependent"));
+            assert_eq!(e.tool, "hand");
+        }
+        for slug in ["block", "linked-id", "indep-id", "linked"] {
+            assert!(
+                at_size.iter().any(|e| e.id.ends_with(&format!("/{slug}"))),
+                "size {size} {slug}"
+            );
+        }
+    }
+}
+
+#[test]
+fn legacy_cli_entries_record_the_cli_version() {
+    let c = conformance();
+    let manifest = Manifest::load().expect("manifest");
+    let cli: Vec<_> = c
+        .entries
+        .iter()
+        .filter(|e| e.suite == "legacy" && e.tool == "cli")
+        .collect();
+    assert!(cli.len() >= 12);
+    for e in cli {
+        assert_eq!(
+            e.extra["cli_version"].as_str(),
+            Some(manifest.tools.lz4_cli.as_str())
+        );
+    }
+}
+
+#[test]
+fn the_oracle_accepts_every_hand_built_regular_and_concatenated_entry_it_can_decode() {
+    use oracle::frame::{decompress_frames, Decoded};
+    let c = conformance();
+    let root = oracle::corpus::conformance_dir();
+    let mut checked = 0;
+    for e in c.entries.iter().filter(|e| {
+        matches!(e.suite.as_str(), "skippable" | "concatenated")
+            && e.params.get("contains_legacy") != Some(&serde_json::json!(true))
+    }) {
+        let bytes = std::fs::read(root.join(&e.file)).expect("file");
+        match decompress_frames(&bytes, e.input_bytes as usize) {
+            Decoded::Accepted(out) => assert_eq!(sha256_hex(&out), e.input_sha256, "{}", e.id),
+            other => panic!("{}: {other:?}", e.id),
+        }
+        checked += 1;
+    }
+    assert!(checked >= 20);
 }
