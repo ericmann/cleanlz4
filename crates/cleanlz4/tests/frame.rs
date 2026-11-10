@@ -1,0 +1,142 @@
+//! Frame tests with frames built by hand from the Frame format document.
+
+use cleanlz4::xxh32::xxh32;
+use cleanlz4::{decompress_frame, DecodeOptions, Error, TrailingData, DEFAULT_MAX_OUTPUT_BYTES};
+
+const MAGIC: [u8; 4] = [0x04, 0x22, 0x4D, 0x18];
+
+/// FLG: version 01, independent blocks, plus `extra` flag bits.
+fn flg(extra: u8) -> u8 {
+    0x40 | 0x20 | extra
+}
+
+/// BD for block maximum size code `code` (4 to 7).
+fn bd(code: u8) -> u8 {
+    code << 4
+}
+
+/// A header with a valid checksum.
+fn header(flg: u8, bd: u8) -> Vec<u8> {
+    let d = [flg, bd];
+    let mut h = MAGIC.to_vec();
+    h.extend_from_slice(&d);
+    h.push(((xxh32(&d, 0) >> 8) & 0xFF) as u8);
+    h
+}
+
+fn block_word(size: usize, uncompressed: bool) -> [u8; 4] {
+    let w = size as u32 | if uncompressed { 0x8000_0000 } else { 0 };
+    w.to_le_bytes()
+}
+
+/// A frame of 64 KB-max blocks, each `(uncompressed, data)`.
+fn frame(blocks: &[(bool, Vec<u8>)]) -> Vec<u8> {
+    let mut f = header(flg(0), bd(4));
+    for (uncompressed, data) in blocks {
+        f.extend_from_slice(&block_word(data.len(), *uncompressed));
+        f.extend_from_slice(data);
+    }
+    f.extend_from_slice(&[0, 0, 0, 0]);
+    f
+}
+
+/// A literals-only compressed block: a token with the literal count, then the literals.
+fn literal_block(lits: &[u8]) -> Vec<u8> {
+    assert!(lits.len() < 15);
+    let mut b = vec![(lits.len() as u8) << 4];
+    b.extend_from_slice(lits);
+    b
+}
+
+#[test]
+fn uncompressed_blocks_frame_decodes() {
+    let f = frame(&[(true, b"hello ".to_vec()), (true, b"world".to_vec())]);
+    assert_eq!(decompress_frame(&f).expect("ok"), b"hello world");
+}
+
+#[test]
+fn empty_frame_decodes_to_empty() {
+    let f = frame(&[]);
+    assert_eq!(decompress_frame(&f).expect("ok"), Vec::<u8>::new());
+}
+
+#[test]
+fn zero_size_uncompressed_block_is_valid() {
+    // 0x80000000 is an empty uncompressed block, not the EndMark.
+    let f = frame(&[(true, vec![]), (true, b"x".to_vec())]);
+    assert_eq!(decompress_frame(&f).expect("ok"), b"x");
+}
+
+#[test]
+fn compressed_block_frame_decodes() {
+    let f = frame(&[
+        (false, literal_block(b"abc")),
+        (true, b"def".to_vec()),
+        (false, literal_block(b"ghi")),
+    ]);
+    assert_eq!(decompress_frame(&f).expect("ok"), b"abcdefghi");
+    // A compressed block with a match.
+    let mut b = vec![0x14, b'a', 1, 0];
+    b.extend(literal_block(b"12345"));
+    let f = frame(&[(false, b)]);
+    assert_eq!(decompress_frame(&f).expect("ok"), b"aaaaaaaaa12345");
+}
+
+#[test]
+fn block_size_field_over_the_maximum_is_rejected() {
+    // The size word alone decides: no data follows it.
+    for uncompressed in [true, false] {
+        let mut f = header(flg(0), bd(4));
+        f.extend_from_slice(&block_word(65_537, uncompressed));
+        assert_eq!(decompress_frame(&f), Err(Error::BlockSizeExceeded));
+    }
+    // The maximum itself is allowed.
+    let mut f = header(flg(0), bd(4));
+    f.extend_from_slice(&block_word(65_536, true));
+    f.extend(vec![7u8; 65_536]);
+    f.extend_from_slice(&[0, 0, 0, 0]);
+    assert_eq!(decompress_frame(&f).expect("ok").len(), 65_536);
+}
+
+#[test]
+fn decoded_block_over_the_maximum_is_rejected() {
+    // One literal, then a match of 70,000 bytes at offset 1: decodes past 64 KB.
+    let match_extra = 70_000 - 4 - 15;
+    let mut b = vec![0x1F, b'a', 1, 0];
+    b.extend(std::iter::repeat_n(255u8, match_extra / 255));
+    b.push((match_extra % 255) as u8);
+    b.extend(literal_block(b"12345"));
+    assert!(b.len() < 65_536);
+    let f = frame(&[(false, b)]);
+    assert_eq!(decompress_frame(&f), Err(Error::BlockSizeExceeded));
+}
+
+#[test]
+fn every_truncation_of_a_small_frame_is_truncated_input() {
+    let f = frame(&[(false, literal_block(b"abc")), (true, b"def".to_vec())]);
+    for cut in 1..f.len() {
+        assert_eq!(
+            decompress_frame(&f[..cut]),
+            Err(Error::TruncatedInput),
+            "cut {cut} of {}",
+            f.len()
+        );
+    }
+    assert!(decompress_frame(&f).is_ok());
+}
+
+#[test]
+fn bytes_after_the_frame_are_trailing_data() {
+    let mut f = frame(&[(true, b"x".to_vec())]);
+    f.push(0);
+    assert_eq!(decompress_frame(&f), Err(Error::TrailingData));
+}
+
+#[test]
+fn default_options_have_the_documented_values() {
+    let o = DecodeOptions::default();
+    assert_eq!(o.max_output_bytes, DEFAULT_MAX_OUTPUT_BYTES);
+    assert_eq!(o.dictionary, None);
+    assert_eq!(o.trailing_data, TrailingData::Error);
+    assert!(o.verify_checksums);
+}

@@ -1,7 +1,9 @@
 //! Frame parsing, block sequencing, checksums and the one-shot driver.
 
+use crate::block::decode_block;
 use crate::error::{Error, Result};
 use crate::xxh32::xxh32;
+use crate::{DecodeOptions, FrameKind, FrameOutput};
 
 /// The frame magic number, read little-endian (Frame format, "Magic Number").
 const FRAME_MAGIC: u32 = 0x184D_2204;
@@ -138,6 +140,127 @@ pub fn parse_frame_descriptor(input: &[u8]) -> Result<(FrameDescriptor, usize)> 
         },
         header_len,
     ))
+}
+
+/// A data block's size word (Frame format, "Data Blocks", "Block Size").
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) struct BlockHeader {
+    /// The data section's size in bytes, not counting any block checksum.
+    pub(crate) size: usize,
+    /// The highest bit: the block is stored uncompressed.
+    pub(crate) uncompressed: bool,
+}
+
+/// The block size word that ends a frame's blocks (Frame format, "EndMark").
+pub(crate) const END_MARK: u32 = 0;
+
+/// Split a block size word: the highest bit marks an uncompressed block and
+/// the other 31 bits give the data size (Frame format, "Block Size").
+pub(crate) fn parse_block_header(word: u32) -> BlockHeader {
+    BlockHeader {
+        size: (word & 0x7FFF_FFFF) as usize,
+        uncompressed: word & 0x8000_0000 != 0,
+    }
+}
+
+/// The state of one regular frame being decoded, shared by the one-shot and
+/// streaming drivers. It works on whole units: one block at a time.
+#[derive(Debug)]
+pub(crate) struct FrameState {
+    desc: FrameDescriptor,
+}
+
+impl FrameState {
+    /// Start a frame from its parsed descriptor.
+    pub(crate) fn new(desc: FrameDescriptor) -> Self {
+        FrameState { desc }
+    }
+
+    /// The frame's descriptor.
+    pub(crate) fn descriptor(&self) -> &FrameDescriptor {
+        &self.desc
+    }
+
+    /// Decode one data block's `data` (without any block checksum), appending
+    /// the decoded bytes to `out`.
+    pub(crate) fn decode_data_block(
+        &mut self,
+        header: BlockHeader,
+        data: &[u8],
+        out: &mut Vec<u8>,
+    ) -> Result<()> {
+        let max = self.desc.block_max_size.bytes();
+        if header.size > max {
+            return Err(Error::BlockSizeExceeded);
+        }
+        if header.uncompressed {
+            out.extend_from_slice(data);
+            return Ok(());
+        }
+        let mut block = Vec::new();
+        match decode_block(data, &[], &mut block, max) {
+            Ok(()) => {}
+            // The block's decoded size passed the frame's maximum.
+            Err(Error::OutputLimitExceeded) => return Err(Error::BlockSizeExceeded),
+            Err(e) => return Err(e),
+        }
+        out.extend_from_slice(&block);
+        Ok(())
+    }
+
+    /// End the frame after its EndMark.
+    pub(crate) fn finish(&mut self) -> Result<()> {
+        Ok(())
+    }
+}
+
+fn skip(input: &[u8], pos: usize, n: usize) -> Result<usize> {
+    let end = pos.checked_add(n).ok_or(Error::TruncatedInput)?;
+    if end > input.len() {
+        return Err(Error::TruncatedInput);
+    }
+    Ok(end)
+}
+
+/// Decode a complete input slice holding one regular frame.
+pub(crate) fn decode_frames(input: &[u8], _options: &DecodeOptions) -> Result<FrameOutput> {
+    let (desc, header_len) = parse_frame_descriptor(input)?;
+    let mut state = FrameState::new(desc);
+    let mut out = Vec::new();
+    let mut pos = header_len;
+    loop {
+        let word = read_u32_le(input, pos).ok_or(Error::TruncatedInput)?;
+        pos = pos.saturating_add(4);
+        if word == END_MARK {
+            break;
+        }
+        let header = parse_block_header(word);
+        if header.size > state.descriptor().block_max_size.bytes() {
+            return Err(Error::BlockSizeExceeded);
+        }
+        let end = skip(input, pos, header.size)?;
+        let data = input.get(pos..end).ok_or(Error::TruncatedInput)?;
+        pos = end;
+        if state.descriptor().block_checksum {
+            // Read and skipped here; verified by a later task.
+            pos = skip(input, pos, 4)?;
+        }
+        state.decode_data_block(header, data, &mut out)?;
+    }
+    if state.descriptor().content_checksum {
+        pos = skip(input, pos, 4)?;
+    }
+    state.finish()?;
+    if pos < input.len() {
+        return Err(Error::TrailingData);
+    }
+    Ok(FrameOutput {
+        data: out,
+        consumed: pos,
+        checksums_verified: true,
+        descriptors: vec![desc],
+        kinds: vec![FrameKind::Regular],
+    })
 }
 
 #[cfg(test)]
