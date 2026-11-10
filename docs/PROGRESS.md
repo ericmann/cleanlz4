@@ -8,7 +8,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P0-01 Confirm the corpora, the tool versions and the spec sources
 - [x] P0-02 Confirm make check and the fuzz toolchain
 - [x] P0-03 Regenerate the corpus, record the baseline conformance run and lock down
-- [ ] P0-04 Phase 0 end: push and record the manual check
+- [x] P0-04 Phase 0 end: push and record the manual check
 - [ ] P1-01 Dictionary differential test: every dictionary entry against the lz4 program
 - [ ] P1-02 Kill the dict_dependent mutant in the oracle's dict module
 - [ ] P1-03 Kill the dropped-dictionary mutant in the conformance runner
@@ -46,3 +46,7 @@ make check exit 0; guard self-test: ok (568 cases); spec sources: ok (3 files); 
 ### P0-03 — baa94de
 
 Lockdown: P0-03 done, no URL is allowed from here. make corpus: MANIFEST.json unchanged. conformance-check and conformance-P0-03.json: 2349 of 2349 passed, 0 failed, ten categories; identical to P2-12 apart from task. corpus_sha256 fd6392a28a4b239780f073ad70015c93f589163e4d232a9dd11502c24c93ba05. EVIDENCE.md: fenced list is sorted-checked, so the new path sits before P1-12; results table row added.
+
+### P0-04 — 52ccc3d
+
+Push: done (origin build/2026-11-10-2). Manual check: NOT VERIFIED (human): testdata/results/conformance-P0-03.json equals 0.1.0's conformance-P2-12.json in corpus_sha256, total, passed and every category; the log entries of P0-01 and P0-02 show both corpora matching testdata/MANIFEST.json, the lz4 program at v1.9.4, the binding at 1.11.1+lz4-1.10.0 and make check green; kukulu_status reports cleanroom.lockdown true
