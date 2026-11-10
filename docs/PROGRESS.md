@@ -27,7 +27,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P2-02 Options, and one regular frame with independent blocks
 - [x] P2-03 Linked blocks
 - [x] P2-04 Block and content checksums
-- [ ] P2-05 Content size
+- [x] P2-05 Content size
 - [ ] P2-06 Concatenated frames, skippable frames and trailing data
 - [ ] P2-07 The legacy frame
 - [ ] P2-08 Preset dictionary and Dict-ID
@@ -151,3 +151,7 @@ FrameState keeps a 65,536-byte history (Vec, drained front) when linked; remembe
 ### P2-04 — b5e45cb
 
 FrameState::new(desc, verify); verify_block_checksum(data, stored) (called before decode); finish(stored_content: Option<u32>); content hash fed only when verifying and flag set. FrameOutput.checksums_verified = options.verify_checksums. Checksum bytes still consumed when verification is off (truncation still TruncatedInput). Tests: 5 cleanlz4 + 2 oracle.
+
+### P2-05 — 08141a4
+
+FrameState counts decoded bytes (account() before extending out); error as soon as count exceeds content_size, and in finish() when smaller (size check precedes content checksum compare). Applies regardless of verify_checksums. DESIGN records the validate-not-skip choice. Tests 4 + 1.
