@@ -13,7 +13,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-02 Oracle FFI: frame compression and decompression
 - [x] P1-03 The typed error enum
 - [x] P1-04 XXH32, one-shot and streaming
-- [ ] P1-05 Block decoder: sequences, overlap copies and strict end-of-block rules
+- [x] P1-05 Block decoder: sequences, overlap copies and strict end-of-block rules
 - [ ] P1-06 Spike: the oracle's end-of-block behaviour
 - [ ] P1-07 Align the end-of-block policy with the oracle
 - [ ] P1-08 Dictionary-prefixed block decoding
@@ -95,3 +95,7 @@ cleanlz4::Error (17 unit variants, Copy), Error::ALL, Display, std Error, Result
 ### P1-04 — 103574e
 
 cleanlz4::xxh32::{xxh32(input,seed), Xxh32{new,update,digest}}. Matches oracle content checksum for 0..=300 and large inputs, header-checksum byte and block checksum. Uses slice::as_chunks (clippy chunks_exact_to_as_chunks lint demands it for const sizes). Tests: 3 unit + 5 oracle. DESIGN entries per Step added.
+
+### P1-05 — 13b602b
+
+block.rs: pub(crate) decode_block(src,&mut Vec,max_len), decode_block_with(.., EndOfBlockPolicy) (policy fields last_sequence_is_literals_only, last_five_are_literals, last_match_twelve_from_end; const EOB all true); lib.rs decompress_block(input,max_output). Interpretation: final token low nibble ignored; length/limit check precedes literal-availability check (so a huge claimed literal length gives OutputLimitExceeded). Matches copy in passes of <=offset bytes. 14 unit tests.
