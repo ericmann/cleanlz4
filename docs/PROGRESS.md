@@ -14,7 +14,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P1-03 Kill the dropped-dictionary mutant in the conformance runner
 - [x] P1-04 Merge is_magic into magic_kind
 - [x] P1-05 Benchmark before the scratch-buffer change
-- [ ] P1-06 Reuse one scratch buffer across blocks
+- [x] P1-06 Reuse one scratch buffer across blocks
 - [ ] P1-07 Measure the scratch-buffer change and decide
 - [ ] P1-08 Phase 1 end: push and record the manual check
 - [ ] P2-01 The full conformance run
@@ -70,3 +70,7 @@ Deleted is_magic; decode_legacy_frame uses magic_kind(word).is_some(). Tests: fr
 ### P1-05 — 679e56f
 
 bench-P1-05.json written by make bench; no code changed. Slowest cleanlz4: canterbury/xargs.1 388.5 MB/s; fastest silesia/x-ray 1761.7 MB/s. Aggregate (total bytes / sum of best times) = 532.1 MB/s. EVIDENCE.md list (sorted) and results table updated; results tests pass.
+
+### P1-06 — 0c003d3
+
+Tests first on unchanged decoder failed: legacy one-shot 16 blocks 18 fresh allocs vs 64 blocks 66; one-shot (independent) 19 vs 67; streaming 22 vs 70. After change: legacy 3/3 one-shot, 7/7 streaming; one-shot independent 4/4, linked 5/5; streaming 7/7 and 8/8. FrameState.scratch, decode_legacy_block takes scratch, Decoder.scratch replaced at both legacy frame ends. Memory tests (oracle limits, cleanlz4 limits) pass unchanged; conformance-check 2349/2349; fuzz build ok; make fuzz-smoke exit 0, all five targets crashes 0 divergences 0. DESIGN entry added, "per-block scratch buffer" reworded.
