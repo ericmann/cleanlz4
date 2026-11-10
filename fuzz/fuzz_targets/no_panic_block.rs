@@ -1,6 +1,4 @@
 #![no_main]
 use libfuzzer_sys::fuzz_target;
 
-fuzz_target!(|data: &[u8]| {
-    let _ = data;
-});
+fuzz_target!(|data: &[u8]| oracle::fuzz_logic::no_panic_block(data));

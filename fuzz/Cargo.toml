@@ -20,3 +20,17 @@ path = "fuzz_targets/no_panic_block.rs"
 test = false
 doc = false
 bench = false
+
+[[bin]]
+name = "no_panic_frame"
+path = "fuzz_targets/no_panic_frame.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "no_panic_stream"
+path = "fuzz_targets/no_panic_stream.rs"
+test = false
+doc = false
+bench = false
