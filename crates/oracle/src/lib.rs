@@ -3,5 +3,6 @@
 pub mod block;
 pub mod config;
 pub mod ffi;
+pub mod frame;
 pub mod manifest;
 pub mod prng;
