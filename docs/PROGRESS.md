@@ -33,7 +33,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P2-08 Preset dictionary and Dict-ID
 - [x] P2-09 Spike: the oracle's frame behaviour, and the differential compare module
 - [x] P2-10 Conformance generator: oracle-compressed frame suites
-- [ ] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
+- [x] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
 - [ ] P2-12 The full conformance run and its results
 - [ ] P2-13 The malformed corpus and its results
 - [x] P2-14 Phase 2 end: push and record the manual check
@@ -562,3 +562,7 @@ cli.rs: wrap_block_in_frame, decompress_frame_with_dict, decompress_block_with_d
 ### P2-08 — 4ea31e1
 
 FrameState::new(desc, verify, Option<&Dictionary>)->Result enforces DictionaryRequired/Mismatch and seeds preset (independent) or history (linked) with dict's last 64KiB. stream.rs call site updated (beyond listed files). oracle::dict::dict_frame added (hand-assembled frames, header accepted-as-truncated check). Tests: 6 in cleanlz4 tests/frame.rs, 3 in oracle tests/dict_frame.rs; DESIGN entry. The earlier P2-09 GAP (Dict-ID frame without dictionary accepted) is now closed in both drivers.
+
+### P2-11 — ae17c40
+
+New suites dictionary(72 entries), skippable(21), legacy(14), concatenated(6); SUITES now 8. Entry.extra keys: dict_file, dict_sha256, dict_bytes, dict_source, dict_offset, dict_dependent, dict_id (id frames only), cli_version. runner: kind "block-dict", entry_dictionary(), frames get DecodeOptions.dictionary when dict_file present. Checked: conformance --check over the four categories 113/113 pass. make corpus 108 s, MANIFEST byte-stable. Footgun: manifest entry order changes diff widely on first regeneration (sorted by id).
