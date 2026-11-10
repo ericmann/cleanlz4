@@ -27,7 +27,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P2-08 Triage crashes and divergences
 - [x] P2-09 The final benchmark
 - [x] P2-10 Phase 2 end: push and record the manual check
-- [ ] P3-01 The CHANGELOG entry for 0.2.0 and the crate versions
+- [x] P3-01 The CHANGELOG entry for 0.2.0 and the crate versions
 - [ ] P3-02 Refresh EVIDENCE.md and README.md
 - [ ] P3-03 Phase 3 end: push and record the manual check
 
@@ -122,3 +122,7 @@ bench-P2-09.json: cleanlz4 slowest silesia/webster 410.9 MB/s, fastest silesia/x
 ### P2-10 — 9a1a0d4
 
 Push: done. Manual check: NOT VERIFIED (human): testdata/results/conformance-P2-01.json shows 2349 of 2349 across ten categories and malformed-P2-02.json shows 144 of 144 with 0 panics; every testdata/results/fuzz-*-P2-0[3-7].json shows crashes == 0 and seconds of at least fuzz.seconds_per_target; DESIGN.md's Divergence triage, 0.2.0 re-verification (P2-08), says none or resolves every divergence; read bench-P2-09.json (actual figures, no target)
+
+### P3-01 — df370a6
+
+Versions 0.2.0 in both crates; Cargo.lock and fuzz/Cargo.lock diffs are only the two version lines. CHANGELOG [0.2.0] - 2026-11-10 (date -u +%F) with link line; entry cites each result file's figures. New crates/oracle/tests/release.rs (3 tests, no version literal). Fuzz build ok. Interpretation: scratch buffer kept per P1-07; no blocked or skipped tasks.
