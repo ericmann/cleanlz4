@@ -2,3 +2,4 @@ target/
 fuzz/target/
 fuzz/artifacts/
 fuzz/corpus/
+.kukulu/implement.lock
