@@ -28,7 +28,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P2-03 Linked blocks
 - [x] P2-04 Block and content checksums
 - [x] P2-05 Content size
-- [ ] P2-06 Concatenated frames, skippable frames and trailing data
+- [x] P2-06 Concatenated frames, skippable frames and trailing data
 - [ ] P2-07 The legacy frame
 - [ ] P2-08 Preset dictionary and Dict-ID
 - [ ] P2-09 Spike: the oracle's frame behaviour, and the differential compare module
@@ -155,3 +155,7 @@ FrameState::new(desc, verify); verify_block_checksum(data, stored) (called befor
 ### P2-05 — 08141a4
 
 FrameState counts decoded bytes (account() before extending out); error as soon as count exceeds content_size, and in finish() when smaller (size check precedes content checksum compare). Applies regardless of verify_checksums. DESIGN records the validate-not-skip choice. Tests 4 + 1.
+
+### P2-06 — a554e49
+
+frame.rs: decode_frames is now the frame loop (classify() -> Boundary{Regular,Skippable,Legacy,PartialMagic,Unknown}); decode_regular_frame(input, options, &mut out) -> (desc, used); skip_skippable_frame. Legacy magic currently returns BadMagic (P2-07 replaces the Legacy arm). Partial magic is TruncatedInput under either policy. Tests 10 + 1.
