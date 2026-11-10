@@ -33,10 +33,10 @@ Started: 2026-11-10T00:53:38.909Z
 - [-] P2-08 Preset dictionary and Dict-ID
 - [x] P2-09 Spike: the oracle's frame behaviour, and the differential compare module
 - [x] P2-10 Conformance generator: oracle-compressed frame suites
-- [ ] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
-- [ ] P2-12 The full conformance run and its results
-- [ ] P2-13 The malformed corpus and its results
-- [ ] P2-14 Phase 2 end: push and record the manual check
+- [-] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
+- [-] P2-12 The full conformance run and its results
+- [-] P2-13 The malformed corpus and its results
+- [x] P2-14 Phase 2 end: push and record the manual check
 - [ ] P3-01 Streaming decoder: regular frames
 - [ ] P3-02 Streaming decoder: skippable, legacy and concatenated frames, dictionaries and trailing data
 - [ ] P3-03 Chunking-invariance property test
@@ -175,3 +175,19 @@ docs/spikes/P2-09.md. Oracle differs from fixed verdicts only on: legacy frame (
 ### P2-10 — afe2455
 
 Suites added: synthetic (21 inputs x 64), frames-cantrbry (11 x 64), frames-silesia (12 x 8); SUITES now has 4 entries; runner handles kind "frame". `make corpus` takes ~92 s and leaves ~1 GB under testdata/conformance (gitignored); MANIFEST.json is 1.7 MB and regeneration is byte-stable. Interpretation: i%len with block size fastest means level correlates with block size id (id4->level 0 ...); every level still meets both values of every flag. Tests corpus.rs +4.
+
+### P2-11 — skipped
+
+SKIPPED: depends on P1-10
+
+### P2-12 — skipped
+
+SKIPPED: depends on P2-08
+
+### P2-13 — skipped
+
+SKIPPED: depends on P2-08
+
+### P2-14 — 7b9a924
+
+Push: done. Manual check: NOT VERIFIED (human): testdata/results/conformance-P2-12.json shows passed == total with all ten categories present; testdata/results/malformed-P2-13.json shows matched_expected_error == total and panics == 0; read docs/spikes/P2-09.md and DESIGN.md's Differential rules and confirm each normalization cites a Frame format section. CAUTION: P2-11, P2-12, P2-13 were auto-skipped because P1-10 (BLOCKED: the binding crate has no LZ4_decompress_safe_usingDict) and P2-08 (skipped) did not complete, so neither result file exists; the Dict-ID DictionaryRequired/Mismatch rules are not implemented in cleanlz4.
