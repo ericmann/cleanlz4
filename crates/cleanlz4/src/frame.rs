@@ -390,7 +390,7 @@ const SKIPPABLE_MAGIC_MASK: u32 = 0xFFFF_FFF0;
 const LEGACY_BLOCK_BYTES: usize = 8 << 20;
 /// The largest compressed legacy block: the block format's worst-case growth of
 /// an 8 MiB block (one extra byte per 255, plus a small constant).
-const LEGACY_MAX_COMPRESSED: usize = LEGACY_BLOCK_BYTES + LEGACY_BLOCK_BYTES / 255 + 16;
+pub(crate) const LEGACY_MAX_COMPRESSED: usize = LEGACY_BLOCK_BYTES + LEGACY_BLOCK_BYTES / 255 + 16;
 
 /// What a frame boundary holds.
 enum Boundary {
@@ -499,12 +499,35 @@ fn decode_legacy_frame(input: &[u8], out: &mut Vec<u8>, remaining: &mut u64) -> 
         let start = pos.saturating_add(4);
         let end = skip(input, start, size)?;
         let data = input.get(start..end).ok_or(Error::TruncatedInput)?;
-        let mut block = Vec::new();
-        let (bound, allowance_bounds) = block_bound(LEGACY_BLOCK_BYTES, *remaining);
-        decode_block(data, &[], &mut block, bound).map_err(|e| limit_error(e, allowance_bounds))?;
-        append_capped(out, &block, *remaining)?;
-        *remaining = remaining.saturating_sub(block.len() as u64);
+        decode_legacy_block(data, out, remaining)?;
         pos = end;
+    }
+}
+
+/// Decode one legacy block, appending to `out` and charging `remaining`.
+pub(crate) fn decode_legacy_block(
+    data: &[u8],
+    out: &mut Vec<u8>,
+    remaining: &mut u64,
+) -> Result<()> {
+    let mut block = Vec::new();
+    let (bound, allowance_bounds) = block_bound(LEGACY_BLOCK_BYTES, *remaining);
+    decode_block(data, &[], &mut block, bound).map_err(|e| limit_error(e, allowance_bounds))?;
+    append_capped(out, &block, *remaining)?;
+    *remaining = remaining.saturating_sub(block.len() as u64);
+    Ok(())
+}
+
+/// The kind of frame a magic number starts, if it is a known one.
+pub(crate) fn magic_kind(word: u32) -> Option<FrameKind> {
+    if word == FRAME_MAGIC {
+        Some(FrameKind::Regular)
+    } else if word == LEGACY_MAGIC {
+        Some(FrameKind::Legacy)
+    } else if word & SKIPPABLE_MAGIC_MASK == SKIPPABLE_MAGIC_BASE {
+        Some(FrameKind::Skippable)
+    } else {
+        None
     }
 }
 

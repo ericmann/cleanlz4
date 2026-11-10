@@ -8,10 +8,10 @@
 
 use crate::error::{Error, Result};
 use crate::frame::{
-    is_magic_prefix, parse_block_header, parse_frame_descriptor, read_u32_le, BlockHeader,
-    FrameDescriptor, FrameState, END_MARK, FRAME_MAGIC,
+    decode_legacy_block, is_magic_prefix, magic_kind, parse_block_header, parse_frame_descriptor,
+    read_u32_le, BlockHeader, FrameDescriptor, FrameState, END_MARK, LEGACY_MAX_COMPRESSED,
 };
-use crate::{DecodeOptions, TrailingData};
+use crate::{DecodeOptions, FrameKind, TrailingData};
 
 /// What a call to [`Decoder::decode`] achieved.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -49,6 +49,14 @@ enum Stage {
     BlockData { header: BlockHeader, need: usize },
     /// Collecting the 4-byte content checksum.
     Trailer,
+    /// Collecting a skippable frame's 4-byte size.
+    SkipSize,
+    /// Discarding `left` more bytes of a skippable frame's user data.
+    Skipping { left: u64 },
+    /// At a legacy block boundary: collecting the next 4-byte word.
+    LegacySize,
+    /// Collecting a legacy block's `size` compressed bytes.
+    LegacyData { size: usize },
     /// After the last frame; nothing more to do.
     Finished,
 }
@@ -71,7 +79,7 @@ pub struct Decoder {
     pending_pos: usize,
     frame: Option<FrameState>,
     descriptor: Option<FrameDescriptor>,
-    /// Regular frames decoded so far.
+    /// Frames of any kind finished so far.
     frames_done: usize,
     /// How many more decoded bytes the output limit permits.
     remaining: u64,
@@ -298,6 +306,73 @@ impl Decoder {
                 self.finish_frame(Some(stored))?;
                 Ok(Step::Continue)
             }
+            Stage::SkipSize => {
+                if !self.gather(input, pos, 4) {
+                    return self.starved(end_of_input);
+                }
+                let size = read_u32_le(&self.buf, 0).ok_or(Error::TruncatedInput)?;
+                self.buf.clear();
+                self.stage = Stage::Skipping {
+                    left: u64::from(size),
+                };
+                Ok(Step::Continue)
+            }
+            Stage::Skipping { left } => {
+                // Count the user data down; it is never buffered.
+                let rest = input.len().saturating_sub(*pos);
+                let take = usize::try_from(left).map_or(rest, |l| l.min(rest));
+                *pos = pos.saturating_add(take);
+                let left = left.saturating_sub(take as u64);
+                if left == 0 {
+                    self.end_frame();
+                    return Ok(Step::Continue);
+                }
+                self.stage = Stage::Skipping { left };
+                self.starved(end_of_input)
+            }
+            Stage::LegacySize => {
+                if self.buf.is_empty() && *pos >= input.len() {
+                    if end_of_input {
+                        // A legacy frame ends at the end of input.
+                        self.end_frame();
+                        return Ok(Step::Continue);
+                    }
+                    return Ok(Step::NeedsInput);
+                }
+                if !self.gather(input, pos, 4) {
+                    return self.starved(end_of_input);
+                }
+                let word = read_u32_le(&self.buf, 0).ok_or(Error::TruncatedInput)?;
+                if word == END_MARK {
+                    // A zero block size is consumed and ends the frame.
+                    self.end_frame();
+                    return Ok(Step::Continue);
+                }
+                if magic_kind(word).is_some() {
+                    // A known magic number ends the frame and starts the next:
+                    // its bytes stay in `buf` for the boundary.
+                    self.frame_done_pending = true;
+                    self.frames_done = self.frames_done.saturating_add(1);
+                    self.stage = Stage::Boundary;
+                    return Ok(Step::Continue);
+                }
+                let size = word as usize;
+                if size > LEGACY_MAX_COMPRESSED {
+                    return Err(Error::BlockSizeExceeded);
+                }
+                self.buf.clear();
+                self.stage = Stage::LegacyData { size };
+                Ok(Step::Continue)
+            }
+            Stage::LegacyData { size } => {
+                if !self.gather(input, pos, size) {
+                    return self.starved(end_of_input);
+                }
+                decode_legacy_block(&self.buf, &mut self.pending, &mut self.remaining)?;
+                self.buf.clear();
+                self.stage = Stage::LegacySize;
+                Ok(Step::Continue)
+            }
             Stage::Finished => Ok(Step::Continue),
         }
     }
@@ -309,7 +384,10 @@ impl Decoder {
         Ok(())
     }
 
-    /// At a frame boundary: collect the magic number byte by byte.
+    /// At a frame boundary: collect the magic number byte by byte, then start
+    /// the frame it names. Bytes that cannot continue a known magic number are
+    /// left unconsumed: `BadMagic` for the first frame, else the trailing-data
+    /// policy (bytes of a partial magic number taken earlier stay consumed).
     fn step_boundary(&mut self, input: &[u8], pos: &mut usize, end_of_input: bool) -> Result<Step> {
         while self.buf.len() < 4 {
             let Some(&b) = input.get(*pos) else {
@@ -329,7 +407,7 @@ impl Decoder {
             let acceptable = if candidate.len() < 4 {
                 is_magic_prefix(&candidate)
             } else {
-                read_u32_le(&candidate, 0) == Some(FRAME_MAGIC)
+                read_u32_le(&candidate, 0).and_then(magic_kind).is_some()
             };
             if !acceptable {
                 // Not a frame: the byte stays unconsumed.
@@ -339,6 +417,7 @@ impl Decoder {
                 return match self.options.trailing_data {
                     TrailingData::Error => Err(Error::TrailingData),
                     TrailingData::ReturnRemainder => {
+                        self.buf.clear();
                         self.stage = Stage::Finished;
                         Ok(Step::Continue)
                     }
@@ -347,7 +426,18 @@ impl Decoder {
             self.buf.push(b);
             *pos = pos.saturating_add(1);
         }
-        self.stage = Stage::Header;
+        match read_u32_le(&self.buf, 0).and_then(magic_kind) {
+            Some(FrameKind::Regular) => self.stage = Stage::Header,
+            Some(FrameKind::Skippable) => {
+                self.buf.clear();
+                self.stage = Stage::SkipSize;
+            }
+            Some(FrameKind::Legacy) => {
+                self.buf.clear();
+                self.stage = Stage::LegacySize;
+            }
+            None => return Err(Error::BadMagic),
+        }
         Ok(Step::Continue)
     }
 }
