@@ -19,7 +19,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-08 Dictionary-prefixed block decoding
 - [x] P1-09 Synthetic inputs and block round-trip tests against the oracle
 - [!] P1-10 Oracle dictionary blocks and the dictionary differential test
-- [ ] P1-11 Conformance generator: the block suite and the manifest's entries
+- [x] P1-11 Conformance generator: the block suite and the manifest's entries
 - [ ] P1-12 Conformance runner and the results for category block
 - [ ] P1-13 DESIGN.md: the Phase 1 spec-rule report
 - [ ] P1-14 Phase 1 end: push and record the manual check
@@ -119,3 +119,7 @@ synth::inputs(seed) (names: empty, one-byte, tiny-2..12, incompressible-64k/1m, 
 ### P1-10 — blocked
 
 BLOCKED: Tried: declared LZ4_decompress_safe_usingDict (SPEC §6.5, Block) via the binding crate in ffi.rs. Fails: the compiler reports E0425 "cannot find function LZ4_decompress_safe_usingDict in crate lz4_sys" (only a similarly named LZ4_decompress_safe_continue, which is not on the permitted surface, was suggested). The task says a missing §6.5 function blocks and names it. Fix: the owner supplies a binding that exports LZ4_decompress_safe_usingDict (or amends SPEC §6.5 to allow another route, e.g. declaring the C symbol directly in ffi.rs via an extern block, which links against the already-built liblz4); then re-run P1-10 and its dependents.
+
+### P1-11 — 5d1f408
+
+corpus.rs: SUITES, conformance_dir, synthetic_inputs ("synthetic/<name>"), corpus_file_inputs, block_entries, block_suite(_synthetic), generate(suites). manifest.rs: Entry (with flattened `extra` map), Conformance{seed,corpus_sha256,entries,finalize()}, Manifest.conformance: Option<Conformance>. gen_corpus bin; `make corpus` (8s). Entry ids "block/<input>/<default|hcN>", file paths relative to testdata/conformance/, params {"mode": slug}. 206 MB generated (gitignored). MANIFEST regeneration is byte-stable. Tests corpus.rs x4. Later suites add entries via Entry.extra and register in SUITES + generate().
