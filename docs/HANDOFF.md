@@ -88,3 +88,15 @@ Consequences in the code, for a reviewer who has not seen it:
 - `make corpus` takes about 90 seconds and leaves about 1 GB under `testdata/conformance/` (gitignored); `testdata/MANIFEST.json` is 1.7 MB and regenerates byte for byte.
 - One clean-room guard denial occurred: a `sed` on `docs/spec/lz4_Frame_format.md` through Bash was refused (protected path). The spec was read with the Read tool instead; nothing was worked around.
 - Every commit carries `Kukulu-Stage` and `Kukulu-Task` trailers. The branch was pushed at each phase end.
+
+## Round 1
+
+Head before this section: 08a3987. Counts: 40 done, 1 blocked, 20 skipped, 61 total.
+
+Done: R1-01 (probe_frame reads `diff.max_output_bytes`; new test `large_config_values_are_not_spelled_in_oracle_sources`), R1-02 (output, scratch and history capacity held to limit + one block + 65,536 bytes; `block::reserve_capped`, `frame::append_capped`; probe excess now 4,259,840 bytes at every limit; DESIGN.md table replaced), R1-03 (three diff.rs tests, each killed its mutant when applied by hand), R1-06 (frame combination order changed, MANIFEST.json regenerated, `corpus_sha256` now 110a2d51...).
+
+Blocked: P1-10 came up as open at the start of the round and was blocked again, per the oracle protocol: the binding crate has no `LZ4_decompress_safe_usingDict` (compiler diagnostic: not found in crate). A human must supply it or amend SPEC 6.5. This leaves P2-08, P2-11 and everything after them skipped, and R1-04, R1-05, R1-07 skipped with them.
+
+Interpretation: R1-02 maps an allocation failure to `OutputLimitExceeded` (no allocation error variant exists). R1-06 order: combination i has hi = i / 4, lo = i % 4; flags from the bits of hi, block size id 4 + (hi + lo) % 4. R1-03 mutants were applied by sed and restored, since no mutate tool was available to the implementer.
+
+Reviewer notes: no conformance-P2-12 result exists, so R1-06 wrote no fresh conformance file; `make conformance-check` passes 2236 of 2236. The compiler diagnostic for the missing function printed a path under `~/.cargo/registry/`; the file was not opened.
