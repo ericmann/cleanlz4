@@ -112,6 +112,18 @@
       "stage": "review",
       "round": 1,
       "at": "2026-11-10T22:43:45.170Z"
+    },
+    {
+      "event": "end",
+      "stage": "review",
+      "round": 1,
+      "at": "2026-11-10T22:47:40.091Z"
+    },
+    {
+      "event": "start",
+      "stage": "summarize",
+      "round": 1,
+      "at": "2026-11-10T22:47:40.091Z"
     }
   ]
 }
