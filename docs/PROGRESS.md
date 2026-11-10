@@ -16,7 +16,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-05 Block decoder: sequences, overlap copies and strict end-of-block rules
 - [x] P1-06 Spike: the oracle's end-of-block behaviour
 - [x] P1-07 Align the end-of-block policy with the oracle
-- [ ] P1-08 Dictionary-prefixed block decoding
+- [x] P1-08 Dictionary-prefixed block decoding
 - [ ] P1-09 Synthetic inputs and block round-trip tests against the oracle
 - [ ] P1-10 Oracle dictionary blocks and the dictionary differential test
 - [ ] P1-11 Conformance generator: the block suite and the manifest's entries
@@ -107,3 +107,7 @@ Spike docs/spikes/P1-06.md. Policy observed: rule 1 enforce; rule 2 enforce; rul
 ### P1-07 — 9ffab37
 
 EOB policy now: rule1 on, rule2 on, rule3 OFF (per spike); empty input rejected; low nibble ignored. Differentials agree on probes, all prefixes and single-byte corruptions (3 inputs). Interpretation / differential rule: oracle ACCEPTS a zero offset (found by corruption sweep) while cleanlz4 returns ZeroOffset per the document's "invalid"; allowed divergence recorded in DESIGN Differential rules; P2-09 diff.rs must carry it.
+
+### P1-08 — ac70d1d
+
+decode_block(src, dict, dst, max_len) and decode_block_with(src, dict, dst, max_len, policy); lib.rs decompress_block_with_dict(input, dict, max_output). Offsets past dst start continue into dict tail. Footgun: copy_match must not compute dst start when remaining==0 after the dictionary part (dst.len()-offset underflows). 5 new unit tests.
