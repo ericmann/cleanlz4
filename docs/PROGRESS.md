@@ -18,7 +18,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-07 Align the end-of-block policy with the oracle
 - [x] P1-08 Dictionary-prefixed block decoding
 - [x] P1-09 Synthetic inputs and block round-trip tests against the oracle
-- [ ] P1-10 Oracle dictionary blocks and the dictionary differential test
+- [!] P1-10 Oracle dictionary blocks and the dictionary differential test
 - [ ] P1-11 Conformance generator: the block suite and the manifest's entries
 - [ ] P1-12 Conformance runner and the results for category block
 - [ ] P1-13 DESIGN.md: the Phase 1 spec-rule report
@@ -115,3 +115,7 @@ decode_block(src, dict, dst, max_len) and decode_block_with(src, dict, dst, max_
 ### P1-09 — cfabc11
 
 synth::inputs(seed) (names: empty, one-byte, tiny-2..12, incompressible-64k/1m, zeros-1m, repetitive-text, window-boundary, min-match, long-match) and synth::word_salad(seed,len). Tests block.rs x3 + synth unit test, all pass. Codebase note: the oracle's HC compressor at level 12 SIGSEGVs on an empty input given a dangling slice pointer; ffi::compress_hc now passes real memory for empty input (ffi.rs touched beyond listed files). Also clippy manual_repeat_n requires std::iter::repeat_n.
+
+### P1-10 — blocked
+
+BLOCKED: Tried: declared LZ4_decompress_safe_usingDict (SPEC §6.5, Block) via the binding crate in ffi.rs. Fails: the compiler reports E0425 "cannot find function LZ4_decompress_safe_usingDict in crate lz4_sys" (only a similarly named LZ4_decompress_safe_continue, which is not on the permitted surface, was suggested). The task says a missing §6.5 function blocks and names it. Fix: the owner supplies a binding that exports LZ4_decompress_safe_usingDict (or amends SPEC §6.5 to allow another route, e.g. declaring the C symbol directly in ffi.rs via an extern block, which links against the already-built liblz4); then re-run P1-10 and its dependents.
