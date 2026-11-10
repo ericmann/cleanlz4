@@ -227,7 +227,11 @@ impl Decoder {
                                 return Err(Error::OutputLimitExceeded);
                             }
                             self.descriptor = Some(desc);
-                            self.frame = Some(FrameState::new(desc, self.options.verify_checksums));
+                            self.frame = Some(FrameState::new(
+                                desc,
+                                self.options.verify_checksums,
+                                self.options.dictionary.as_ref(),
+                            )?);
                             self.buf.clear();
                             self.stage = Stage::BlockHeader;
                             return Ok(Step::Continue);

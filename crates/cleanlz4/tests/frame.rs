@@ -2,8 +2,8 @@
 
 use cleanlz4::xxh32::xxh32;
 use cleanlz4::{
-    decompress_frame, decompress_frame_with, DecodeOptions, Error, FrameKind, TrailingData,
-    DEFAULT_MAX_OUTPUT_BYTES,
+    decompress_frame, decompress_frame_with, DecodeOptions, Dictionary, Error, FrameKind,
+    TrailingData, DEFAULT_MAX_OUTPUT_BYTES,
 };
 
 const MAGIC: [u8; 4] = [0x04, 0x22, 0x4D, 0x18];
@@ -636,4 +636,92 @@ fn legacy_truncated_block_is_truncated_input() {
     let mut g = f.clone();
     g.extend_from_slice(&[1, 2]);
     assert_eq!(decompress_frame(&g), Err(Error::TruncatedInput));
+}
+
+// Preset dictionary and Dict-ID (Frame format, "Dictionary ID flag").
+
+/// A 64 KB-max frame whose FLG carries the Dict-ID flag when `id` is given.
+fn dict_frame(linked: bool, id: Option<u32>, blocks: &[(bool, Vec<u8>)]) -> Vec<u8> {
+    let flg = if linked { 0x40 } else { 0x60 } | u8::from(id.is_some());
+    let mut d = vec![flg, bd(4)];
+    if let Some(id) = id {
+        d.extend_from_slice(&id.to_le_bytes());
+    }
+    let mut f = MAGIC.to_vec();
+    f.extend_from_slice(&d);
+    f.push(((xxh32(&d, 0) >> 8) & 0xFF) as u8);
+    for (unc, data) in blocks {
+        f.extend_from_slice(&block_word(data.len(), *unc));
+        f.extend_from_slice(data);
+    }
+    f.extend_from_slice(&[0; 4]);
+    f
+}
+
+fn with_dict(bytes: &[u8], id: Option<u32>) -> DecodeOptions {
+    DecodeOptions {
+        dictionary: Some(Dictionary {
+            bytes: bytes.to_vec(),
+            id,
+        }),
+        ..DecodeOptions::default()
+    }
+}
+
+#[test]
+fn dict_id_without_a_dictionary_is_dictionary_required() {
+    let f = dict_frame(false, Some(7), &[(true, b"x".to_vec())]);
+    assert_eq!(decompress_frame(&f), Err(Error::DictionaryRequired));
+}
+
+#[test]
+fn different_ids_are_dictionary_mismatch() {
+    let f = dict_frame(false, Some(7), &[(true, b"x".to_vec())]);
+    assert_eq!(
+        decompress_frame_with(&f, &with_dict(b"abc", Some(8))).map(|o| o.data),
+        Err(Error::DictionaryMismatch)
+    );
+    let ok = decompress_frame_with(&f, &with_dict(b"abc", Some(7))).expect("same id");
+    assert_eq!(ok.data, b"x");
+}
+
+#[test]
+fn a_dictionary_without_an_id_is_used_for_any_frame() {
+    let f = dict_frame(false, Some(7), &[(false, match_block(8, 8))]);
+    let out = decompress_frame_with(&f, &with_dict(b"ABCDEFGH", None)).expect("ok");
+    assert_eq!(out.data, b"ABCDEFGH12345");
+}
+
+#[test]
+fn a_dictionary_is_used_for_a_frame_without_dict_id() {
+    let f = dict_frame(false, None, &[(false, match_block(8, 8))]);
+    let out = decompress_frame_with(&f, &with_dict(b"ABCDEFGH", Some(3))).expect("ok");
+    assert_eq!(out.data, b"ABCDEFGH12345");
+    // Without it the same frame is an offset error.
+    assert_eq!(decompress_frame(&f), Err(Error::OffsetOutOfRange));
+}
+
+#[test]
+fn linked_frame_uses_the_dictionary_once_at_the_start() {
+    // Block 1 reaches into the dictionary; block 2, at offset 21, reaches the
+    // dictionary's first byte through the history (dictionary, then block 1).
+    let blocks = [(false, match_block(8, 8)), (false, match_block(21, 8))];
+    let f = dict_frame(true, None, &blocks);
+    let out = decompress_frame_with(&f, &with_dict(b"ABCDEFGH", None)).expect("ok");
+    assert_eq!(out.data, b"ABCDEFGH12345ABCDEFGH12345");
+    // An offset beyond history (dictionary + output so far) is out of range.
+    let blocks = [(false, match_block(8, 8)), (false, match_block(30, 8))];
+    let f = dict_frame(true, None, &blocks);
+    assert_eq!(
+        decompress_frame_with(&f, &with_dict(b"ABCDEFGH", None)).map(|o| o.data),
+        Err(Error::OffsetOutOfRange)
+    );
+}
+
+#[test]
+fn independent_frame_uses_the_dictionary_for_every_block() {
+    let blocks = [(false, match_block(8, 8)), (false, match_block(8, 8))];
+    let f = dict_frame(false, None, &blocks);
+    let out = decompress_frame_with(&f, &with_dict(b"ABCDEFGH", None)).expect("ok");
+    assert_eq!(out.data, b"ABCDEFGH12345ABCDEFGH12345");
 }

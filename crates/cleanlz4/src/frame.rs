@@ -3,7 +3,7 @@
 use crate::block::{decode_block, reserve_capped};
 use crate::error::{Error, Result};
 use crate::xxh32::{xxh32, Xxh32};
-use crate::{DecodeOptions, FrameKind, FrameOutput, TrailingData};
+use crate::{DecodeOptions, Dictionary, FrameKind, FrameOutput, TrailingData};
 
 /// The frame magic number, read little-endian (Frame format, "Magic Number").
 pub(crate) const FRAME_MAGIC: u32 = 0x184D_2204;
@@ -200,6 +200,10 @@ pub(crate) struct FrameState {
     /// The last `WINDOW` bytes of this frame's decoded output; kept only when
     /// blocks are linked.
     history: Vec<u8>,
+    /// The last `WINDOW` bytes of the preset dictionary, the prefix of every
+    /// block of an independent frame; empty for linked frames, whose history
+    /// starts from it instead.
+    preset: Vec<u8>,
     /// Whether block and content checksums are compared.
     verify: bool,
     /// XXH32 of the decoded bytes so far (fed only when verifying).
@@ -214,14 +218,47 @@ const WINDOW: usize = 64 << 10;
 
 impl FrameState {
     /// Start a frame from its parsed descriptor.
-    pub(crate) fn new(desc: FrameDescriptor, verify: bool) -> Self {
-        FrameState {
+    ///
+    /// Dictionary rules (Frame format, "Dictionary ID flag", "Dictionary ID"):
+    /// a frame with a Dict-ID and no dictionary is `DictionaryRequired`; a frame
+    /// Dict-ID and a dictionary id that are both present and differ are
+    /// `DictionaryMismatch`; otherwise a supplied dictionary is used. With
+    /// independent blocks it is every block's prefix; with linked blocks it is
+    /// the initial history only, its last `WINDOW` bytes.
+    pub(crate) fn new(
+        desc: FrameDescriptor,
+        verify: bool,
+        dictionary: Option<&Dictionary>,
+    ) -> Result<Self> {
+        if desc.dict_id.is_some() && dictionary.is_none() {
+            return Err(Error::DictionaryRequired);
+        }
+        let mut tail = Vec::new();
+        if let Some(d) = dictionary {
+            if let (Some(want), Some(have)) = (desc.dict_id, d.id) {
+                if want != have {
+                    return Err(Error::DictionaryMismatch);
+                }
+            }
+            tail.extend_from_slice(
+                d.bytes
+                    .get(d.bytes.len().saturating_sub(WINDOW)..)
+                    .unwrap_or(&[]),
+            );
+        }
+        let (history, preset) = if desc.block_independence {
+            (Vec::new(), tail)
+        } else {
+            (tail, Vec::new())
+        };
+        Ok(FrameState {
             desc,
-            history: Vec::new(),
+            history,
+            preset,
             verify,
             content_hash: Xxh32::new(0),
             decoded: 0,
-        }
+        })
     }
 
     /// Check a block's stored checksum against its raw data, before the block
@@ -281,9 +318,10 @@ impl FrameState {
         }
         let (bound, allowance_bounds) = block_bound(max, allowance);
         let mut block = Vec::new();
-        // Linked blocks see the previous output as a prefix; independent ones see none.
+        // Linked blocks see the previous output as a prefix; independent ones see
+        // only the preset dictionary, if any.
         let prefix: &[u8] = if self.desc.block_independence {
-            &[]
+            &self.preset
         } else {
             &self.history
         };
@@ -398,7 +436,7 @@ fn decode_regular_frame(
     if desc.content_size.is_some_and(|size| size > *remaining) {
         return Err(Error::OutputLimitExceeded);
     }
-    let mut state = FrameState::new(desc, options.verify_checksums);
+    let mut state = FrameState::new(desc, options.verify_checksums, options.dictionary.as_ref())?;
     let mut pos = header_len;
     loop {
         let word = read_u32_le(input, pos).ok_or(Error::TruncatedInput)?;
