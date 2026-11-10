@@ -35,7 +35,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P2-10 Conformance generator: oracle-compressed frame suites
 - [x] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
 - [x] P2-12 The full conformance run and its results
-- [ ] P2-13 The malformed corpus and its results
+- [x] P2-13 The malformed corpus and its results
 - [x] P2-14 Phase 2 end: push and record the manual check
 - [x] P3-01 Streaming decoder: regular frames
 - [ ] P3-02 Streaming decoder: skippable, legacy and concatenated frames, dictionaries and trailing data
@@ -570,3 +570,7 @@ New suites dictionary(72 entries), skippable(21), legacy(14), concatenated(6); S
 ### P2-12 — c52d095
 
 testdata/results/conformance-P2-12.json: total 2349, passed 2349, failed 0; per category block 156, checksums 301, concatenated 6, content-size 401, dictionary 72, frame-independent 45, frame-linked 53, legacy 14, skippable 21, synthetic 1280. EVIDENCE.md lists the file. DESIGN Measurements section has the table.
+
+### P2-13 — 2903308
+
+oracle::malformed (cases, write_all, read_index, outcome, run) + bin malformed (--write, --task); make malformed TASK. 144 files in testdata/malformed with index.json. malformed-P2-13.json: total 144, matched_expected_error 144, panics 0. Tests malformed.rs x6 pass. Rule 3 EOB not enforced so no file. Frame files agree with the oracle under compare, zero-offset frame via normalization.
