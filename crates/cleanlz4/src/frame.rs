@@ -1,6 +1,6 @@
 //! Frame parsing, block sequencing, checksums and the one-shot driver.
 
-use crate::block::decode_block;
+use crate::block::{decode_block, reserve_capped};
 use crate::error::{Error, Result};
 use crate::xxh32::{xxh32, Xxh32};
 use crate::{DecodeOptions, FrameKind, FrameOutput, TrailingData};
@@ -162,6 +162,15 @@ pub(crate) fn limit_error(e: Error, allowance_bounds: bool) -> Error {
     }
 }
 
+/// Append `bytes` to `out`, growing its capacity geometrically but never past
+/// the bytes already in it plus the output allowance.
+fn append_capped(out: &mut Vec<u8>, bytes: &[u8], allowance: u64) -> Result<()> {
+    let room = usize::try_from(allowance).unwrap_or(usize::MAX);
+    reserve_capped(out, bytes.len(), out.len().saturating_add(room))?;
+    out.extend_from_slice(bytes);
+    Ok(())
+}
+
 /// A data block's size word (Frame format, "Data Blocks", "Block Size").
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) struct BlockHeader {
@@ -230,9 +239,15 @@ impl FrameState {
         if self.desc.block_independence {
             return;
         }
-        self.history.extend_from_slice(block);
-        let excess = self.history.len().saturating_sub(WINDOW);
+        // Trim before extending, so the history's capacity stays near the window
+        // however large the block is.
+        let keep = WINDOW.saturating_sub(block.len());
+        let excess = self.history.len().saturating_sub(keep);
         self.history.drain(..excess);
+        let tail = block
+            .get(block.len().saturating_sub(WINDOW)..)
+            .unwrap_or(&[]);
+        self.history.extend_from_slice(tail);
     }
 
     /// The frame's descriptor.
@@ -260,7 +275,7 @@ impl FrameState {
                 return Err(Error::OutputLimitExceeded);
             }
             self.account(data.len())?;
-            out.extend_from_slice(data);
+            append_capped(out, data, allowance)?;
             self.produced(data);
             return Ok(data.len());
         }
@@ -275,7 +290,7 @@ impl FrameState {
         decode_block(data, prefix, &mut block, bound)
             .map_err(|e| limit_error(e, allowance_bounds))?;
         self.account(block.len())?;
-        out.extend_from_slice(&block);
+        append_capped(out, &block, allowance)?;
         self.produced(&block);
         Ok(block.len())
     }
@@ -449,8 +464,8 @@ fn decode_legacy_frame(input: &[u8], out: &mut Vec<u8>, remaining: &mut u64) -> 
         let mut block = Vec::new();
         let (bound, allowance_bounds) = block_bound(LEGACY_BLOCK_BYTES, *remaining);
         decode_block(data, &[], &mut block, bound).map_err(|e| limit_error(e, allowance_bounds))?;
+        append_capped(out, &block, *remaining)?;
         *remaining = remaining.saturating_sub(block.len() as u64);
-        out.extend_from_slice(&block);
         pos = end;
     }
 }

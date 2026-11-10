@@ -199,3 +199,41 @@ fn block_decode_limit_applies_to_decompress_block() {
     );
     assert_eq!(decompress_block(&b, 10), Err(Error::OutputLimitExceeded));
 }
+
+#[test]
+fn one_shot_output_capacity_never_exceeds_the_limit() {
+    const BLOCK: usize = 4 << 20;
+    let blocks: Vec<Vec<u8>> = (0..4u8).map(|i| vec![i; BLOCK]).collect();
+    let mut f = header(0x60, 7, None);
+    for b in &blocks {
+        f.extend_from_slice(&(b.len() as u32 | 0x8000_0000).to_le_bytes());
+        f.extend_from_slice(b);
+    }
+    f.extend_from_slice(&[0, 0, 0, 0]);
+    let full = 4 * BLOCK;
+    let out = decompress_frame_with(&f, &limit(full as u64)).expect("ok");
+    assert_eq!(out.data.len(), full);
+    assert!(
+        out.data.capacity() <= full,
+        "capacity {}",
+        out.data.capacity()
+    );
+
+    // The same data cut to 12 MiB + 1 bytes.
+    let cut = 3 * BLOCK + 1;
+    let mut g = header(0x60, 7, None);
+    for b in blocks.iter().take(3) {
+        g.extend_from_slice(&(b.len() as u32 | 0x8000_0000).to_le_bytes());
+        g.extend_from_slice(b);
+    }
+    g.extend_from_slice(&(1u32 | 0x8000_0000).to_le_bytes());
+    g.push(3);
+    g.extend_from_slice(&[0, 0, 0, 0]);
+    let out = decompress_frame_with(&g, &limit(cut as u64)).expect("ok");
+    assert_eq!(out.data.len(), cut);
+    assert!(
+        out.data.capacity() <= cut,
+        "capacity {}",
+        out.data.capacity()
+    );
+}

@@ -66,6 +66,22 @@ fn read_length(src: &[u8], pos: &mut usize, nibble: usize) -> Result<usize> {
     Ok(total)
 }
 
+/// Make room for `extra` more bytes in `v`, growing geometrically but never
+/// past `cap` bytes of capacity (unless `extra` itself needs more). Nothing
+/// is reserved beyond what has been or is about to be written, so a limit
+/// bounds the memory as well as the length. An allocation failure is reported
+/// as `OutputLimitExceeded`: no allocation error exists in `Error`.
+pub(crate) fn reserve_capped(v: &mut Vec<u8>, extra: usize, cap: usize) -> Result<()> {
+    let len = v.len();
+    let need = len.checked_add(extra).ok_or(Error::OutputLimitExceeded)?;
+    if need <= v.capacity() {
+        return Ok(());
+    }
+    let target = need.max(v.capacity().saturating_mul(2).min(cap));
+    v.try_reserve_exact(target.saturating_sub(len))
+        .map_err(|_| Error::OutputLimitExceeded)
+}
+
 /// Fail before writing when `extra` more bytes would pass `max_len`.
 fn check_limit(dst_len: usize, extra: usize, max_len: usize) -> Result<()> {
     match dst_len.checked_add(extra) {
@@ -143,7 +159,7 @@ pub(crate) fn decode_block_with(
         let literal_len = read_length(src, &mut pos, usize::from(token >> 4))?;
         check_limit(dst.len(), literal_len, max_len)?;
         let literals = take(src, &mut pos, literal_len)?;
-        dst.reserve(literal_len);
+        reserve_capped(dst, literal_len, max_len)?;
         dst.extend_from_slice(literals);
 
         if pos == src.len() {
@@ -177,7 +193,7 @@ pub(crate) fn decode_block_with(
             .checked_add(MIN_MATCH)
             .ok_or(Error::OutputLimitExceeded)?;
         check_limit(dst.len(), match_len, max_len)?;
-        dst.reserve(match_len);
+        reserve_capped(dst, match_len, max_len)?;
         last_match_start = Some(dst.len());
         copy_match(dst, dict, offset, match_len)?;
 
