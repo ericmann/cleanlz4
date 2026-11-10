@@ -45,7 +45,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P3-06 Tune stream.chunking_cases
 - [x] P3-07 Phase 3 end: push and record the manual check
 - [x] P4-01 Fuzz targets (a): no panic on arbitrary bytes
-- [ ] P4-02 Fuzz targets (b) and (c): differential
+- [x] P4-02 Fuzz targets (b) and (c): differential
 - [ ] P4-03 The fuzz runner, its results writer and regression replay
 - [ ] P4-04 Run no_panic_block for the configured duration
 - [ ] P4-05 Run no_panic_frame for the configured duration
@@ -590,3 +590,7 @@ chunking_coverage_report added (ignored; CHUNKING_CASES_OVERRIDE). Measured shap
 ### P4-01 — bc64d44
 
 fuzz_logic.rs: no_panic_block/frame/stream; fuzz targets are one-line wrappers; fuzz/Cargo.toml gained two [[bin]]. Tests fuzz_logic.rs x3 pass; cargo +nightly fuzz build ok (offline). Interpretation: block split byte = third byte (len*byte/256); stream out buffer widened for big outputs to bound calls. Clean-room: one Bash call that also read docs/kukulu.json was denied by the guard (protected path); continued without it.
+
+### P4-02 — 4dc91f9
+
+fuzz_logic.rs: diff_roundtrip, diff_accept(_in), record_divergence(dir,input,limit)->Result<bool>; fuzz targets diff_roundtrip and diff_accept added with [[bin]] entries. Tests fuzz_logic.rs +5 (8 total) pass; fuzz build ok. testdata/results/divergences/.gitkeep added. Interpretations in the commit. Footgun: clippy manual_is_multiple_of wants is_multiple_of.
