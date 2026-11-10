@@ -30,7 +30,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P3-01 The CHANGELOG entry for 0.2.0 and the crate versions
 - [x] P3-02 Refresh EVIDENCE.md and README.md
 - [x] P3-03 Phase 3 end: push and record the manual check
-- [ ] R1-01 Test that the streaming legacy scratch buffer dies with its frame
+- [x] R1-01 Test that the streaming legacy scratch buffer dies with its frame
 
 ## Log
 
@@ -135,3 +135,10 @@ EVIDENCE.md: Results table gained a Flight column (0.1.0 / 0.2.0) with a row for
 ### P3-03 — 2895c52
 
 Push: done. Similarity: docs/kukulu.json holds one negative pair (rust-independent-vs-indep) and one positive pair (rust-derived-vs-indep), both Rust-vs-Rust, because kukulu 0.8.0 refuses a second pair of either role; SPEC 5.3's Rust-vs-C controls (independent-vs-c, derived-vs-c) are not scored in this run. The Rust-vs-Rust band applies to subject-vs-indep. It does not apply to subject-vs-c, whose Rust-vs-C reading is 0.1.0's docs/flights/cleanlz4/SIMILARITY.md. SUMMARY.md says which band applies to each test pair and repeats the tool's verdict verbatim (SPEC 5.3, 9 Q4). Evidence for the attestation: docs/EVIDENCE.md's fenced list. Manual check: NOT VERIFIED (human): the owner reads docs/SIMILARITY.md (written by the summarize stage) against the same-language controls rust-independent-vs-indep and rust-derived-vs-indep, and reads subject-vs-c against 0.1.0's docs/flights/cleanlz4/SIMILARITY.md; the owner runs node docs/attestation/verify.mjs docs/attestation --key sha256:<owner's fingerprint> from a clean checkout on a second machine (the bundle is under docs/flights/cleanlz4-0-2-0/attestation once the flight is archived)
+
+### R1-01 — 1b9d5b0
+
+Added a live-bytes counter to the counting allocator and two tests in tests/scratch.rs (1 MiB blocks, 3-block legacy frame; end mark / followed by regular frame). Both compare live bytes at last delivery vs FrameDone (drop ~1.06 MB, asserted >= half block). Output Vec preallocated so it adds a constant.
+Mutant (a) (delete stream.rs line 237): FAILED "end mark: scratch outlived its frame: 12198455 live then, 12198455 at FrameDone".
+Mutant (b) (delete line 372): FAILED "next magic: scratch outlived its frame: 15668043 live then, 15668043 at FrameDone".
+Both undone; git diff --exit-code on stream.rs clean. DESIGN.md entry updated. No Interpretation choices.
