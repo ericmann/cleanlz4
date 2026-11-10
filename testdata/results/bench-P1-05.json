@@ -1,0 +1,143 @@
+{
+  "task": "P1-05",
+  "inputs": [
+    {
+      "name": "canterbury/alice29.txt",
+      "bytes": 152089,
+      "cleanlz4_mb_s": 398.1,
+      "c_mb_s": 625.0
+    },
+    {
+      "name": "canterbury/asyoulik.txt",
+      "bytes": 125179,
+      "cleanlz4_mb_s": 412.3,
+      "c_mb_s": 1189.8
+    },
+    {
+      "name": "canterbury/cp.html",
+      "bytes": 24603,
+      "cleanlz4_mb_s": 472.7,
+      "c_mb_s": 446.7
+    },
+    {
+      "name": "canterbury/fields.c",
+      "bytes": 11150,
+      "cleanlz4_mb_s": 450.5,
+      "c_mb_s": 350.0
+    },
+    {
+      "name": "canterbury/grammar.lsp",
+      "bytes": 3721,
+      "cleanlz4_mb_s": 446.6,
+      "c_mb_s": 158.3
+    },
+    {
+      "name": "canterbury/kennedy.xls",
+      "bytes": 1029744,
+      "cleanlz4_mb_s": 514.0,
+      "c_mb_s": 1278.1
+    },
+    {
+      "name": "canterbury/lcet10.txt",
+      "bytes": 426754,
+      "cleanlz4_mb_s": 416.4,
+      "c_mb_s": 1299.1
+    },
+    {
+      "name": "canterbury/plrabn12.txt",
+      "bytes": 481861,
+      "cleanlz4_mb_s": 408.3,
+      "c_mb_s": 1287.8
+    },
+    {
+      "name": "canterbury/ptt5",
+      "bytes": 513216,
+      "cleanlz4_mb_s": 622.2,
+      "c_mb_s": 510.6
+    },
+    {
+      "name": "canterbury/sum",
+      "bytes": 38240,
+      "cleanlz4_mb_s": 441.8,
+      "c_mb_s": 510.8
+    },
+    {
+      "name": "canterbury/xargs.1",
+      "bytes": 4227,
+      "cleanlz4_mb_s": 388.5,
+      "c_mb_s": 162.3
+    },
+    {
+      "name": "silesia/dickens",
+      "bytes": 10192446,
+      "cleanlz4_mb_s": 474.2,
+      "c_mb_s": 1437.8
+    },
+    {
+      "name": "silesia/mozilla",
+      "bytes": 51220480,
+      "cleanlz4_mb_s": 489.8,
+      "c_mb_s": 743.3
+    },
+    {
+      "name": "silesia/mr",
+      "bytes": 9970564,
+      "cleanlz4_mb_s": 610.3,
+      "c_mb_s": 1493.9
+    },
+    {
+      "name": "silesia/nci",
+      "bytes": 33553445,
+      "cleanlz4_mb_s": 628.0,
+      "c_mb_s": 824.4
+    },
+    {
+      "name": "silesia/ooffice",
+      "bytes": 6152192,
+      "cleanlz4_mb_s": 701.2,
+      "c_mb_s": 1408.1
+    },
+    {
+      "name": "silesia/osdb",
+      "bytes": 10085684,
+      "cleanlz4_mb_s": 829.3,
+      "c_mb_s": 1483.8
+    },
+    {
+      "name": "silesia/reymont",
+      "bytes": 6627202,
+      "cleanlz4_mb_s": 449.7,
+      "c_mb_s": 1241.4
+    },
+    {
+      "name": "silesia/samba",
+      "bytes": 21606400,
+      "cleanlz4_mb_s": 496.4,
+      "c_mb_s": 730.6
+    },
+    {
+      "name": "silesia/sao",
+      "bytes": 7251944,
+      "cleanlz4_mb_s": 1075.9,
+      "c_mb_s": 1563.1
+    },
+    {
+      "name": "silesia/webster",
+      "bytes": 41458703,
+      "cleanlz4_mb_s": 397.1,
+      "c_mb_s": 709.9
+    },
+    {
+      "name": "silesia/x-ray",
+      "bytes": 8474240,
+      "cleanlz4_mb_s": 1761.7,
+      "c_mb_s": 1913.0
+    },
+    {
+      "name": "silesia/xml",
+      "bytes": 5345280,
+      "cleanlz4_mb_s": 801.2,
+      "c_mb_s": 1501.8
+    }
+  ]
+}
