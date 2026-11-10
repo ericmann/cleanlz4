@@ -325,12 +325,12 @@ Derived from docs/SPEC.md v0.1 on 2026-11-09. SPEC.md wins over this file.
 
 **Goal:** Produce blocks that depend on a dictionary using only the permitted oracle surface, and check cleanlz4 decodes them as the oracle does.
 
-**Files touched:** `crates/oracle/src/ffi.rs`, `crates/oracle/src/block.rs`, `crates/oracle/src/dict.rs`, `crates/oracle/src/lib.rs`, `crates/oracle/tests/dict.rs`, `docs/DESIGN.md`
+**Files touched:** `crates/oracle/src/cli.rs`, `crates/oracle/src/dict.rs`, `crates/oracle/src/lib.rs`, `crates/oracle/tests/dict.rs`, `docs/DESIGN.md`
 
 **Design constraints:**
 
-- SPEC §6.5 (`LZ4_decompress_safe_usingDict`), §9 Q3; Frame format, "Block Independence flag", "Data Blocks". Follow the oracle protocol; a missing `LZ4_decompress_safe_usingDict` blocks, naming it.
-- `block::decompress_safe_using_dict(src, dict, capacity) -> Result<Vec<u8>, Rejected>`.
+- SPEC §6.5, §9 Q2, §9 Q3; Frame format, "Block Independence flag", "Data Blocks", "Dictionary ID". **Owner decision (clean-room record seq 681), under SPEC §9 Q2:** the binding crate lacks `LZ4_decompress_safe_usingDict`, so the `lz4` CLI, run as a black box, is the oracle for dictionary decoding. Do not block on that function, and do not declare it or any other C symbol in `ffi.rs`; `ffi.rs` is unchanged.
+- `cli::decompress_frame_with_dict(frame: &[u8], dict: &[u8]) -> Result<Vec<u8>, Rejected>` (new file `crates/oracle/src/cli.rs`) writes the frame and the dictionary to a temporary directory, runs `lz4 -d -D <dict> -c <frame>`, and maps exit 0 to `Ok(stdout)` and any other exit status to `Rejected`. It replaces `block::decompress_safe_using_dict`. To give the CLI a dictionary block, wrap the block in a minimal hand-built frame (Frame format: magic, FLG/BD with independent blocks and no checksums, header checksum computed with cleanlz4's XXH32, one data block, end mark). The CLI binary is found on `PATH`, and its version is already recorded in `testdata/MANIFEST.json`.
 - The permitted surface has no dictionary compressor, so `dict::dict_block(dict: &[u8], data: &[u8]) -> Option<DictBlock>` uses linked blocks: `compress_frame(&[dict, data], &Prefs { block_size_id: 7, linked: true, auto_flush: true, checksums off, no content size, level 0 })` makes the first block from `dict` and the second from `data`, and the second may refer back into the first. Walk the frame by the Frame format: a 7-byte header, then each block as a 4-byte little-endian size whose top bit marks an uncompressed block. Return the second block's bytes (or `None` if it is uncompressed) with `dict_dependent`, true when the oracle's plain `decompress_safe` rejects the block or gives other bytes. `dict` and `data` must each fit one 4 MiB block.
 - Dictionary sizes come from `dict.sizes_bytes`. Record the method in DESIGN.md, citing the two Frame format sections.
 
