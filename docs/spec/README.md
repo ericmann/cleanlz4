@@ -15,6 +15,6 @@ There is no IETF RFC for LZ4. These documents are the format's published specifi
 Licensing notices:
 
 - `lz4_Frame_format.md` and `xxhash_spec.md` carry Yann Collet's notice permitting copying and distribution with the notice preserved. Their copies here are unmodified.
-- `lz4_Block_format.md` carries no notice of its own. Check the upstream repository's terms before this repository goes public, or replace the copy with its pinned URL and hash.
+- `lz4_Block_format.md` carries no notice of its own; under the upstream repository's default it is GPL-2.0-or-later. It is included unmodified as a separate document.
 
 A task that needs a fact not in these documents blocks and asks. It never looks the fact up in an implementation.
