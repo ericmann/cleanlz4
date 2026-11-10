@@ -7,3 +7,4 @@ pub mod ffi;
 pub mod frame;
 pub mod manifest;
 pub mod prng;
+pub mod synth;

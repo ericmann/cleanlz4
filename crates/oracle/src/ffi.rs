@@ -26,10 +26,18 @@ pub fn compress_default(src: &[u8], dst: &mut [u8]) -> c_int {
 
 /// High-compression mode into `dst`; returns the compressed size or 0 on failure.
 pub fn compress_hc(src: &[u8], dst: &mut [u8], level: c_int) -> c_int {
-    // SAFETY: both pointers come from live slices whose lengths are passed alongside.
+    // An empty slice's pointer is dangling; the library's high levels can fault
+    // on it, so pass a pointer to real memory instead (observed on level 12).
+    let placeholder = [0u8; 1];
+    let src_ptr = if src.is_empty() {
+        placeholder.as_ptr()
+    } else {
+        src.as_ptr()
+    };
+    // SAFETY: both pointers come from live memory whose lengths are passed alongside.
     unsafe {
         lz4_sys::LZ4_compress_HC(
-            src.as_ptr() as *const c_char,
+            src_ptr as *const c_char,
             dst.as_mut_ptr() as *mut c_char,
             src.len() as c_int,
             dst.len() as c_int,
