@@ -57,7 +57,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P4-11 Tune bench.repeats
 - [-] P4-12 Tune fuzz.seconds_per_target
 - [x] P4-13 Phase 4 end: push and record the manual check
-- [ ] P5-01 The evidence index and the Done checklist
+- [x] P5-01 The evidence index and the Done checklist
 - [ ] P5-02 Phase 5 end: push and record the manual check
 
 ## Log
@@ -271,3 +271,7 @@ SKIPPED: depends on P4-03
 ### P4-13 — c188920
 
 Push: done. Manual check: NOT VERIFIED (human): every testdata/results/fuzz-*.json shows crashes == 0 and divergences == 0 at its newest task id, or DESIGN.md's Divergence triage resolves each one; every run's seconds is at least fuzz.seconds_per_target; read bench-P4-10.json (actuals only, no target); act on any recommendation P4-12 recorded. CAUTION: P4-01 to P4-09 and P4-12 were auto-skipped (chain from P3-02, which waits on skipped P2-08, which waits on blocked P1-10), so no fuzz target, fuzz run or fuzz result file exists and fuzz.seconds_per_target / fuzz.smoke_seconds were never used.
+
+### P5-01 — f289cc4
+
+docs/EVIDENCE.md written (evidence list: DESIGN.md, 2 spikes, MANIFEST.json, 3 result files; results table read from the files; Done checklist: items 1 and 3 NOT MET, 2/4/5 owed to summarize; blocked P1-10 and the skipped chain named). README.md replaced. Test evidence_index_lists_every_result_file added. testdata/malformed/index.json does not exist so is not listed.
