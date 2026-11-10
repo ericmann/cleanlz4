@@ -1,0 +1,1010 @@
+[
+  {
+    "file": "bad-magic.lz4",
+    "kind": "frame",
+    "expected": "BadMagic",
+    "rule": "docs/spec/lz4_Frame_format.md, Magic Number",
+    "max_output": 67108864
+  },
+  {
+    "file": "flg-reserved-bit.lz4",
+    "kind": "frame",
+    "expected": "ReservedBitSet",
+    "rule": "docs/spec/lz4_Frame_format.md, Reserved bits",
+    "max_output": 67108864
+  },
+  {
+    "file": "bd-reserved-80.lz4",
+    "kind": "frame",
+    "expected": "ReservedBitSet",
+    "rule": "docs/spec/lz4_Frame_format.md, Reserved bits",
+    "max_output": 67108864
+  },
+  {
+    "file": "bd-reserved-08.lz4",
+    "kind": "frame",
+    "expected": "ReservedBitSet",
+    "rule": "docs/spec/lz4_Frame_format.md, Reserved bits",
+    "max_output": 67108864
+  },
+  {
+    "file": "bd-reserved-04.lz4",
+    "kind": "frame",
+    "expected": "ReservedBitSet",
+    "rule": "docs/spec/lz4_Frame_format.md, Reserved bits",
+    "max_output": 67108864
+  },
+  {
+    "file": "bd-reserved-02.lz4",
+    "kind": "frame",
+    "expected": "ReservedBitSet",
+    "rule": "docs/spec/lz4_Frame_format.md, Reserved bits",
+    "max_output": 67108864
+  },
+  {
+    "file": "bd-reserved-01.lz4",
+    "kind": "frame",
+    "expected": "ReservedBitSet",
+    "rule": "docs/spec/lz4_Frame_format.md, Reserved bits",
+    "max_output": 67108864
+  },
+  {
+    "file": "version-0.lz4",
+    "kind": "frame",
+    "expected": "UnsupportedVersion",
+    "rule": "docs/spec/lz4_Frame_format.md, Version Number",
+    "max_output": 67108864
+  },
+  {
+    "file": "version-2.lz4",
+    "kind": "frame",
+    "expected": "UnsupportedVersion",
+    "rule": "docs/spec/lz4_Frame_format.md, Version Number",
+    "max_output": 67108864
+  },
+  {
+    "file": "version-3.lz4",
+    "kind": "frame",
+    "expected": "UnsupportedVersion",
+    "rule": "docs/spec/lz4_Frame_format.md, Version Number",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-max-size-0.lz4",
+    "kind": "frame",
+    "expected": "InvalidBlockMaxSize",
+    "rule": "docs/spec/lz4_Frame_format.md, Block Maximum Size",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-max-size-1.lz4",
+    "kind": "frame",
+    "expected": "InvalidBlockMaxSize",
+    "rule": "docs/spec/lz4_Frame_format.md, Block Maximum Size",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-max-size-2.lz4",
+    "kind": "frame",
+    "expected": "InvalidBlockMaxSize",
+    "rule": "docs/spec/lz4_Frame_format.md, Block Maximum Size",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-max-size-3.lz4",
+    "kind": "frame",
+    "expected": "InvalidBlockMaxSize",
+    "rule": "docs/spec/lz4_Frame_format.md, Block Maximum Size",
+    "max_output": 67108864
+  },
+  {
+    "file": "bad-header-checksum.lz4",
+    "kind": "frame",
+    "expected": "BadHeaderChecksum",
+    "rule": "docs/spec/lz4_Frame_format.md, Header Checksum",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-001.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-002.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-003.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-004.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-005.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-006.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-007.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-008.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-009.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-010.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-011.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-012.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-013.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-014.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-015.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-016.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-017.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-018.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-019.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-020.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-021.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-022.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-023.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-024.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-025.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-026.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-027.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-028.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-029.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-030.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-031.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-032.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-033.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-034.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-035.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-036.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-037.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-038.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-039.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-plain-040.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-001.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-002.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-003.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-004.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-005.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-006.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-007.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-008.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-009.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-010.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-011.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-012.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-013.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-014.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-015.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-016.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-017.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-018.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-019.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-020.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-021.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-022.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-023.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-024.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-025.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-026.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-027.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-028.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-029.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-030.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-031.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-032.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-033.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-034.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-035.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-036.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-037.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-038.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-039.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-040.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-041.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-042.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-043.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-044.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-045.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-046.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-047.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-048.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-049.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-050.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-051.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-052.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-053.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-054.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-055.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-056.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-057.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-058.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-059.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "truncated-checked-060.lz4",
+    "kind": "frame",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, EndMark, Content Checksum (the frame ends early)",
+    "max_output": 67108864
+  },
+  {
+    "file": "frame-zero-offset.lz4",
+    "kind": "frame",
+    "expected": "ZeroOffset",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks (block offset 0 is invalid, Block format, Compressed block format)",
+    "max_output": 67108864
+  },
+  {
+    "file": "frame-offset-before-output-start.lz4",
+    "kind": "frame",
+    "expected": "OffsetOutOfRange",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks (offset reaches before the first byte)",
+    "max_output": 67108864
+  },
+  {
+    "file": "frame-independent-offset-into-previous-block.lz4",
+    "kind": "frame",
+    "expected": "OffsetOutOfRange",
+    "rule": "docs/spec/lz4_Frame_format.md, Block Independence flag (independent blocks do not reference earlier blocks)",
+    "max_output": 67108864
+  },
+  {
+    "file": "frame-linked-offset-beyond-history.lz4",
+    "kind": "frame",
+    "expected": "OffsetOutOfRange",
+    "rule": "docs/spec/lz4_Frame_format.md, Block Independence flag (linked blocks reach back only over earlier output)",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-eob-rule-1.block",
+    "kind": "block",
+    "expected": "EndOfBlockViolation",
+    "rule": "docs/spec/lz4_Block_format.md, End of block conditions, rule 1",
+    "max_output": 67108864
+  },
+  {
+    "file": "frame-eob-rule-1.lz4",
+    "kind": "frame",
+    "expected": "EndOfBlockViolation",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, with Block format, End of block conditions, rule 1",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-eob-rule-2-0.block",
+    "kind": "block",
+    "expected": "EndOfBlockViolation",
+    "rule": "docs/spec/lz4_Block_format.md, End of block conditions, rule 2",
+    "max_output": 67108864
+  },
+  {
+    "file": "frame-eob-rule-2-0.lz4",
+    "kind": "frame",
+    "expected": "EndOfBlockViolation",
+    "rule": "docs/spec/lz4_Frame_format.md, Data Blocks, with Block format, End of block conditions, rule 2",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-eob-rule-2-1.block",
+    "kind": "block",
+    "expected": "EndOfBlockViolation",
+    "rule": "docs/spec/lz4_Block_format.md, End of block conditions, rule 2",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-eob-rule-2-2.block",
+    "kind": "block",
+    "expected": "EndOfBlockViolation",
+    "rule": "docs/spec/lz4_Block_format.md, End of block conditions, rule 2",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-eob-rule-2-3.block",
+    "kind": "block",
+    "expected": "EndOfBlockViolation",
+    "rule": "docs/spec/lz4_Block_format.md, End of block conditions, rule 2",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-eob-rule-2-4.block",
+    "kind": "block",
+    "expected": "EndOfBlockViolation",
+    "rule": "docs/spec/lz4_Block_format.md, End of block conditions, rule 2",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-empty-input.block",
+    "kind": "block",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Block_format.md, Compressed block format (a block holds at least one token)",
+    "max_output": 67108864
+  },
+  {
+    "file": "bad-block-checksum.lz4",
+    "kind": "frame",
+    "expected": "BlockChecksumMismatch",
+    "rule": "docs/spec/lz4_Frame_format.md, Block checksum",
+    "max_output": 67108864
+  },
+  {
+    "file": "bad-content-checksum.lz4",
+    "kind": "frame",
+    "expected": "ContentChecksumMismatch",
+    "rule": "docs/spec/lz4_Frame_format.md, Content Checksum",
+    "max_output": 67108864
+  },
+  {
+    "file": "content-size-too-small.lz4",
+    "kind": "frame",
+    "expected": "ContentSizeMismatch",
+    "rule": "docs/spec/lz4_Frame_format.md, Content Size",
+    "max_output": 67108864
+  },
+  {
+    "file": "content-size-too-large.lz4",
+    "kind": "frame",
+    "expected": "ContentSizeMismatch",
+    "rule": "docs/spec/lz4_Frame_format.md, Content Size",
+    "max_output": 67108864
+  },
+  {
+    "file": "raw-block-size-above-maximum.lz4",
+    "kind": "frame",
+    "expected": "BlockSizeExceeded",
+    "rule": "docs/spec/lz4_Frame_format.md, Block Maximum Size, Block Size",
+    "max_output": 67108864
+  },
+  {
+    "file": "compressed-block-decodes-above-maximum.lz4",
+    "kind": "frame",
+    "expected": "BlockSizeExceeded",
+    "rule": "docs/spec/lz4_Frame_format.md, Block Maximum Size",
+    "max_output": 67108864
+  },
+  {
+    "file": "dict-id-without-dictionary.lz4",
+    "kind": "frame",
+    "expected": "DictionaryRequired",
+    "rule": "docs/spec/lz4_Frame_format.md, Dictionary ID flag, Dictionary ID",
+    "max_output": 67108864
+  },
+  {
+    "file": "trailing-garbage-1.lz4",
+    "kind": "frame",
+    "expected": "TrailingData",
+    "rule": "docs/spec/lz4_Frame_format.md, Frame Concatenation (bytes that are not a frame follow the frame)",
+    "max_output": 67108864
+  },
+  {
+    "file": "trailing-garbage-8.lz4",
+    "kind": "frame",
+    "expected": "TrailingData",
+    "rule": "docs/spec/lz4_Frame_format.md, Frame Concatenation (bytes that are not a frame follow the frame)",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-zero-offset.block",
+    "kind": "block",
+    "expected": "ZeroOffset",
+    "rule": "docs/spec/lz4_Block_format.md, Compressed block format (offset 0 is invalid)",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-offset-out-of-range.block",
+    "kind": "block",
+    "expected": "OffsetOutOfRange",
+    "rule": "docs/spec/lz4_Block_format.md, Compressed block format (offset reaches before the output start)",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-truncated-in-literals.block",
+    "kind": "block",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Block_format.md, Compressed block format (literals field)",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-truncated-in-offset.block",
+    "kind": "block",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Block_format.md, Compressed block format (offset field)",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-truncated-literal-length-extension.block",
+    "kind": "block",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Block_format.md, Compressed block format (literal length extension)",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-truncated-match-length-extension.block",
+    "kind": "block",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Block_format.md, Compressed block format (match length extension)",
+    "max_output": 67108864
+  },
+  {
+    "file": "block-truncated-final-token.block",
+    "kind": "block",
+    "expected": "TruncatedInput",
+    "rule": "docs/spec/lz4_Block_format.md, Compressed block format (every block ends with a literals sequence)",
+    "max_output": 67108864
+  }
+]

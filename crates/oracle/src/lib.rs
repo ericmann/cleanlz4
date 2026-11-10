@@ -11,6 +11,7 @@ pub mod dict;
 pub mod diff;
 pub mod ffi;
 pub mod frame;
+pub mod malformed;
 pub mod manifest;
 pub mod prng;
 pub mod results;

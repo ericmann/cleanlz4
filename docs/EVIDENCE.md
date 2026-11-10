@@ -10,14 +10,15 @@ docs/DESIGN.md
 docs/spikes/P1-06.md
 docs/spikes/P2-09.md
 testdata/MANIFEST.json
+testdata/malformed/index.json
 testdata/results/bench-P4-10.json
 testdata/results/bench-P4-11.json
 testdata/results/conformance-P1-12.json
 testdata/results/conformance-P2-12.json
+testdata/results/malformed-P2-13.json
 ```
 
-`testdata/malformed/index.json` is not listed: it was never produced (see
-the checklist).
+`testdata/malformed/index.json` lists the 144 malformed files and the rule each breaks.
 
 ## Results
 
@@ -25,6 +26,7 @@ the checklist).
 |---|---|
 | `testdata/results/conformance-P1-12.json` | 156 of 156 passed, category `block` only; `corpus_sha256` b3d9df463fc95a8fe662fd023d9c39a7415277109a096f42599e43c836ae58c8 |
 | `testdata/results/conformance-P2-12.json` | 2349 of 2349 passed across all ten categories; `corpus_sha256` fd6392a28a4b239780f073ad70015c93f589163e4d232a9dd11502c24c93ba05 |
+| `testdata/results/malformed-P2-13.json` | 144 of 144 matched their expected error, 0 panics |
 | `testdata/results/bench-P4-10.json` | 23 corpus files; cleanlz4 413.8 to 2,224.6 MB/s, oracle 188.0 to 1,957.9 MB/s; no target |
 | `testdata/results/bench-P4-11.json` | 23 corpus files at the final `bench.repeats`; cleanlz4 437.6 to 2,048.7 MB/s, oracle 182.6 to 1,988.1 MB/s; no target |
 

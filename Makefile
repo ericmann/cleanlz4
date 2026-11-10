@@ -29,3 +29,7 @@ conformance-check:
 .PHONY: bench
 bench:
 	cargo run --release -p oracle --example bench_decode -- --task $(TASK)
+
+.PHONY: malformed
+malformed:
+	cargo run --release -p oracle --bin malformed -- --task $(TASK)
