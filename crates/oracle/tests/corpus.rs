@@ -204,3 +204,41 @@ fn the_oracle_decodes_every_generated_synthetic_frame() {
     }
     let _ = std::fs::remove_dir_all(&dir);
 }
+
+#[test]
+fn every_frame_level_meets_every_block_size() {
+    let cfg = Config::load().expect("config");
+    let c = conformance();
+    for suite in ["synthetic", "frames-cantrbry"] {
+        let frames: Vec<_> = c.entries.iter().filter(|e| e.suite == suite).collect();
+        for level in &cfg.conformance.frame_levels {
+            let at_level: Vec<_> = frames
+                .iter()
+                .filter(|e| e.params["level"].as_i64() == Some(i64::from(*level)))
+                .collect();
+            for id in 4u64..=7 {
+                assert!(
+                    at_level
+                        .iter()
+                        .any(|e| e.params["block_size_id"].as_u64() == Some(id)),
+                    "{suite} level {level} block size {id}"
+                );
+            }
+            for flag in [
+                "linked",
+                "block_checksum",
+                "content_checksum",
+                "content_size",
+            ] {
+                for value in [false, true] {
+                    assert!(
+                        at_level
+                            .iter()
+                            .any(|e| e.params[flag].as_bool() == Some(value)),
+                        "{suite} level {level} {flag}={value}"
+                    );
+                }
+            }
+        }
+    }
+}

@@ -144,28 +144,26 @@ pub struct FrameCombo {
     pub content_size: bool,
 }
 
-/// All 64 combinations, in a fixed order: the block size id varies fastest,
-/// then content size, content checksum, block checksum and linked.
+/// All 64 combinations, in a fixed order. Combination `i` has `hi = i / 4` and
+/// `lo = i % 4`: `hi` (0 to 15) gives the four flags, linked, block checksum,
+/// content checksum and content size, from the highest bit to the lowest, and
+/// the block size id is `4 + (hi + lo) % 4`. The level is chosen by `i % len`
+/// (see `frame_level`), so with four levels it follows `lo`: each level sees
+/// all 16 flag settings, and the block size skew means each level also sees
+/// every block size.
 pub fn frame_combos() -> Vec<FrameCombo> {
-    let mut v = Vec::new();
-    for linked in [false, true] {
-        for block_checksum in [false, true] {
-            for content_checksum in [false, true] {
-                for content_size in [false, true] {
-                    for block_size_id in 4u8..=7 {
-                        v.push(FrameCombo {
-                            block_size_id,
-                            linked,
-                            block_checksum,
-                            content_checksum,
-                            content_size,
-                        });
-                    }
-                }
+    (0..64usize)
+        .map(|i| {
+            let (hi, lo) = (i / 4, i % 4);
+            FrameCombo {
+                block_size_id: 4 + ((hi + lo) % 4) as u8,
+                linked: hi & 8 != 0,
+                block_checksum: hi & 4 != 0,
+                content_checksum: hi & 2 != 0,
+                content_size: hi & 1 != 0,
             }
-        }
-    }
-    v
+        })
+        .collect()
 }
 
 /// The compression level of combination `i`: `conformance.frame_levels[i % len]`.
