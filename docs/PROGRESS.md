@@ -29,7 +29,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P2-10 Phase 2 end: push and record the manual check
 - [x] P3-01 The CHANGELOG entry for 0.2.0 and the crate versions
 - [x] P3-02 Refresh EVIDENCE.md and README.md
-- [ ] P3-03 Phase 3 end: push and record the manual check
+- [x] P3-03 Phase 3 end: push and record the manual check
 
 ## Log
 
@@ -130,3 +130,7 @@ Versions 0.2.0 in both crates; Cargo.lock and fuzz/Cargo.lock diffs are only the
 ### P3-02 — 7e53782
 
 EVIDENCE.md: Results table gained a Flight column (0.1.0 / 0.2.0) with a row for every file of this flight; Done checklist rewritten for SPEC 0.3 section 1 (items 1,2,3,5 met; 4 owed to summarize; 6 owed to end of run); blocked/skipped: none. README gained a 0.2.0 section and the added commands. New test evidence_results_table_names_every_result_file (passes with evidence_index_lists_every_result_file). Interpretation: item 2 marked met, naming each command's task; no fuzz-P2-08 re-run exists since nothing was triaged.
+
+### P3-03 — 2895c52
+
+Push: done. Similarity: docs/kukulu.json holds one negative pair (rust-independent-vs-indep) and one positive pair (rust-derived-vs-indep), both Rust-vs-Rust, because kukulu 0.8.0 refuses a second pair of either role; SPEC 5.3's Rust-vs-C controls (independent-vs-c, derived-vs-c) are not scored in this run. The Rust-vs-Rust band applies to subject-vs-indep. It does not apply to subject-vs-c, whose Rust-vs-C reading is 0.1.0's docs/flights/cleanlz4/SIMILARITY.md. SUMMARY.md says which band applies to each test pair and repeats the tool's verdict verbatim (SPEC 5.3, 9 Q4). Evidence for the attestation: docs/EVIDENCE.md's fenced list. Manual check: NOT VERIFIED (human): the owner reads docs/SIMILARITY.md (written by the summarize stage) against the same-language controls rust-independent-vs-indep and rust-derived-vs-indep, and reads subject-vs-c against 0.1.0's docs/flights/cleanlz4/SIMILARITY.md; the owner runs node docs/attestation/verify.mjs docs/attestation --key sha256:<owner's fingerprint> from a clean checkout on a second machine (the bundle is under docs/flights/cleanlz4-0-2-0/attestation once the flight is archived)
