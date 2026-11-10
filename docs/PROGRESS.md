@@ -11,7 +11,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P0-04 Phase 0 end: push and record the manual check
 - [x] P1-01 Oracle FFI: the block functions
 - [x] P1-02 Oracle FFI: frame compression and decompression
-- [ ] P1-03 The typed error enum
+- [x] P1-03 The typed error enum
 - [ ] P1-04 XXH32, one-shot and streaming
 - [ ] P1-05 Block decoder: sequences, overlap copies and strict end-of-block rules
 - [ ] P1-06 Spike: the oracle's end-of-block behaviour
@@ -87,3 +87,7 @@ oracle::ffi has compress_bound/compress_default/compress_hc/decompress_safe (saf
 ### P1-02 — dbc95ae
 
 oracle::frame: Prefs (Default impl), compress_frame(chunks,&Prefs), Decoded{Accepted,Rejected,OverCap}, decompress_frames(input,cap), content_checksum_of. ffi.rs: CompressCtx/DecompressCtx RAII, frame_is_error, frame_error_name, frame_compress_bound. Binding exports the version constant. Tests: ffi_frame.rs x7. Binding had all needed preferences fields incl. block checksum.
+
+### P1-03 — 26e5f16
+
+cleanlz4::Error (17 unit variants, Copy), Error::ALL, Display, std Error, Result alias, re-exported from lib. Tests: error.rs x3. DESIGN entry for BlockSizeExceeded.
