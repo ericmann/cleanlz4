@@ -17,7 +17,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-06 Spike: the oracle's end-of-block behaviour
 - [x] P1-07 Align the end-of-block policy with the oracle
 - [x] P1-08 Dictionary-prefixed block decoding
-- [ ] P1-09 Synthetic inputs and block round-trip tests against the oracle
+- [x] P1-09 Synthetic inputs and block round-trip tests against the oracle
 - [ ] P1-10 Oracle dictionary blocks and the dictionary differential test
 - [ ] P1-11 Conformance generator: the block suite and the manifest's entries
 - [ ] P1-12 Conformance runner and the results for category block
@@ -111,3 +111,7 @@ EOB policy now: rule1 on, rule2 on, rule3 OFF (per spike); empty input rejected;
 ### P1-08 — ac70d1d
 
 decode_block(src, dict, dst, max_len) and decode_block_with(src, dict, dst, max_len, policy); lib.rs decompress_block_with_dict(input, dict, max_output). Offsets past dst start continue into dict tail. Footgun: copy_match must not compute dst start when remaining==0 after the dictionary part (dst.len()-offset underflows). 5 new unit tests.
+
+### P1-09 — cfabc11
+
+synth::inputs(seed) (names: empty, one-byte, tiny-2..12, incompressible-64k/1m, zeros-1m, repetitive-text, window-boundary, min-match, long-match) and synth::word_salad(seed,len). Tests block.rs x3 + synth unit test, all pass. Codebase note: the oracle's HC compressor at level 12 SIGSEGVs on an empty input given a dangling slice pointer; ffi::compress_hc now passes real memory for empty input (ffi.rs touched beyond listed files). Also clippy manual_repeat_n requires std::iter::repeat_n.
