@@ -15,7 +15,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P1-04 Merge is_magic into magic_kind
 - [x] P1-05 Benchmark before the scratch-buffer change
 - [x] P1-06 Reuse one scratch buffer across blocks
-- [ ] P1-07 Measure the scratch-buffer change and decide
+- [x] P1-07 Measure the scratch-buffer change and decide
 - [ ] P1-08 Phase 1 end: push and record the manual check
 - [ ] P2-01 The full conformance run
 - [ ] P2-02 The full malformed run
@@ -74,3 +74,7 @@ bench-P1-05.json written by make bench; no code changed. Slowest cleanlz4: cante
 ### P1-06 — 0c003d3
 
 Tests first on unchanged decoder failed: legacy one-shot 16 blocks 18 fresh allocs vs 64 blocks 66; one-shot (independent) 19 vs 67; streaming 22 vs 70. After change: legacy 3/3 one-shot, 7/7 streaming; one-shot independent 4/4, linked 5/5; streaming 7/7 and 8/8. FrameState.scratch, decode_legacy_block takes scratch, Decoder.scratch replaced at both legacy frame ends. Memory tests (oracle limits, cleanlz4 limits) pass unchanged; conformance-check 2349/2349; fuzz build ok; make fuzz-smoke exit 0, all five targets crashes 0 divergences 0. DESIGN entry added, "per-block scratch buffer" reworded.
+
+### P1-07 — 9a9eb31
+
+A(before)=532.1 MB/s. After run 1: 485.4 (slowdown 8.77%, above 7.28%); run 2: 502.7 (slowdown 5.54%). Criterion met on second run: scratch change KEPT, no code changes. 7 of 23 inputs individually slower than 7.28% (info). DESIGN Measurements "Scratch-buffer reuse (P1-07)" table added; bench-P1-07.json (second run) and EVIDENCE.md updated. Note for reviewer: run-to-run noise is large (~3 points of aggregate).
