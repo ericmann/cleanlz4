@@ -1,0 +1,1297 @@
+{
+  "config": {
+    "subject": [
+      "crates/cleanlz4/src"
+    ],
+    "pairs": [
+      {
+        "id": "rust-independent-vs-indep",
+        "role": "negative",
+        "left": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src",
+        "right": "/home/ericmann/Projects/prior-art/lz4_flex/src"
+      },
+      {
+        "id": "rust-derived-vs-indep",
+        "role": "positive",
+        "left": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src",
+        "right": "/home/ericmann/Projects/prior-art/lz4_flex/src",
+        "control": null
+      },
+      {
+        "id": "subject-vs-indep",
+        "role": "test",
+        "left": "subject",
+        "right": "/home/ericmann/Projects/prior-art/lz4_flex/src"
+      },
+      {
+        "id": "subject-vs-c",
+        "role": "test",
+        "left": "subject",
+        "right": "/home/ericmann/Projects/prior-art/lz4/lib"
+      }
+    ],
+    "languages": {
+      ".rs": "rust",
+      ".c": "c",
+      ".h": "c",
+      ".cc": "cpp",
+      ".cpp": "cpp",
+      ".cxx": "cpp",
+      ".hpp": "cpp",
+      ".go": "go",
+      ".py": "python",
+      ".js": "javascript",
+      ".mjs": "javascript",
+      ".cjs": "javascript",
+      ".ts": "typescript",
+      ".java": "java",
+      ".php": "php"
+    },
+    "ngram": [
+      5,
+      10
+    ],
+    "minIdentLen": 6,
+    "commentNgram": 5,
+    "identExclusions": null,
+    "near": 0.25,
+    "separationMargin": 0
+  },
+  "files": [
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/bitreader.rs",
+      "sha256": "900c29037d6b179942146f926972c234dddca381dac603855ceb4e0debd8134a",
+      "bytes": 6787,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/checksum.rs",
+      "sha256": "ff0aba5add619ac09f4da104b0cfc8b4a474cc323e945d46f519b1fe516067e8",
+      "bytes": 10108,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/config.rs",
+      "sha256": "d660165f5e490913ac6a9495b45923ef3234730c9098cd0aa978dde6bc1f25fa",
+      "bytes": 6256,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/decode_path.rs",
+      "sha256": "7e78f2cb1d5315afd4217b6a38c40e189a328bf911b535a824ef108901790742",
+      "bytes": 787,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/error.rs",
+      "sha256": "fdaf140e3cf041e1536e3d13125894b9352566c8c129ae272152af226aaf087f",
+      "bytes": 11743,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/fast_loop.rs",
+      "sha256": "882ae2db5d6d1938b9a3ef0de226701ec3a67116088e97dd6193f75e24f0e122",
+      "bytes": 6805,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/gzip.rs",
+      "sha256": "b10799a4ab2474c78bd030f4e19637e39245e32b0085cbf350f6634a9203a0b0",
+      "bytes": 31278,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/huffman.rs",
+      "sha256": "e62ac398917f9996626c0f43ee86a2bdbce681df344cdd8f532617af29b5927e",
+      "bytes": 18023,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/inflate.rs",
+      "sha256": "64e4b360d6b480a432e0353176033c15363dd9366caaca4f46c59f5736039ba0",
+      "bytes": 41367,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/lib.rs",
+      "sha256": "98e66291fdc2fc70cf0cc8094461409a4dda7659e35e1905e8f92aedfa8eb285",
+      "bytes": 5090,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/options.rs",
+      "sha256": "5f0d2a1f94afcb51f478eb6d333ddc881d13ee0d4fa8d2f095da77ea4d69cc53",
+      "bytes": 2104,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/sink.rs",
+      "sha256": "9c0d6e933a17116805b5334179304a6ee578f9331e5b4372e5c6a2a73459e798",
+      "bytes": 6703,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/stats.rs",
+      "sha256": "1f9413c50297112b9f7ae3bf259aa96d481a001b0093329067d28cc7f0d199ae",
+      "bytes": 7751,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/stream.rs",
+      "sha256": "c82077726433eaea4bf3533083ebf6245f7efef0f103f8cdb9e2aed8de336650",
+      "bytes": 27704,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tables.rs",
+      "sha256": "61eb5a3ccffa57dfdefe552779b2bd6fc4a1d5547a9163ab054678be19e1090c",
+      "bytes": 2946,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/test_hooks.rs",
+      "sha256": "e28f585e95e352edb18b1b362fbd899bbdcc974599001f5c67202029f23713a4",
+      "bytes": 3258,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/bitreader.rs",
+      "sha256": "1bdabf408fc840dd1a427ef55d0ba502b4cd924b6f838ddb2a8ae1ac83683bac",
+      "bytes": 2126,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/bitreader_bulk.rs",
+      "sha256": "1fc819010d547675c54041d928a6ea796b4df55eb4ae72ba6a93ed345e314020",
+      "bytes": 15639,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/bitwriter.rs",
+      "sha256": "3ed086993aac435b18c7a901d19460f3291437ffed534eda25c949d1f476c3ba",
+      "bytes": 1704,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/checksum.rs",
+      "sha256": "0c00fe8733166a3149585e23012eb69623fcdf8d06928b0578e71da0cbe5d561",
+      "bytes": 9548,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/config.rs",
+      "sha256": "dfd04c6bc2fd189ea37ee110e1627774d2dcf8e4dbeede7f2c137e2513b5fc4b",
+      "bytes": 438,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/decode_path.rs",
+      "sha256": "7e9d35f54351107396802dd6d17a9c5287271303a016f54c7e6a4cc59aa30806",
+      "bytes": 8333,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/dynbuilder.rs",
+      "sha256": "09d0aa9b8f701494a998ea698fbf8dd446e63640a661f270db4081a8d1dbc9b1",
+      "bytes": 10706,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/error.rs",
+      "sha256": "f3ce5ebb798d598ae9c1bef03ccfb04cc24a76b6ba998ccf5f26bec1b7790fc8",
+      "bytes": 2986,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/fast_loop.rs",
+      "sha256": "c465c5ef1db2d073cf7b7134ec903bcc08e1c4e6b65be27071857eafe77b464b",
+      "bytes": 22971,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/fastpath.rs",
+      "sha256": "3d3a3e03bb4c14b198d0133f2e10ddbe5c689dd15dec7a87f0245118e7253909",
+      "bytes": 6281,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/gzip.rs",
+      "sha256": "a190bb5f9846436d0e4d78b67d37ee5df5d322801807d78afaa551b1265d5863",
+      "bytes": 14848,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/gzip_header.rs",
+      "sha256": "345daf5811577de8b5e01baba7016f8807c8a176c190a08c74fbdf441f9772a0",
+      "bytes": 8012,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/history.rs",
+      "sha256": "016bd4310138a3b56676f6685784daff73e7d06c0b43d7e7b2a835f9826d3b6c",
+      "bytes": 11071,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/huffman.rs",
+      "sha256": "9896e4af8e85e7847c6b8c2f7d3f30771ddf982b5d60b830eee91d01b5fc6850",
+      "bytes": 4439,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/huffman_table.rs",
+      "sha256": "6860f8d32a48c0194dc98af00b42357dacb6e9022cced01e578dff106611bdae",
+      "bytes": 8962,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/huffman_twolevel.rs",
+      "sha256": "5e1c8079e92e2f197610104b16c824907ceadb914dc2203a9659ca5a53830ff8",
+      "bytes": 7139,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/huffman_validation.rs",
+      "sha256": "1e96b13987597d13d3cb530b345cad34a38882e41cab09ee7b04669397b4c2c9",
+      "bytes": 3716,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/inflate_dynamic.rs",
+      "sha256": "27835cac0dc2a35816c92014450a12215e6a0f4678b6abb324e7068492c5bdf2",
+      "bytes": 16128,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/inflate_fixed.rs",
+      "sha256": "053f3d7c0686db0ea5f630a24270d11b6fd876a3122c9ba0efe8c3044873c82e",
+      "bytes": 10901,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/inflate_stored.rs",
+      "sha256": "2973e31ecb19239655d87b0e0f5cea4e11c24e06ef3696f5c455cf623cc68740",
+      "bytes": 6425,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/invariants.rs",
+      "sha256": "c5f0f6df766cc8757771d7e207efa22222ec56092d048037094e6f612042db1b",
+      "bytes": 11799,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/mod.rs",
+      "sha256": "586045797ed569dcfb4737b5396470d9f709345c913625dc643088bc70cc6791",
+      "bytes": 762,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/oneshot_sizing.rs",
+      "sha256": "f633a4c31a915c25d7c4f66608d2276c1793d4bdfb52ce0f3b9d48e7fb95f699",
+      "bytes": 10575,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/reset.rs",
+      "sha256": "1ab62fe4e04524d1678fab3e5485450d2e1402090082a7a871d81c48b39be0d3",
+      "bytes": 5469,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/sink.rs",
+      "sha256": "de6c109671b662dbc6caef0bf3bb30183405a4215415d3859d78a73b07f5a465",
+      "bytes": 11685,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/slice_api.rs",
+      "sha256": "916c4333bdd6f2ef4679a87710898a707bcb173b78c561963f888d8370fc024e",
+      "bytes": 1895,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/stats.rs",
+      "sha256": "160a0a218165537799205f30e06b125a9fafd20fae0c6fd87a4882e9c1e5cbad",
+      "bytes": 8446,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/stream_contract.rs",
+      "sha256": "6d844b3a77174c8bb365166c8115b157a7323ffbd6e55b87d097e12d56a36e27",
+      "bytes": 16842,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/stream_raw.rs",
+      "sha256": "8ba9ca7cc3976c3dc0096a5c33ef8fa32c9ebb1594c46360061ec8fb9342ffe0",
+      "bytes": 7772,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/tables.rs",
+      "sha256": "97c08e5f53afbb998d13b81f9446004da82ee0ae28a64e916f14dbcf54679482",
+      "bytes": 3762,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/window.rs",
+      "sha256": "d26be09e3c2db6cbed7287d3a56e404482a1f04e6c1468b51c328818c00863c4",
+      "bytes": 2380,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/tests/zlib.rs",
+      "sha256": "91f70a21bd23ca8b32491e7a02df8baff9ced2501dd41dc4c272d67c4353c710",
+      "bytes": 9380,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/window.rs",
+      "sha256": "be4f13968e6f4b7021466a530920f836f4c4c3105e22758774d570ab373ccd05",
+      "bytes": 8699,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/cleanflate/crates/cleanflate/src/zlib.rs",
+      "sha256": "b3b4d2554b4e7299e6899eaacddb04c5a0e173143224f548272570b8c039e65c",
+      "bytes": 9998,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/compress.rs",
+      "sha256": "08225a806718562f053637f32e2aa7020897d569aba01b6357c7e44b747b55b1",
+      "bytes": 39129,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/decompress.rs",
+      "sha256": "e1c00de65ae0c8f94105b7f7dcf1ea12eba87368fb40b29eedc61716ab3d99b9",
+      "bytes": 24330,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/decompress_safe.rs",
+      "sha256": "0cd498a960055366fa5549b12329c85aa080def5f088111d76327382c1d817b5",
+      "bytes": 18526,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/hashtable.rs",
+      "sha256": "5b7cebc20eef3153b359a54528a30df31f61fcb38ea59350b592a0b02e8ac997",
+      "bytes": 5690,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/mod.rs",
+      "sha256": "9f48789c8a13510bea3407ec22115d8d6dea0ff614ed741dba2293ffe0a2b66f",
+      "bytes": 6195,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/fastcpy.rs",
+      "sha256": "c3dbe266822f115c526de7a50c4073f1f9ec26e7838ac7959443ca040cb15440",
+      "bytes": 4062,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/fastcpy_unsafe.rs",
+      "sha256": "cfbd64aa10a1511490ea4d67855e9b038bedafd7739335de7e062c23db1576f3",
+      "bytes": 4999,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/compress.rs",
+      "sha256": "e7f3b609aa20d07cea89890b006ba5ee2327fb8c3486aa3db26896cfdc6e7750",
+      "bytes": 18596,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/decompress.rs",
+      "sha256": "de1e237c3d7419259f47a3cec3ae0f2bf005ff59a21d929460c98bb0770a163e",
+      "bytes": 17571,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/header.rs",
+      "sha256": "c9926623a51e20325e717df62bdf1ad0ca24b787e7e04e8122a38d8a28587cc4",
+      "bytes": 13521,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/mod.rs",
+      "sha256": "97f44388951671638b517c3eeeef45a291d85bf9e51446847574b97a6c33e295",
+      "bytes": 3560,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/lib.rs",
+      "sha256": "a61ef4b28733e7bdd1b758387dece2d8be72059155f9b87d87916b464329b923",
+      "bytes": 5163,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/sink.rs",
+      "sha256": "563b4358c3185b8fc1e89ff4924b235c513a5da861e81c2c557dc29158efbc38",
+      "bytes": 10339,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src/block/compress.rs",
+      "sha256": "9359364e23c7b4d839a60fe7134d39f22b43f1e3653547120f67e4c09f2d564a",
+      "bytes": 22676,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src/block/decompress.rs",
+      "sha256": "f23796373d374fcefe6ad74fb998bb6f7dbdcc66f77304f9ddadc08d8b7bcdeb",
+      "bytes": 12568,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src/block/decompress_safe.rs",
+      "sha256": "98de8926f04004cfc2e78858a2d84ed60ca163d567950a1c724020df98669eba",
+      "bytes": 9565,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src/block/hashtable.rs",
+      "sha256": "9d958585be9347d9c8ae995d75a528e686e778579dd0fa16baa5d1162001ae35",
+      "bytes": 4300,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src/block/mod.rs",
+      "sha256": "fdc7e4b9eb45bca2c9fa678bd07c0310fb64c82bc2df9e36253297a12fe0fee0",
+      "bytes": 3596,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src/fastcpy.rs",
+      "sha256": "61904c85fc5ac60ce3355ffe48be210102938311e51f40680c9af40ab76a025f",
+      "bytes": 2713,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src/fastcpy_unsafe.rs",
+      "sha256": "23d0689f72457f94018741d56e9a691380750007121c8b2d2d069037a785838c",
+      "bytes": 3028,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src/frame/compress.rs",
+      "sha256": "69ed639fafd8fc4ce34a2746328630ae10119734cf1541e5b80b6beaaca23782",
+      "bytes": 10319,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src/frame/decompress.rs",
+      "sha256": "b72040364dd88499e56d70592e1665d61c70012787f037b2324e5b5cead17e8d",
+      "bytes": 11851,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src/frame/header.rs",
+      "sha256": "6903ff1c886c9ce0af2fc302148cca262436151aae94a62d6508649f297f5b37",
+      "bytes": 9340,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src/frame/mod.rs",
+      "sha256": "26d883d47f266ed725ef6cefed898ae40a0d038f102d584c071ba602d544f993",
+      "bytes": 2094,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src/lib.rs",
+      "sha256": "958fba541ee4c5cd7d5e34d25110a53befd9af931c3e374ccf9ffa6f9ee92125",
+      "bytes": 1638,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "left",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src/sink.rs",
+      "sha256": "08777e22d2a746ac295bef99fbf33374c501e23eb75c33ac2fe5fa048224f2f4",
+      "bytes": 6632,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/compress.rs",
+      "sha256": "08225a806718562f053637f32e2aa7020897d569aba01b6357c7e44b747b55b1",
+      "bytes": 39129,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/decompress.rs",
+      "sha256": "e1c00de65ae0c8f94105b7f7dcf1ea12eba87368fb40b29eedc61716ab3d99b9",
+      "bytes": 24330,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/decompress_safe.rs",
+      "sha256": "0cd498a960055366fa5549b12329c85aa080def5f088111d76327382c1d817b5",
+      "bytes": 18526,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/hashtable.rs",
+      "sha256": "5b7cebc20eef3153b359a54528a30df31f61fcb38ea59350b592a0b02e8ac997",
+      "bytes": 5690,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/mod.rs",
+      "sha256": "9f48789c8a13510bea3407ec22115d8d6dea0ff614ed741dba2293ffe0a2b66f",
+      "bytes": 6195,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/fastcpy.rs",
+      "sha256": "c3dbe266822f115c526de7a50c4073f1f9ec26e7838ac7959443ca040cb15440",
+      "bytes": 4062,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/fastcpy_unsafe.rs",
+      "sha256": "cfbd64aa10a1511490ea4d67855e9b038bedafd7739335de7e062c23db1576f3",
+      "bytes": 4999,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/compress.rs",
+      "sha256": "e7f3b609aa20d07cea89890b006ba5ee2327fb8c3486aa3db26896cfdc6e7750",
+      "bytes": 18596,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/decompress.rs",
+      "sha256": "de1e237c3d7419259f47a3cec3ae0f2bf005ff59a21d929460c98bb0770a163e",
+      "bytes": 17571,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/header.rs",
+      "sha256": "c9926623a51e20325e717df62bdf1ad0ca24b787e7e04e8122a38d8a28587cc4",
+      "bytes": 13521,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/mod.rs",
+      "sha256": "97f44388951671638b517c3eeeef45a291d85bf9e51446847574b97a6c33e295",
+      "bytes": 3560,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/lib.rs",
+      "sha256": "a61ef4b28733e7bdd1b758387dece2d8be72059155f9b87d87916b464329b923",
+      "bytes": 5163,
+      "language": "rust"
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/sink.rs",
+      "sha256": "563b4358c3185b8fc1e89ff4924b235c513a5da861e81c2c557dc29158efbc38",
+      "bytes": 10339,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/block.rs",
+      "sha256": "11470ccad48902f95a5c34c4b08b0e2a7676191e135e0c68bed9899b83babac5",
+      "bytes": 17707,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/error.rs",
+      "sha256": "f3f7c957e0809103db70b55bbfac0cdb1d908a3aeb1c9a12577ab4756779f8a9",
+      "bytes": 4738,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/frame.rs",
+      "sha256": "4cb7012f8f95cf409e848ab8d2b1dac928165131a9a72829d7fae20e959ae36b",
+      "bytes": 27929,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/lib.rs",
+      "sha256": "d75b321c6094d35d068c2cef22ed26629d7f800b144b2cacd08f714a3511f3f4",
+      "bytes": 3216,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/stream.rs",
+      "sha256": "3943fa27a6d170d987a13adb5f827e9c0bd2ef3241dfb07b686cca6a1f92a74e",
+      "bytes": 18509,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/xxh32.rs",
+      "sha256": "3351028549c33df3d671dedd39c082c36ac1452612dcbeb312955ae61b8b55b3",
+      "bytes": 5726,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/compress.rs",
+      "sha256": "08225a806718562f053637f32e2aa7020897d569aba01b6357c7e44b747b55b1",
+      "bytes": 39129,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/decompress.rs",
+      "sha256": "e1c00de65ae0c8f94105b7f7dcf1ea12eba87368fb40b29eedc61716ab3d99b9",
+      "bytes": 24330,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/decompress_safe.rs",
+      "sha256": "0cd498a960055366fa5549b12329c85aa080def5f088111d76327382c1d817b5",
+      "bytes": 18526,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/hashtable.rs",
+      "sha256": "5b7cebc20eef3153b359a54528a30df31f61fcb38ea59350b592a0b02e8ac997",
+      "bytes": 5690,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/block/mod.rs",
+      "sha256": "9f48789c8a13510bea3407ec22115d8d6dea0ff614ed741dba2293ffe0a2b66f",
+      "bytes": 6195,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/fastcpy.rs",
+      "sha256": "c3dbe266822f115c526de7a50c4073f1f9ec26e7838ac7959443ca040cb15440",
+      "bytes": 4062,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/fastcpy_unsafe.rs",
+      "sha256": "cfbd64aa10a1511490ea4d67855e9b038bedafd7739335de7e062c23db1576f3",
+      "bytes": 4999,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/compress.rs",
+      "sha256": "e7f3b609aa20d07cea89890b006ba5ee2327fb8c3486aa3db26896cfdc6e7750",
+      "bytes": 18596,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/decompress.rs",
+      "sha256": "de1e237c3d7419259f47a3cec3ae0f2bf005ff59a21d929460c98bb0770a163e",
+      "bytes": 17571,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/header.rs",
+      "sha256": "c9926623a51e20325e717df62bdf1ad0ca24b787e7e04e8122a38d8a28587cc4",
+      "bytes": 13521,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/frame/mod.rs",
+      "sha256": "97f44388951671638b517c3eeeef45a291d85bf9e51446847574b97a6c33e295",
+      "bytes": 3560,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/lib.rs",
+      "sha256": "a61ef4b28733e7bdd1b758387dece2d8be72059155f9b87d87916b464329b923",
+      "bytes": 5163,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4_flex/src/sink.rs",
+      "sha256": "563b4358c3185b8fc1e89ff4924b235c513a5da861e81c2c557dc29158efbc38",
+      "bytes": 10339,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/block.rs",
+      "sha256": "11470ccad48902f95a5c34c4b08b0e2a7676191e135e0c68bed9899b83babac5",
+      "bytes": 17707,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/error.rs",
+      "sha256": "f3f7c957e0809103db70b55bbfac0cdb1d908a3aeb1c9a12577ab4756779f8a9",
+      "bytes": 4738,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/frame.rs",
+      "sha256": "4cb7012f8f95cf409e848ab8d2b1dac928165131a9a72829d7fae20e959ae36b",
+      "bytes": 27929,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/lib.rs",
+      "sha256": "d75b321c6094d35d068c2cef22ed26629d7f800b144b2cacd08f714a3511f3f4",
+      "bytes": 3216,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/stream.rs",
+      "sha256": "3943fa27a6d170d987a13adb5f827e9c0bd2ef3241dfb07b686cca6a1f92a74e",
+      "bytes": 18509,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "left",
+      "path": "/media/ericmann/Data/Projects/cleanlz4/crates/cleanlz4/src/xxh32.rs",
+      "sha256": "3351028549c33df3d671dedd39c082c36ac1452612dcbeb312955ae61b8b55b3",
+      "bytes": 5726,
+      "language": "rust"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4.c",
+      "sha256": "45061782ff932eb8cf71c3aea9495cec0d392f012395272e0550e30c8593c740",
+      "bytes": 126402,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4.h",
+      "sha256": "6fee8f913ce3bc65bf716060f65ce890d83bea905445256c7a56da5bf4824d73",
+      "bytes": 44365,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4file.c",
+      "sha256": "a2ceba67630ac8b3751380a56dee18d9f4f0368131628f9198464ef1d4594142",
+      "bytes": 21958,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4file.h",
+      "sha256": "610f434c232e86880315f20f8305e8aa048c2918d5c73fe8649ba50b89756387",
+      "bytes": 6797,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4frame.c",
+      "sha256": "d8f0567cfab22507acf4847e0cadf34e57c9f9e31a00b4f1f2f77fd54f111f23",
+      "bytes": 158084,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4frame.h",
+      "sha256": "dfceed0f276a4139a1f49ae77113ebc1eb2d3900ea224711dcd1b7a0eb5f1e5f",
+      "bytes": 47820,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4frame_static.h",
+      "sha256": "ddcaf4c055dbddf8778cdc8520cfde26f765bcb4012d97da9ab898f52bbfa578",
+      "bytes": 2054,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4hc.c",
+      "sha256": "2511d51c3026999536b8cb56806a7f1b6a5bd8a81295a02ff2e1efc10ab071aa",
+      "bytes": 96913,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/lz4hc.h",
+      "sha256": "a92a509858c3b79afb033bfa64335d633802884e5c1d5a15aaa54cdb3e9e5103",
+      "bytes": 18575,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/xxhash.c",
+      "sha256": "9c5498e00479217d7573b2474397a4248127f013f24d9ef98de0281d2dd30d89",
+      "bytes": 34168,
+      "language": "c"
+    },
+    {
+      "pair": "subject-vs-c",
+      "side": "right",
+      "path": "/home/ericmann/Projects/prior-art/lz4/lib/xxhash.h",
+      "sha256": "aefdd236f35130495c18764cabed3f7b216906855fc5e6a9025cd2040bc84444",
+      "bytes": 13466,
+      "language": "c"
+    }
+  ],
+  "rows": [
+    {
+      "pair": "rust-independent-vs-indep",
+      "role": "negative",
+      "metric": "ngram_jaccard@5",
+      "score": 0.22525951557093427,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "role": "negative",
+      "metric": "ngram_containment@5",
+      "score": 0.49197052711127903,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "role": "negative",
+      "metric": "ngram_jaccard@10",
+      "score": 0.05143375161028675,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "role": "negative",
+      "metric": "ngram_containment@10",
+      "score": 0.1621540312876053,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "role": "negative",
+      "metric": "ident_jaccard",
+      "score": 0.05063291139240506,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "role": "negative",
+      "metric": "ident_match_rate_left",
+      "score": 0.07234042553191489,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "rust-independent-vs-indep",
+      "role": "negative",
+      "metric": "comment_jaccard",
+      "score": 0.00013886960144424384,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "role": "positive",
+      "metric": "ngram_jaccard@5",
+      "score": 0.981658244431967,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "role": "positive",
+      "metric": "ngram_containment@5",
+      "score": 0.9909314188550916,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "role": "positive",
+      "metric": "ngram_jaccard@10",
+      "score": 0.9715196914633242,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "role": "positive",
+      "metric": "ngram_containment@10",
+      "score": 0.9859250338702393,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "role": "positive",
+      "metric": "ident_jaccard",
+      "score": 0.6157112526539278,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "role": "positive",
+      "metric": "ident_match_rate_left",
+      "score": 1,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "rust-derived-vs-indep",
+      "role": "positive",
+      "metric": "comment_jaccard",
+      "score": 0,
+      "c": null,
+      "band": null
+    },
+    {
+      "pair": "subject-vs-indep",
+      "role": "test",
+      "metric": "ngram_jaccard@5",
+      "score": 0.22453073506232984,
+      "c": -0.0009634872201620449,
+      "band": "below negative"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "role": "test",
+      "metric": "ngram_containment@5",
+      "score": 0.4817091915155241,
+      "c": -0.020565410567334658,
+      "band": "below negative"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "role": "test",
+      "metric": "ngram_jaccard@10",
+      "score": 0.052916564115185825,
+      "c": 0.001611602178309473,
+      "band": "at or near negative"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "role": "test",
+      "metric": "ngram_containment@10",
+      "score": 0.13281443044230293,
+      "c": -0.0356162097880585,
+      "band": "below negative"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "role": "test",
+      "metric": "ident_jaccard",
+      "score": 0.07920792079207921,
+      "c": 0.05056822623192597,
+      "band": "at or near negative"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "role": "test",
+      "metric": "ident_match_rate_left",
+      "score": 0.1917808219178082,
+      "c": 0.12875455573708683,
+      "band": "at or near negative"
+    },
+    {
+      "pair": "subject-vs-indep",
+      "role": "test",
+      "metric": "comment_jaccard",
+      "score": 0.0006782726656115759,
+      "c": null,
+      "band": "not separated"
+    },
+    {
+      "pair": "subject-vs-c",
+      "role": "test",
+      "metric": "ngram_jaccard@5",
+      "score": 0.034923664122137404,
+      "c": -0.25163428253693665,
+      "band": "below negative"
+    },
+    {
+      "pair": "subject-vs-c",
+      "role": "test",
+      "metric": "ngram_containment@5",
+      "score": 0.11251152782047341,
+      "c": -0.760498479078468,
+      "band": "below negative"
+    },
+    {
+      "pair": "subject-vs-c",
+      "role": "test",
+      "metric": "ngram_jaccard@10",
+      "score": 0.0005568492457223854,
+      "c": -0.0552958154894648,
+      "band": "below negative"
+    },
+    {
+      "pair": "subject-vs-c",
+      "role": "test",
+      "metric": "ngram_containment@10",
+      "score": 0.0027180627625401532,
+      "c": -0.1935440407895055,
+      "band": "below negative"
+    },
+    {
+      "pair": "subject-vs-c",
+      "role": "test",
+      "metric": "ident_jaccard",
+      "score": 0.01277139208173691,
+      "c": -0.06700224826551182,
+      "band": "below negative"
+    },
+    {
+      "pair": "subject-vs-c",
+      "role": "test",
+      "metric": "ident_match_rate_left",
+      "score": 0.0684931506849315,
+      "c": -0.00414729169284906,
+      "band": "below negative"
+    },
+    {
+      "pair": "subject-vs-c",
+      "role": "test",
+      "metric": "comment_jaccard",
+      "score": 0.0000701877522372346,
+      "c": null,
+      "band": "not separated"
+    }
+  ],
+  "verdict": "independence supported on every separable metric",
+  "limits": [
+    "This is a lexical approximation of cleanflate-bench's tree-sitter token method: the same normalization but no parse tree, so a C macro body and a Rust impl-for block are handled by rule rather than by grammar.",
+    "There is no clone detector: copied logic that was renamed and reordered below the n-gram window is not found.",
+    "Cross-language pairs score lower on token metrics by construction, as the bench found: its n-gram metrics did not separate its controls, and its identifier and comment metrics did.",
+    "A structural metric needs a same-language positive control.",
+    "One target library is n = 1: a score is evidence about this subject and this prior art, not a general property."
+  ],
+  "at": "2026-11-10T22:49:01.603Z"
+}
