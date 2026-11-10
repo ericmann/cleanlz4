@@ -7,7 +7,7 @@ Started: 2026-11-10T00:53:38.909Z
 
 - [x] P0-01 Cargo workspace, make check, the deps script and the config file
 - [x] P0-02 Verify docs/spec against SOURCES.json
-- [ ] P0-03 Fetch the corpora, write MANIFEST.json and go offline
+- [x] P0-03 Fetch the corpora, write MANIFEST.json and go offline
 - [ ] P0-04 Phase 0 end: push and record the manual check
 - [ ] P1-01 Oracle FFI: the block functions
 - [ ] P1-02 Oracle FFI: frame compression and decompression
@@ -71,3 +71,7 @@ Workspace, fuzz crate, make check, deps script, config.json created; cargo build
 ### P0-02 — e26b635
 
 verify-spec-sources.mjs and its test added; real spec files match (3 files ok). Makefile check extended. Interpretation: none.
+
+### P0-03 — cb81e13
+
+Lockdown: network off from this commit. Archive SHA-256: cantrbry.tar.gz f140e8a5b73d3f53198555a63bfb827889394a42f20825df33c810c3d5e3f8fb; silesia.zip 0626e25f45c0ffb5dc801f13b7c82a3b75743ba07e3a71835a41e3d9f63c77af. fetched_at 2026-11-10T00:56:35Z. Tools: lz4 CLI v1.9.4, binding lz4-sys 1.11.1+lz4-1.10.0. Corpus dirs under testdata/corpora/{cantrbry,silesia}; manifest corpus names "canterbury","silesia". oracle::manifest module has Manifest::load/save, sha256_hex. .cargo/config.toml offline.
