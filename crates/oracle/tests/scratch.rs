@@ -13,20 +13,25 @@ use std::sync::Mutex;
 struct Counting;
 
 static FRESH: AtomicUsize = AtomicUsize::new(0);
+static LIVE: AtomicUsize = AtomicUsize::new(0);
 
 // SAFETY: every call is forwarded unchanged to the system allocator; the
 // counter only observes fresh allocations.
 unsafe impl GlobalAlloc for Counting {
     unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
         FRESH.fetch_add(1, Ordering::SeqCst);
+        LIVE.fetch_add(layout.size(), Ordering::SeqCst);
         unsafe { System.alloc(layout) }
     }
 
     unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
+        LIVE.fetch_sub(layout.size(), Ordering::SeqCst);
         unsafe { System.dealloc(ptr, layout) }
     }
 
     unsafe fn realloc(&self, ptr: *mut u8, layout: Layout, new_size: usize) -> *mut u8 {
+        LIVE.fetch_add(new_size, Ordering::SeqCst);
+        LIVE.fetch_sub(layout.size(), Ordering::SeqCst);
         unsafe { System.realloc(ptr, layout, new_size) }
     }
 }
@@ -145,4 +150,81 @@ fn legacy_fresh_allocations_do_not_grow_with_the_block_count() {
         streaming(&f16, &d16),
         streaming(&f64, &d64),
     );
+}
+
+/// One block of a large legacy frame, big enough to dominate the readings.
+const BIG_BLOCK: usize = 1 << 20;
+
+/// A legacy frame of three big blocks, with no end mark.
+fn big_legacy_frame() -> (Vec<u8>, Vec<u8>) {
+    let data = word_salad(11, 3 * BIG_BLOCK);
+    let mut f = 0x184C_2102u32.to_le_bytes().to_vec();
+    for chunk in data.chunks(BIG_BLOCK) {
+        let block = compress_default(chunk);
+        f.extend_from_slice(&(block.len() as u32).to_le_bytes());
+        f.extend_from_slice(&block);
+    }
+    (f, data)
+}
+
+/// Streams `input` and returns the live bytes after the last call that
+/// delivered output before the first `FrameDone`, the live bytes when
+/// `FrameDone` is reported, and the decoded bytes.
+fn live_around_frame_end(input: &[u8], capacity: usize) -> (usize, usize, Vec<u8>) {
+    // Allocated before counting starts mattering, so it adds a constant.
+    let mut out = Vec::with_capacity(capacity);
+    let mut buf = vec![0u8; BIG_BLOCK];
+    let mut d = Decoder::new(DecodeOptions::default());
+    let mut pos = 0;
+    let mut last_delivery = 0;
+    let mut at_done = None;
+    loop {
+        let p = d
+            .decode(input.get(pos..).unwrap_or(&[]), &mut buf, true)
+            .expect("decodes");
+        pos += p.consumed;
+        out.extend_from_slice(buf.get(..p.produced).unwrap_or(&[]));
+        let live = LIVE.load(Ordering::SeqCst);
+        if p.status == Status::FrameDone && at_done.is_none() {
+            at_done = Some(live);
+        }
+        if at_done.is_none() && p.produced > 0 {
+            last_delivery = live;
+        }
+        if p.status == Status::Done {
+            break;
+        }
+    }
+    (last_delivery, at_done.expect("a frame ended"), out)
+}
+
+fn assert_freed(label: &str, last_delivery: usize, at_done: usize) {
+    eprintln!("{label}: live {last_delivery} at last delivery, {at_done} at FrameDone");
+    assert!(
+        at_done + BIG_BLOCK / 2 <= last_delivery,
+        "{label}: scratch outlived its frame: {last_delivery} live then, {at_done} at FrameDone"
+    );
+}
+
+#[test]
+fn streaming_legacy_scratch_is_freed_at_the_end_mark() {
+    let _g = SERIAL.lock().unwrap_or_else(|e| e.into_inner());
+    let (mut f, data) = big_legacy_frame();
+    f.extend_from_slice(&0u32.to_le_bytes());
+    let (last, done, out) = live_around_frame_end(&f, data.len());
+    assert_eq!(out, data);
+    assert_freed("end mark", last, done);
+}
+
+#[test]
+fn streaming_legacy_scratch_is_freed_at_the_next_magic() {
+    let _g = SERIAL.lock().unwrap_or_else(|e| e.into_inner());
+    let (mut f, data) = big_legacy_frame();
+    let (second, second_data) = regular_frame(2, false);
+    f.extend_from_slice(&second);
+    let mut want = data;
+    want.extend_from_slice(&second_data);
+    let (last, done, out) = live_around_frame_end(&f, want.len());
+    assert_eq!(out, want);
+    assert_freed("next magic", last, done);
 }
