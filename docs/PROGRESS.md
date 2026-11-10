@@ -68,7 +68,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] R1-07 Refresh the evidence index after the reopened tasks
 - [x] R2-01 Test that a legacy frame's output capacity stays within the limit
 - [x] R2-02 Test the frame-combination generator itself, and the manifest against it
-- [ ] R3-01 Streaming decoder: skippable, legacy and concatenated frames and the trailing-data policy (no dictionaries)
+- [x] R3-01 Streaming decoder: skippable, legacy and concatenated frames and the trailing-data policy (no dictionaries)
 - [ ] R3-02 The malformed corpus and its results, without the Dict-ID case
 
 ## Log
@@ -638,3 +638,7 @@ New public Decoder::remainder(): bytes of a partial magic taken before a mismatc
 ### R1-07 — 0007813
 
 EVIDENCE.md: results table covers every tracked result file (read from the files: conformance 2349/2349, malformed 144/144 0 panics, five fuzz targets 3,601 s 0 crashes, diff_accept P4-08 100 divergences then P4-09 re-run 0); fenced list sorted and complete incl. malformed index and the 100 divergence inputs; Done items 1 and 3 met, 2/4/5 owed to summarize; no blocked or skipped tasks. README updated. evidence_index test passes.
+
+### R3-01 — dd4c98d
+
+Built on P3-02 (same round): stream.rs boundary, skippable, legacy and ReturnRemainder behaviour and 9 tests already existed. Added skippable_frame_first_streams_like_one_shot (3 magic low nibbles x 3 chunkings plus skippable-only inputs, equals one-shot) and rewrote DESIGN's "Streaming frame boundary (this task only)" entry to the full rule. conformance-check 2349/2349. kukulu_mutate is not available to me; removing the skippable arm of step_boundary would make the new test fail with BadMagic.
