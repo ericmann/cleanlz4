@@ -13,6 +13,7 @@ testdata/MANIFEST.json
 testdata/malformed/index.json
 testdata/results/bench-P4-10.json
 testdata/results/bench-P4-11.json
+testdata/results/conformance-P0-03.json
 testdata/results/conformance-P1-12.json
 testdata/results/conformance-P2-12.json
 testdata/results/divergences/02b3652175cdf639.bin
@@ -133,6 +134,7 @@ The 100 `testdata/results/divergences/*.bin` files are the `diff_accept` diverge
 |---|---|
 | `testdata/results/conformance-P1-12.json` | 156 of 156 passed, category `block` only; `corpus_sha256` b3d9df463fc95a8fe662fd023d9c39a7415277109a096f42599e43c836ae58c8 |
 | `testdata/results/conformance-P2-12.json` | 2349 of 2349 passed across all ten categories; `corpus_sha256` fd6392a28a4b239780f073ad70015c93f589163e4d232a9dd11502c24c93ba05 |
+| `testdata/results/conformance-P0-03.json` | 2349 of 2349 passed across all ten categories (0.1.1 baseline); `corpus_sha256` fd6392a28a4b239780f073ad70015c93f589163e4d232a9dd11502c24c93ba05 |
 | `testdata/results/fuzz-no_panic_block-P4-04.json` | target `no_panic_block`, 3,601 s, 20,681,767 runs, 0 crashes, 0 divergences, 1,249 corpus entries, seed 1 |
 | `testdata/results/fuzz-no_panic_frame-P4-05.json` | target `no_panic_frame`, 3,601 s, 101,577,396 runs, 0 crashes, 0 divergences, 834 corpus entries, seed 1 |
 | `testdata/results/fuzz-no_panic_stream-P4-06.json` | target `no_panic_stream`, 3,601 s, 21,051,494 runs, 0 crashes, 0 divergences, 895 corpus entries, seed 1 |
