@@ -112,6 +112,20 @@ impl Decoder {
         self.descriptor.as_ref()
     }
 
+    /// Under `TrailingData::ReturnRemainder`, the bytes this decoder took from
+    /// the input after the last frame that turned out not to begin one: one to
+    /// three bytes that were a prefix of a known magic number when they were
+    /// read. The caller's remainder is these bytes followed by the input not
+    /// consumed, which is what the one-shot decoder leaves after its
+    /// `consumed` count. Empty in every other case.
+    pub fn remainder(&self) -> &[u8] {
+        if matches!(self.stage, Stage::Finished) {
+            &self.buf
+        } else {
+            &[]
+        }
+    }
+
     /// Whether block and content checksums are verified.
     pub fn checksums_verified(&self) -> bool {
         self.options.verify_checksums
@@ -387,7 +401,8 @@ impl Decoder {
     /// At a frame boundary: collect the magic number byte by byte, then start
     /// the frame it names. Bytes that cannot continue a known magic number are
     /// left unconsumed: `BadMagic` for the first frame, else the trailing-data
-    /// policy (bytes of a partial magic number taken earlier stay consumed).
+    /// policy (bytes of a partial magic number taken earlier are handed back by
+    /// `remainder`).
     fn step_boundary(&mut self, input: &[u8], pos: &mut usize, end_of_input: bool) -> Result<Step> {
         while self.buf.len() < 4 {
             let Some(&b) = input.get(*pos) else {
@@ -417,7 +432,8 @@ impl Decoder {
                 return match self.options.trailing_data {
                     TrailingData::Error => Err(Error::TrailingData),
                     TrailingData::ReturnRemainder => {
-                        self.buf.clear();
+                        // The bytes of the partial magic taken so far stay in
+                        // `buf`: `remainder` hands them back.
                         self.stage = Stage::Finished;
                         Ok(Step::Continue)
                     }

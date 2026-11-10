@@ -536,3 +536,83 @@ fn every_one_shot_test_frame_matches_when_streamed_bytewise() {
         assert_eq!(streamed, one_shot(c), "{c:02x?}");
     }
 }
+
+/// Stream `input` under `ReturnRemainder` with the given piece sizes (cycled);
+/// returns the decoded bytes and the bytes left to the caller: the decoder's
+/// `remainder` followed by all input not consumed.
+fn stream_remainder(input: &[u8], pieces: &[usize]) -> Result<(Vec<u8>, Vec<u8>), Error> {
+    let options = DecodeOptions {
+        trailing_data: TrailingData::ReturnRemainder,
+        ..DecodeOptions::default()
+    };
+    let mut d = Decoder::new(options);
+    let mut out = Vec::new();
+    let mut buf = [0u8; 64];
+    let mut pos = 0usize;
+    // Unconsumed bytes are re-presented with the next piece, as a caller would.
+    for k in 0..(10 * input.len() + 100) {
+        let want = pieces[k % pieces.len()].max(1);
+        let end = (pos + want).min(input.len());
+        let p = d.decode(&input[pos..end], &mut buf, end == input.len())?;
+        pos += p.consumed;
+        out.extend_from_slice(&buf[..p.produced]);
+        if p.status == Status::Done {
+            let mut left = d.remainder().to_vec();
+            left.extend_from_slice(&input[pos..]);
+            return Ok((out, left));
+        }
+    }
+    panic!("no progress");
+}
+
+#[test]
+fn return_remainder_leaves_a_trailing_magic_prefix_unconsumed() {
+    let f = frame(0x60, &[(true, b"abc".to_vec())], b"abc");
+    let tails: [&[u8]; 3] = [
+        &[0x04, 0x22, 0x4D, 0x00, 0xAA], // a regular-magic prefix, then a mismatch
+        &[0x50, 0x2A, 0x4D, 0x00],       // a skippable-magic prefix
+        &[0x02, 0x21, 0x4C, 0x00],       // a legacy-magic prefix
+    ];
+    let options = DecodeOptions {
+        trailing_data: TrailingData::ReturnRemainder,
+        ..DecodeOptions::default()
+    };
+    let mut seed = 12345u64;
+    for tail in tails {
+        let input = [f.clone(), tail.to_vec()].concat();
+        let one = decompress_frame_with(&input, &options).expect("one-shot");
+        assert_eq!(one.consumed, f.len());
+        let want_left = &input[one.consumed..];
+        let mut splits: Vec<Vec<usize>> = vec![vec![input.len()], vec![1], vec![2], vec![3]];
+        for _ in 0..20 {
+            let mut v = Vec::new();
+            for _ in 0..8 {
+                seed = seed
+                    .wrapping_mul(6364136223846793005)
+                    .wrapping_add(1442695040888963407);
+                v.push(1 + (seed >> 33) as usize % 9);
+            }
+            splits.push(v);
+        }
+        for pieces in splits {
+            let (out, left) = stream_remainder(&input, &pieces).expect("streamed");
+            assert_eq!(out, one.data, "{tail:02x?} {pieces:?}");
+            assert_eq!(left, want_left, "{tail:02x?} {pieces:?}");
+        }
+    }
+    // A lone prefix byte at the end of the input is TruncatedInput on both paths.
+    let input = [f.clone(), vec![0x04]].concat();
+    assert_eq!(
+        decompress_frame_with(&input, &options).map(|o| o.data),
+        Err(Error::TruncatedInput)
+    );
+    for pieces in [vec![input.len()], vec![1]] {
+        assert_eq!(
+            stream_remainder(&input, &pieces).map(|r| r.0),
+            Err(Error::TruncatedInput)
+        );
+    }
+    // Under the default policy the tail is TrailingData.
+    let input = [f, tails[0].to_vec()].concat();
+    assert_eq!(run(&input, 1, 8), Err(Error::TrailingData));
+}
