@@ -10,7 +10,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P0-03 Regenerate the corpus, record the baseline conformance run and lock down
 - [x] P0-04 Phase 0 end: push and record the manual check
 - [x] P1-01 Dictionary differential test: every dictionary entry against the lz4 program
-- [ ] P1-02 Kill the dict_dependent mutant in the oracle's dict module
+- [x] P1-02 Kill the dict_dependent mutant in the oracle's dict module
 - [ ] P1-03 Kill the dropped-dictionary mutant in the conformance runner
 - [ ] P1-04 Merge is_magic into magic_kind
 - [ ] P1-05 Benchmark before the scratch-buffer change
@@ -54,3 +54,7 @@ Push: done (origin build/2026-11-10-2). Manual check: NOT VERIFIED (human): test
 ### P1-01 — 4e039a9
 
 Added crates/oracle/tests/dict_corpus.rs (3 tests, all pass first run; the decoder already agreed). Compared 72 dictionary entries: 54 frame (28 with dict_id... 36 with, 18 without per size breakdown: with-id 18+10+8, without 9+5+4) and 18 block-dict; sizes 4096/65536/131072 all covered. Comment fixes in dict.rs, cli.rs, fuzz_logic.rs; DESIGN.md: new decision, two stale statements corrected, spec-rules row replaced. make corpus left MANIFEST.json unchanged; conformance-check 2349/2349.
+
+### P1-02 — 3df514c
+
+Added a_block_sharing_nothing_with_the_dictionary_is_not_dict_dependent in tests/dict.rs. Mutant (Ok(_) => true) fails it: "size 4096: labelled dict_dependent" at tests/dict.rs:99; undone, git diff --exit-code on dict.rs clean. dict.rs unchanged.
