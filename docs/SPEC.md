@@ -238,7 +238,7 @@ If the binding crate lacks one of these, the task blocks and names it. It never 
 - lint: `cargo clippy --workspace --all-targets -- -D warnings`
 - test: `cargo test --workspace`
 - test one: `cargo test --workspace {filter}`
-- guard: `node "$CLAUDE_PLUGIN_ROOT/scripts/cleanroom-guard.mjs" --self-test docs/cleanroom.json` (adjust to the installed plugin path)
+- guard: `node /home/ericmann/.claude/plugins/cache/displacetech/kukulu/0.8.0/scripts/cleanroom-guard.mjs --self-test docs/cleanroom.json`
 - deps: a script that fails if `crates/cleanlz4/Cargo.toml` has a non-empty `[dependencies]` or any `unsafe` token appears under `crates/cleanlz4/`
 - fuzz (Phase 4 only): `cargo +nightly fuzz run <target> -- -max_total_time=<fuzz.seconds_per_target>`
 
