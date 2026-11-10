@@ -242,3 +242,88 @@ fn every_frame_level_meets_every_block_size() {
         }
     }
 }
+
+type FrameKey = (i64, u64, bool, bool, bool, bool);
+
+#[test]
+fn frame_combos_are_distinct_and_every_level_meets_every_block_size() {
+    let cfg = Config::load().expect("config");
+    let combos = frame_combos();
+    assert_eq!(combos.len(), 64);
+    for (i, a) in combos.iter().enumerate() {
+        for b in combos.iter().skip(i + 1) {
+            assert_ne!(a, b);
+        }
+    }
+    let mut levels = cfg.conformance.frame_levels.clone();
+    levels.sort_unstable();
+    levels.dedup();
+    assert!(!levels.is_empty());
+    for level in levels {
+        let mine: Vec<_> = combos
+            .iter()
+            .enumerate()
+            .filter(|(i, _)| frame_level(&cfg, *i) == level)
+            .map(|(_, c)| c)
+            .collect();
+        assert!(!mine.is_empty(), "level {level}");
+        for id in 4u8..=7 {
+            assert!(
+                mine.iter().any(|c| c.block_size_id == id),
+                "level {level} block size {id}"
+            );
+        }
+        for v in [false, true] {
+            assert!(mine.iter().any(|c| c.linked == v), "level {level} linked");
+            assert!(
+                mine.iter().any(|c| c.block_checksum == v),
+                "level {level} block checksum"
+            );
+            assert!(
+                mine.iter().any(|c| c.content_checksum == v),
+                "level {level} content checksum"
+            );
+            assert!(
+                mine.iter().any(|c| c.content_size == v),
+                "level {level} content size"
+            );
+        }
+    }
+}
+
+#[test]
+fn manifest_frame_entries_match_the_generator() {
+    let cfg = Config::load().expect("config");
+    let c = conformance();
+    let want: std::collections::BTreeSet<FrameKey> = frame_combos()
+        .iter()
+        .enumerate()
+        .map(|(i, f)| {
+            (
+                i64::from(frame_level(&cfg, i)),
+                u64::from(f.block_size_id),
+                f.linked,
+                f.block_checksum,
+                f.content_checksum,
+                f.content_size,
+            )
+        })
+        .collect();
+    assert_eq!(want.len(), 64);
+    for suite in ["synthetic", "frames-cantrbry"] {
+        let mut inputs: std::collections::BTreeMap<&str, std::collections::BTreeSet<FrameKey>> =
+            Default::default();
+        for e in c.entries.iter().filter(|e| e.suite == suite) {
+            let (id, linked, bc, cc, cs) = param_key(e);
+            let level = e.params["level"].as_i64().expect("level");
+            inputs
+                .entry(&e.input)
+                .or_default()
+                .insert((level, id, linked, bc, cc, cs));
+        }
+        assert!(!inputs.is_empty(), "{suite}");
+        for (input, got) in inputs {
+            assert_eq!(got, want, "{suite} {input}");
+        }
+    }
+}
