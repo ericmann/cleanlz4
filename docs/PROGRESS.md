@@ -63,7 +63,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] R1-02 Hold the output limit to its memory bound, and test it past several blocks
 - [x] R1-03 Test the differential module's normalizations and cap rule
 - [x] R1-04 Assert the Dict-ID probe's fixed verdict once dictionaries exist
-- [ ] R1-05 Streaming ReturnRemainder leaves a trailing magic prefix to the caller
+- [x] R1-05 Streaming ReturnRemainder leaves a trailing magic prefix to the caller
 - [x] R1-06 Frame suites: every level meets every block size
 - [ ] R1-07 Refresh the evidence index after the reopened tasks
 - [x] R2-01 Test that a legacy frame's output capacity stays within the limit
@@ -630,3 +630,7 @@ Table in DESIGN Measurements. cov at 60 s -> end, last NEW second (share of 3,60
 ### R1-04 — 0f4915e
 
 tests/diff.rs: the Dict-ID probe now asserts cleanlz4::decompress_frame_with(default options) == Err(DictionaryRequired) and the comparison stays Agree; every other probe keeps its fixed-verdict assertion. All tests pass.
+
+### R1-05 — 256714b
+
+New public Decoder::remainder(): bytes of a partial magic taken before a mismatch under ReturnRemainder; caller's remainder = remainder() + unconsumed input = one-shot input[consumed..]. Chose exposing over not-consuming (the latter would stall fixed-window one-byte feeders and existing harnesses); DESIGN updated (replaces the P3-02 limitation). Test return_remainder_leaves_a_trailing_magic_prefix_unconsumed passes (3 tails x whole, 1,2,3 bytes and 20 random splits; lone 04 is TruncatedInput both paths; default policy TrailingData). make conformance-check 2349/2349.
