@@ -101,3 +101,39 @@ fn runner_counts_a_panic_as_failed() {
     assert_eq!(r.failures[0].1, "panic");
     let _ = std::fs::remove_dir_all(&d);
 }
+
+#[test]
+fn evidence_index_lists_every_result_file() {
+    let root = oracle::config::repo_root();
+    let evidence =
+        std::fs::read_to_string(root.join("docs").join("EVIDENCE.md")).expect("EVIDENCE.md");
+    // The first fenced block under "## Evidence files".
+    let after = evidence
+        .split("## Evidence files")
+        .nth(1)
+        .expect("Evidence files heading");
+    let block = after.split("```").nth(1).expect("fenced block");
+    let listed: Vec<&str> = block
+        .lines()
+        .map(str::trim)
+        .filter(|l| !l.is_empty() && *l != "text")
+        .collect();
+    let mut sorted = listed.clone();
+    sorted.sort_unstable();
+    assert_eq!(listed, sorted, "the list is sorted");
+    for path in &listed {
+        assert!(root.join(path).is_file(), "listed but missing: {path}");
+    }
+    let out = std::process::Command::new("git")
+        .args(["ls-files", "testdata/results"])
+        .current_dir(&root)
+        .output()
+        .expect("git ls-files");
+    let tracked = String::from_utf8_lossy(&out.stdout).into_owned();
+    for path in tracked.lines().filter(|p| !p.ends_with(".gitkeep")) {
+        assert!(
+            listed.contains(&path),
+            "tracked result file not in the index: {path}"
+        );
+    }
+}
