@@ -69,7 +69,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] R2-01 Test that a legacy frame's output capacity stays within the limit
 - [x] R2-02 Test the frame-combination generator itself, and the manifest against it
 - [x] R3-01 Streaming decoder: skippable, legacy and concatenated frames and the trailing-data policy (no dictionaries)
-- [ ] R3-02 The malformed corpus and its results, without the Dict-ID case
+- [x] R3-02 The malformed corpus and its results, without the Dict-ID case
 
 ## Log
 
@@ -642,3 +642,7 @@ EVIDENCE.md: results table covers every tracked result file (read from the files
 ### R3-01 — dd4c98d
 
 Built on P3-02 (same round): stream.rs boundary, skippable, legacy and ReturnRemainder behaviour and 9 tests already existed. Added skippable_frame_first_streams_like_one_shot (3 magic low nibbles x 3 chunkings plus skippable-only inputs, equals one-shot) and rewrote DESIGN's "Streaming frame boundary (this task only)" entry to the full rule. conformance-check 2349/2349. kukulu_mutate is not available to me; removing the skippable arm of step_boundary would make the new test fail with BadMagic.
+
+### R3-02 — 1e3a656
+
+Built on P2-13 (same round). make malformed TASK=R3-02 wrote testdata/results/malformed-R3-02.json: total 144, matched_expected_error 144, panics 0. The six acceptance tests already exist and pass. Corpus keeps the Dict-ID-without-dictionary case (DictionaryRequired) now that P2-08 exists. EVIDENCE.md and DESIGN.md list the new file.
