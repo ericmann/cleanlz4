@@ -20,7 +20,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-09 Synthetic inputs and block round-trip tests against the oracle
 - [!] P1-10 Oracle dictionary blocks and the dictionary differential test
 - [x] P1-11 Conformance generator: the block suite and the manifest's entries
-- [ ] P1-12 Conformance runner and the results for category block
+- [x] P1-12 Conformance runner and the results for category block
 - [ ] P1-13 DESIGN.md: the Phase 1 spec-rule report
 - [ ] P1-14 Phase 1 end: push and record the manual check
 - [ ] P2-01 Frame descriptor parsing and introspection
@@ -123,3 +123,7 @@ BLOCKED: Tried: declared LZ4_decompress_safe_usingDict (SPEC §6.5, Block) via t
 ### P1-11 — 5d1f408
 
 corpus.rs: SUITES, conformance_dir, synthetic_inputs ("synthetic/<name>"), corpus_file_inputs, block_entries, block_suite(_synthetic), generate(suites). manifest.rs: Entry (with flattened `extra` map), Conformance{seed,corpus_sha256,entries,finalize()}, Manifest.conformance: Option<Conformance>. gen_corpus bin; `make corpus` (8s). Entry ids "block/<input>/<default|hcN>", file paths relative to testdata/conformance/, params {"mode": slug}. 206 MB generated (gitignored). MANIFEST regeneration is byte-stable. Tests corpus.rs x4. Later suites add entries via Entry.extra and register in SUITES + generate().
+
+### P1-12 — 7343356
+
+Conformance block: 156 of 156 passed (testdata/results/conformance-P1-12.json, corpus_sha256 b3d9df46...). results.rs (ConformanceResult/MalformedResult/FuzzResult/BenchResult, write_result, CATEGORIES), runner.rs (run_entries, Decoder type, cleanlz4_decoder: block only; later tasks add frame kinds), bin conformance (--task, --categories, --check; regenerates missing suites). Makefile conformance/conformance-check. Tests results.rs x4.
