@@ -84,3 +84,28 @@ fn wrong_dictionary_never_panics_and_agrees_with_the_oracle() {
         }
     }
 }
+
+#[test]
+fn a_block_sharing_nothing_with_the_dictionary_is_not_dict_dependent() {
+    let cfg = Config::load().expect("config");
+    // ASCII dictionary, high-byte data: no four-byte match can reach into it.
+    let data: Vec<u8> = (0..16 * 1024).map(|i| 0x80 + (i % 0x30) as u8).collect();
+    assert!(data.iter().all(|b| *b >= 0x80));
+    for size in &cfg.dict.sizes_bytes {
+        let size = *size as usize;
+        let dict = word_salad(cfg.fuzz.seed, size);
+        assert!(dict.iter().all(|b| *b < 0x80), "size {size}");
+        let b = dict_block(&dict, &data).expect("compressed second block");
+        assert!(!b.dict_dependent, "size {size}: labelled dict_dependent");
+        assert_eq!(
+            decompress_safe(&b.block, data.len()).expect("oracle decodes"),
+            data,
+            "size {size}: oracle output"
+        );
+        assert_eq!(
+            cleanlz4::decompress_block(&b.block, data.len()).expect("cleanlz4 decodes"),
+            data,
+            "size {size}: cleanlz4 output"
+        );
+    }
+}
