@@ -1,77 +1,183 @@
 {
   "verify": [
     "node /home/ericmann/.claude/plugins/cache/displacetech/kukulu/0.8.0/scripts/cleanroom-guard.mjs --self-test docs/cleanroom.json",
-    { "cmd": "cargo fmt --all -- --check", "from": "P0-01" },
-    { "cmd": "cargo clippy --workspace --all-targets -- -D warnings", "timeoutMs": 1200000, "from": "P0-01" },
-    { "cmd": "cargo test --workspace", "timeoutMs": 1800000, "from": "P0-01" },
-    { "cmd": "bash scripts/check-deps.sh", "from": "P0-01" },
-    { "cmd": "bash scripts/test-check-deps.sh", "from": "P0-01" },
-    { "cmd": "node scripts/verify-spec-sources.mjs", "from": "P0-02" }
+    {
+      "cmd": "cargo fmt --all -- --check",
+      "from": "P0-01"
+    },
+    {
+      "cmd": "cargo clippy --workspace --all-targets -- -D warnings",
+      "timeoutMs": 1200000,
+      "from": "P0-01"
+    },
+    {
+      "cmd": "cargo test --workspace",
+      "timeoutMs": 1800000,
+      "from": "P0-01"
+    },
+    {
+      "cmd": "bash scripts/check-deps.sh",
+      "from": "P0-01"
+    },
+    {
+      "cmd": "bash scripts/test-check-deps.sh",
+      "from": "P0-01"
+    },
+    {
+      "cmd": "node scripts/verify-spec-sources.mjs",
+      "from": "P0-02"
+    }
   ],
   "extraVerify": {
     "fuzz/": [
-      { "cmd": "cargo fmt --manifest-path fuzz/Cargo.toml -- --check", "from": "P0-01" },
-      { "cmd": "cargo +nightly fuzz build", "timeoutMs": 1800000, "from": "P0-01" }
+      {
+        "cmd": "cargo fmt --manifest-path fuzz/Cargo.toml -- --check",
+        "from": "P0-01"
+      },
+      {
+        "cmd": "cargo +nightly fuzz build",
+        "timeoutMs": 1800000,
+        "from": "P0-01"
+      }
     ],
     "crates/cleanlz4/src/": [
-      { "cmd": "make conformance-check", "timeoutMs": 3600000, "from": "P2-12" }
+      {
+        "cmd": "make conformance-check",
+        "timeoutMs": 3600000,
+        "from": "P2-12"
+      }
     ],
     "testdata/results/conformance-P1-12.json": [
-      { "cmd": "make conformance TASK=P1-12 CATEGORIES=block", "timeoutMs": 3600000, "from": "P1-12" }
+      {
+        "cmd": "make conformance TASK=P1-12 CATEGORIES=block",
+        "timeoutMs": 3600000,
+        "from": "P1-12"
+      }
     ],
     "testdata/results/conformance-P2-12.json": [
-      { "cmd": "make conformance TASK=P2-12 CATEGORIES=all", "timeoutMs": 7200000, "from": "P2-12" }
+      {
+        "cmd": "make conformance TASK=P2-12 CATEGORIES=all",
+        "timeoutMs": 7200000,
+        "from": "P2-12"
+      }
     ],
     "testdata/results/fuzz-no_panic_block-P4-04.json": [
-      { "cmd": "make fuzz-run TARGET=no_panic_block TASK=P4-04", "timeoutMs": 4500000, "from": "P4-04" }
+      {
+        "cmd": "make fuzz-run TARGET=no_panic_block TASK=P4-04",
+        "timeoutMs": 4500000,
+        "from": "P4-04"
+      }
     ],
     "testdata/results/fuzz-no_panic_frame-P4-05.json": [
-      { "cmd": "make fuzz-run TARGET=no_panic_frame TASK=P4-05", "timeoutMs": 4500000, "from": "P4-05" }
+      {
+        "cmd": "make fuzz-run TARGET=no_panic_frame TASK=P4-05",
+        "timeoutMs": 4500000,
+        "from": "P4-05"
+      }
     ],
     "testdata/results/fuzz-no_panic_stream-P4-06.json": [
-      { "cmd": "make fuzz-run TARGET=no_panic_stream TASK=P4-06", "timeoutMs": 4500000, "from": "P4-06" }
+      {
+        "cmd": "make fuzz-run TARGET=no_panic_stream TASK=P4-06",
+        "timeoutMs": 4500000,
+        "from": "P4-06"
+      }
     ],
     "testdata/results/fuzz-diff_roundtrip-P4-07.json": [
-      { "cmd": "make fuzz-run TARGET=diff_roundtrip TASK=P4-07", "timeoutMs": 4500000, "from": "P4-07" }
+      {
+        "cmd": "make fuzz-run TARGET=diff_roundtrip TASK=P4-07",
+        "timeoutMs": 4500000,
+        "from": "P4-07"
+      }
     ],
     "testdata/results/fuzz-diff_accept-P4-08.json": [
-      { "cmd": "make fuzz-run TARGET=diff_accept TASK=P4-08", "timeoutMs": 4500000, "from": "P4-08" }
+      {
+        "cmd": "make fuzz-run TARGET=diff_accept TASK=P4-08",
+        "timeoutMs": 4500000,
+        "from": "P4-08"
+      }
     ],
     "testdata/results/fuzz-no_panic_block-P4-09.json": [
-      { "cmd": "make fuzz-run TARGET=no_panic_block TASK=P4-09", "timeoutMs": 4500000, "from": "P4-09" }
+      {
+        "cmd": "make fuzz-run TARGET=no_panic_block TASK=P4-09",
+        "timeoutMs": 4500000,
+        "from": "P4-09"
+      }
     ],
     "testdata/results/fuzz-no_panic_frame-P4-09.json": [
-      { "cmd": "make fuzz-run TARGET=no_panic_frame TASK=P4-09", "timeoutMs": 4500000, "from": "P4-09" }
+      {
+        "cmd": "make fuzz-run TARGET=no_panic_frame TASK=P4-09",
+        "timeoutMs": 4500000,
+        "from": "P4-09"
+      }
     ],
     "testdata/results/fuzz-no_panic_stream-P4-09.json": [
-      { "cmd": "make fuzz-run TARGET=no_panic_stream TASK=P4-09", "timeoutMs": 4500000, "from": "P4-09" }
+      {
+        "cmd": "make fuzz-run TARGET=no_panic_stream TASK=P4-09",
+        "timeoutMs": 4500000,
+        "from": "P4-09"
+      }
     ],
     "testdata/results/fuzz-diff_roundtrip-P4-09.json": [
-      { "cmd": "make fuzz-run TARGET=diff_roundtrip TASK=P4-09", "timeoutMs": 4500000, "from": "P4-09" }
+      {
+        "cmd": "make fuzz-run TARGET=diff_roundtrip TASK=P4-09",
+        "timeoutMs": 4500000,
+        "from": "P4-09"
+      }
     ],
     "testdata/results/fuzz-diff_accept-P4-09.json": [
-      { "cmd": "make fuzz-run TARGET=diff_accept TASK=P4-09", "timeoutMs": 4500000, "from": "P4-09" }
+      {
+        "cmd": "make fuzz-run TARGET=diff_accept TASK=P4-09",
+        "timeoutMs": 4500000,
+        "from": "P4-09"
+      }
     ]
   },
-  "build": ["cargo build --workspace --release"],
+  "build": [
+    "cargo build --workspace --release"
+  ],
   "baseBranch": "main",
   "branchPrefix": "build/",
-  "maxRounds": 3,
-  "maxRoundsHard": 6,
+  "maxRounds": 6,
+  "maxRoundsHard": 8,
   "flight": "cleanlz4",
   "mutation": {
     "targeted": {
-      "cargo": { "cmd": "cargo test --workspace {filter}", "timeoutMs": 1800000 }
+      "cargo": {
+        "cmd": "cargo test --workspace {filter}",
+        "timeoutMs": 1800000
+      }
     }
   },
   "cleanroom": {
     "similarity": {
-      "subject": ["crates/cleanlz4/src"],
+      "subject": [
+        "crates/cleanlz4/src"
+      ],
       "pairs": [
-        { "id": "independent-vs-c", "role": "negative", "left": "/home/ericmann/Projects/prior-art/lz4_flex/src", "right": "/home/ericmann/Projects/prior-art/lz4/lib" },
-        { "id": "derived-vs-c", "role": "positive", "left": "/home/ericmann/Projects/prior-art/c2rust-lz4/src", "right": "/home/ericmann/Projects/prior-art/lz4/lib" },
-        { "id": "subject-vs-c", "role": "test", "left": "subject", "right": "/home/ericmann/Projects/prior-art/lz4/lib" },
-        { "id": "subject-vs-indep", "role": "test", "left": "subject", "right": "/home/ericmann/Projects/prior-art/lz4_flex/src" }
+        {
+          "id": "independent-vs-c",
+          "role": "negative",
+          "left": "/home/ericmann/Projects/prior-art/lz4_flex/src",
+          "right": "/home/ericmann/Projects/prior-art/lz4/lib"
+        },
+        {
+          "id": "derived-vs-c",
+          "role": "positive",
+          "left": "/home/ericmann/Projects/prior-art/c2rust-lz4/src",
+          "right": "/home/ericmann/Projects/prior-art/lz4/lib"
+        },
+        {
+          "id": "subject-vs-c",
+          "role": "test",
+          "left": "subject",
+          "right": "/home/ericmann/Projects/prior-art/lz4/lib"
+        },
+        {
+          "id": "subject-vs-indep",
+          "role": "test",
+          "left": "subject",
+          "right": "/home/ericmann/Projects/prior-art/lz4_flex/src"
+        }
       ]
     }
   },
@@ -79,7 +185,9 @@
     {
       "id": "no-unsafe-token",
       "description": "SPEC 3.2: the token unsafe appears nowhere under crates/cleanlz4/ (the crate root's forbid(unsafe_code) attribute is not the token).",
-      "paths": ["crates/cleanlz4/"],
+      "paths": [
+        "crates/cleanlz4/"
+      ],
       "pattern": "\\bunsafe\\b",
       "shouldMatch": [
         "    unsafe { core::ptr::read(p) }",
@@ -95,7 +203,9 @@
     {
       "id": "no-panic-lint-suppression",
       "description": "SPEC 3.3: library code never switches off the four panic lints (or clippy::all / clippy::restriction) with allow or expect.",
-      "paths": ["crates/cleanlz4/src/"],
+      "paths": [
+        "crates/cleanlz4/src/"
+      ],
       "pattern": "\\b(allow|expect)\\s*\\([^)]*clippy::(unwrap_used|expect_used|panic|indexing_slicing|all|restriction)\\b",
       "shouldMatch": [
         "#[allow(clippy::unwrap_used)]",
@@ -113,7 +223,9 @@
     {
       "id": "no-panicking-macros",
       "description": "SPEC 3.3: no unreachable!, todo! or unimplemented! under crates/cleanlz4/src/ (clippy::panic does not cover them).",
-      "paths": ["crates/cleanlz4/src/"],
+      "paths": [
+        "crates/cleanlz4/src/"
+      ],
       "pattern": "\\b(unreachable|todo|unimplemented)!\\s*[(\\[{]",
       "shouldMatch": [
         "        _ => unreachable!(),",
@@ -128,7 +240,9 @@
     {
       "id": "cleanlz4-independent-of-oracle",
       "description": "SPEC 4: crates/cleanlz4 never depends on crates/oracle and never mentions the oracle's binding crate.",
-      "paths": ["crates/cleanlz4/"],
+      "paths": [
+        "crates/cleanlz4/"
+      ],
       "flags": "i",
       "pattern": "lz4[-_]sys|\\.\\./oracle|\\boracle\\s*=|\\boracle::|extern\\s+crate\\s+oracle",
       "shouldMatch": [
@@ -147,7 +261,9 @@
     {
       "id": "cleanlz4-no-extra-dependency-tables",
       "description": "SPEC 3.2: crates/cleanlz4/Cargo.toml has no dev-, build-, target- or per-crate dependency table; scripts/check-deps.sh proves the plain [dependencies] table is empty.",
-      "paths": ["crates/cleanlz4/Cargo.toml"],
+      "paths": [
+        "crates/cleanlz4/Cargo.toml"
+      ],
       "pattern": "^\\s*\\[\\s*(dev-dependencies|build-dependencies|target\\..*dependencies|(dev-|build-)?dependencies\\.[^\\]]+)\\s*\\]",
       "shouldMatch": [
         "[dev-dependencies]",
@@ -164,7 +280,14 @@
     {
       "id": "no-prior-art-crates",
       "description": "SPEC 3.1: no LZ4 or xxHash crate other than the oracle's binding crate is named in any manifest, lockfile or source file.",
-      "paths": ["Cargo.toml", "Cargo.lock", "crates/", "fuzz/Cargo.toml", "fuzz/Cargo.lock", "fuzz/fuzz_targets/"],
+      "paths": [
+        "Cargo.toml",
+        "Cargo.lock",
+        "crates/",
+        "fuzz/Cargo.toml",
+        "fuzz/Cargo.lock",
+        "fuzz/fuzz_targets/"
+      ],
       "flags": "i",
       "pattern": "\\b(lz4[-_]flex|twox[-_]hash|xxhash[-_]rust|lz[-_]fear|lzzzz|lz4[-_]compression|lz4[-_]java|python[-_]lz4)\\b|^\\s*(lz4|lz4_rs|xxhash|xxh3)\\s*=|^name = \"(lz4|xxhash|xxh3)\"$",
       "shouldMatch": [
@@ -185,7 +308,10 @@
     {
       "id": "oracle-calls-only-the-permitted-c-api",
       "description": "SPEC 3.7 and 6.5: the only reference-library functions called anywhere are the sixteen named in SPEC 6.5.",
-      "paths": ["crates/oracle/", "fuzz/fuzz_targets/"],
+      "paths": [
+        "crates/oracle/",
+        "fuzz/fuzz_targets/"
+      ],
       "pattern": "\\bLZ4F?_(?!(?:compress_default|compress_HC|compressBound|decompress_safe|decompress_safe_usingDict|createCompressionContext|compressBegin|compressUpdate|compressEnd|freeCompressionContext|createDecompressionContext|decompress|freeDecompressionContext|isError|getErrorName)\\s*\\()\\w+\\s*\\(",
       "shouldMatch": [
         "let n = LZ4_decompress_fast(src, dst, len);",
@@ -207,8 +333,17 @@
     {
       "id": "binding-crate-only-in-ffi-module",
       "description": "SPEC 6.5: the binding crate is named in crates/oracle/src/ffi.rs (and crates/oracle/Cargo.toml) only; every other file goes through the oracle crate's safe wrappers.",
-      "paths": ["crates/oracle/src/", "crates/oracle/tests/", "crates/oracle/examples/", "crates/oracle/benches/", "fuzz/fuzz_targets/", "fuzz/Cargo.toml"],
-      "exclude": ["crates/oracle/src/ffi.rs"],
+      "paths": [
+        "crates/oracle/src/",
+        "crates/oracle/tests/",
+        "crates/oracle/examples/",
+        "crates/oracle/benches/",
+        "fuzz/fuzz_targets/",
+        "fuzz/Cargo.toml"
+      ],
+      "exclude": [
+        "crates/oracle/src/ffi.rs"
+      ],
       "pattern": "lz4[-_]sys",
       "shouldMatch": [
         "use lz4_sys::*;",
@@ -223,7 +358,11 @@
     {
       "id": "leaf-modules-import-only-error",
       "description": "SPEC 4: xxh32.rs, block.rs and error.rs import core and std only; the one crate-internal import they may make is crate::error.",
-      "paths": ["crates/cleanlz4/src/xxh32.rs", "crates/cleanlz4/src/block.rs", "crates/cleanlz4/src/error.rs"],
+      "paths": [
+        "crates/cleanlz4/src/xxh32.rs",
+        "crates/cleanlz4/src/block.rs",
+        "crates/cleanlz4/src/error.rs"
+      ],
       "pattern": "\\b(crate|super)::(frame|stream|block|xxh32)\\b|\\b(crate|super)::\\{",
       "shouldMatch": [
         "use crate::frame::FrameDescriptor;",
@@ -241,7 +380,9 @@
     {
       "id": "frame-does-not-import-stream",
       "description": "SPEC 4: frame.rs may import block and xxh32, never stream.",
-      "paths": ["crates/cleanlz4/src/frame.rs"],
+      "paths": [
+        "crates/cleanlz4/src/frame.rs"
+      ],
       "pattern": "\\b(crate|super)::stream\\b|\\b(crate|super)::\\{[^}]*\\bstream\\b",
       "shouldMatch": [
         "use crate::stream::Decoder;",
@@ -256,7 +397,12 @@
     {
       "id": "no-hardcoded-output-limit",
       "description": "SPEC 3.5 and 5.1: limits.max_output_bytes (1 GiB) is written once, on the line that defines DEFAULT_MAX_OUTPUT_BYTES in crates/cleanlz4/src/lib.rs, and in testdata/config.json.",
-      "paths": ["crates/", "fuzz/fuzz_targets/", "Makefile", "scripts/"],
+      "paths": [
+        "crates/",
+        "fuzz/fuzz_targets/",
+        "Makefile",
+        "scripts/"
+      ],
       "pattern": "^(?!.*DEFAULT_MAX_OUTPUT_BYTES).*(\\b1073741824\\b|\\b1_073_741_824\\b|\\b1(u64|usize|u32|_u64|_usize)?\\s*<<\\s*30\\b|1024\\s*\\*\\s*1024\\s*\\*\\s*1024|\\b0x4000_?0000\\b)",
       "shouldMatch": [
         "let cap: u64 = 1 << 30;",
@@ -276,7 +422,12 @@
     {
       "id": "no-hardcoded-fuzz-tunables",
       "description": "SPEC 3.5 and 5.1: fuzz.seconds_per_target, fuzz.smoke_seconds and fuzz.seed are read from testdata/config.json, never written as literals in code, the Makefile or scripts.",
-      "paths": ["crates/", "fuzz/fuzz_targets/", "Makefile", "scripts/"],
+      "paths": [
+        "crates/",
+        "fuzz/fuzz_targets/",
+        "Makefile",
+        "scripts/"
+      ],
       "pattern": "max_total_time\\s*=\\s*[0-9]|-seed=[0-9]|\\b(seconds_per_target|smoke_seconds|fuzz_seed|SECONDS_PER_TARGET|SMOKE_SECONDS|FUZZ_SEED)\\s*(:\\s*\\w+\\s*)?([?+:]?=|:)\\s*[0-9]",
       "shouldMatch": [
         "cargo +nightly fuzz run $(TARGET) -- -max_total_time=3600",
@@ -297,7 +448,12 @@
     {
       "id": "no-hardcoded-bench-repeats",
       "description": "SPEC 3.5 and 5.1: bench.repeats is read from testdata/config.json, never written as a literal.",
-      "paths": ["crates/", "fuzz/fuzz_targets/", "Makefile", "scripts/"],
+      "paths": [
+        "crates/",
+        "fuzz/fuzz_targets/",
+        "Makefile",
+        "scripts/"
+      ],
       "pattern": "\\b(repeats|bench_repeats|REPEATS|BENCH_REPEATS)\\s*(:\\s*\\w+\\s*)?([?+:]?=|:)\\s*[0-9]",
       "shouldMatch": [
         "let repeats = 10;",
@@ -314,7 +470,12 @@
     {
       "id": "no-hardcoded-chunking-cases",
       "description": "SPEC 3.5 and Phase 3: stream.chunking_cases (10,000) is read from testdata/config.json, never written as a literal.",
-      "paths": ["crates/", "fuzz/fuzz_targets/", "Makefile", "scripts/"],
+      "paths": [
+        "crates/",
+        "fuzz/fuzz_targets/",
+        "Makefile",
+        "scripts/"
+      ],
       "pattern": "\\b(chunking_cases|CHUNKING_CASES)\\s*(:\\s*\\w+\\s*)?([?+:]?=|:)\\s*[0-9]|\\bfor\\s+\\w+\\s+in\\s+0\\s*\\.\\.=?\\s*10_?000\\b",
       "shouldMatch": [
         "let chunking_cases = 10000;",

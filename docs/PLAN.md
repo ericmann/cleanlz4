@@ -27,6 +27,8 @@ Derived from docs/SPEC.md v0.1 on 2026-11-09. SPEC.md wins over this file.
 - Fuzz targets → five: `no_panic_block`, `no_panic_frame`, `no_panic_stream` (SPEC's (a), one per entry point), `diff_roundtrip` (b) and `diff_accept` (c). Each runs for `fuzz.seconds_per_target` as its own task through `kukulu_verify`, because an hour does not fit a foreground shell call.
 - Phase 5 → `kukulu_similarity`, `kukulu_attest` and `SUMMARY.md` belong to the summarize stage (the tools refuse while an implement run is armed). Phase 5 here prepares the evidence index they read.
 - Conformance categories → one category per entry, by the suite that made it; for oracle-compressed frames of corpus inputs the precedence is `content-size`, then `checksums`, then `frame-linked` or `frame-independent`.
+- 2026-11-10: maxRounds set to 6 (was 3) by the operator through kukulu_flight_options.
+- 2026-11-10: maxRoundsHard set to 8 (was 6) by the operator through kukulu_flight_options.
 
 ## Conventions
 
