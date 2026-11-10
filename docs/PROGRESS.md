@@ -17,7 +17,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P1-06 Reuse one scratch buffer across blocks
 - [x] P1-07 Measure the scratch-buffer change and decide
 - [x] P1-08 Phase 1 end: push and record the manual check
-- [ ] P2-01 The full conformance run
+- [~] P2-01 The full conformance run
 - [ ] P2-02 The full malformed run
 - [ ] P2-03 Run no_panic_block for the configured duration
 - [ ] P2-04 Run no_panic_frame for the configured duration

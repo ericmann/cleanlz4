@@ -1,0 +1,49 @@
+{
+  "task": "P2-01",
+  "corpus_sha256": "fd6392a28a4b239780f073ad70015c93f589163e4d232a9dd11502c24c93ba05",
+  "total": 2349,
+  "passed": 2349,
+  "failed": 0,
+  "by_category": {
+    "block": {
+      "total": 156,
+      "passed": 156
+    },
+    "checksums": {
+      "total": 301,
+      "passed": 301
+    },
+    "concatenated": {
+      "total": 6,
+      "passed": 6
+    },
+    "content-size": {
+      "total": 401,
+      "passed": 401
+    },
+    "dictionary": {
+      "total": 72,
+      "passed": 72
+    },
+    "frame-independent": {
+      "total": 45,
+      "passed": 45
+    },
+    "frame-linked": {
+      "total": 53,
+      "passed": 53
+    },
+    "legacy": {
+      "total": 14,
+      "passed": 14
+    },
+    "skippable": {
+      "total": 21,
+      "passed": 21
+    },
+    "synthetic": {
+      "total": 1280,
+      "passed": 1280
+    }
+  }
+}

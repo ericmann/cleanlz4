@@ -289,6 +289,10 @@ Before is `testdata/results/bench-P1-05.json`, after is `testdata/results/bench-
 
 Inputs slower by more than 7.28% (information only): 7 of 23. The first run of the after measurement gave an aggregate of 485.4 MB/s (slowdown 8.77%, above 7.28%), so it was run once more as the criterion says; the second gave 502.7 MB/s (slowdown 5.54%). Criterion: keep the change when the slowdown is at most 7.28% in either run; the second run is, so the scratch-buffer reuse is kept.
 
+### Full conformance run, 0.2.0 (P2-01)
+
+`make conformance TASK=P2-01 CATEGORIES=all` wrote `testdata/results/conformance-P2-01.json`: 2349 of 2349 passed, 0 failed, `corpus_sha256` fd6392a28a4b239780f073ad70015c93f589163e4d232a9dd11502c24c93ba05. Per category (total, all passed): block 156, checksums 301, concatenated 6, content-size 401, dictionary 72, frame-independent 45, frame-linked 53, legacy 14, skippable 21, synthetic 1280. Identical to P2-12 apart from the task name.
+
 ### bench.repeats (P4-11)
 
 `bench_decode --only cantrbry` (Canterbury files, release build), three runs at each repeat count; spread is the largest (max - min) / max of `cleanlz4_mb_s` over the three runs, across files.
