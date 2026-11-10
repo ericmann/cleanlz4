@@ -38,9 +38,9 @@ Started: 2026-11-10T00:53:38.909Z
 - [-] P2-13 The malformed corpus and its results
 - [x] P2-14 Phase 2 end: push and record the manual check
 - [x] P3-01 Streaming decoder: regular frames
-- [ ] P3-02 Streaming decoder: skippable, legacy and concatenated frames, dictionaries and trailing data
-- [ ] P3-03 Chunking-invariance property test
-- [ ] P3-04 The output limit and bounded memory
+- [-] P3-02 Streaming decoder: skippable, legacy and concatenated frames, dictionaries and trailing data
+- [-] P3-03 Chunking-invariance property test
+- [x] P3-04 The output limit and bounded memory
 - [ ] P3-05 Tune limits.max_output_bytes
 - [ ] P3-06 Tune stream.chunking_cases
 - [ ] P3-07 Phase 3 end: push and record the manual check
@@ -195,3 +195,15 @@ Push: done. Manual check: NOT VERIFIED (human): testdata/results/conformance-P2-
 ### P3-01 — cae1d4e
 
 stream.rs: Decoder{new,decode,descriptor,checksums_verified}, Progress, Status; Stage machine Boundary/Header/BlockHeader/BlockData/Trailer/Finished; re-exported from lib. Reuses FrameState (verify_block_checksum, decode_data_block into `pending`, finish). frame.rs only made FRAME_MAGIC, read_u32_le, is_magic_prefix pub(crate). Boundary: only regular magic accepted (P3-02 will add skippable/legacy). NOTE for later: P3-02 depends on P2-08 (skipped) so it, and P3-03, will be auto-skipped: streaming of skippable/legacy frames and dictionaries is NOT implemented unless a fix round unblocks P1-10/P2-08. Tests 10 (bytewise in/out, statuses, sticky errors, descriptor timing).
+
+### P3-02 — skipped
+
+SKIPPED: depends on P2-08
+
+### P3-03 — skipped
+
+SKIPPED: depends on P3-02
+
+### P3-04 — 8f7d248
+
+frame.rs: block_bound/limit_error helpers; FrameState::decode_data_block(header,data,out,allowance)->Result<usize>; one-shot tracks `remaining` across frames (regular and legacy); stream.rs Decoder.remaining; header-time check content_size > remaining -> OutputLimitExceeded in both paths. Existing test content_size_larger_than_the_data_is_rejected changed for u64::MAX (now OutputLimitExceeded at the header, per this task's rule). Peak allocation for a 64 MiB-of-zeros bomb with a 1 MiB limit stays under the specified bound in both paths. Codebase note: the oracle limits test binary has a counting GlobalAlloc, which needs `unsafe impl` outside ffi.rs (task-mandated, test binary only).
