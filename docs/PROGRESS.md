@@ -21,7 +21,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P2-02 The full malformed run
 - [x] P2-03 Run no_panic_block for the configured duration
 - [x] P2-04 Run no_panic_frame for the configured duration
-- [ ] P2-05 Run no_panic_stream for the configured duration
+- [x] P2-05 Run no_panic_stream for the configured duration
 - [ ] P2-06 Run diff_roundtrip for the configured duration
 - [ ] P2-07 Run diff_accept for the configured duration
 - [ ] P2-08 Triage crashes and divergences
@@ -98,3 +98,7 @@ fuzz-no_panic_block-P2-03.json: seconds 3601, runs 37841791, crashes 0, divergen
 ### P2-04 — b9e29b0
 
 fuzz-no_panic_frame-P2-04.json: seconds 3601, runs 142651039, crashes 0, divergences 0, corpus_entries 928, seed 1. Crashes: 0 Divergences: 0. No new regressions files. (kukulu_verify again aborted at the 1800s MCP idle timeout while the run continued; waited for the result file.)
+
+### P2-05 — 44c7fa4
+
+fuzz-no_panic_stream-P2-05.json: seconds 3601, runs 30891817, crashes 0, divergences 0, corpus_entries 1008, seed 1. Crashes: 0 Divergences: 0. No new regressions files.
