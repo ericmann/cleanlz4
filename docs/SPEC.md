@@ -112,9 +112,9 @@ Each is checkable by grep, by a test, or by the guard. The planner turns the mec
 
 The owner prepares the prior art **outside the repository** before the flight:
 
-- the C reference (`lib/` of the `lz4` repository at a pinned tag);
-- `lz4_flex`'s `src/` at a pinned version (independent Rust);
-- a `c2rust` translation of the C reference (derived Rust; the same-language positive control).
+- the C reference: `lib/` of the `lz4` repository at tag v1.11.0, commit `c72c7c0ec132ad2ce2fe9fad7b0c728d9faee2fc`;
+- `lz4_flex` 0.14.0 `src/`, commit `1bffdcbbf906a234b913937cb2f57c0245915038` (independent Rust);
+- a `c2rust` 0.22.1 translation of lz4 v1.11.0 (`lz4.c`, `lz4frame.c`, `lz4hc.c`, `xxhash.c`), unedited (derived Rust; the same-language positive control).
 
 The planner writes this block into `docs/kukulu.json` as given, with the owner's absolute paths:
 
@@ -123,10 +123,10 @@ The planner writes this block into `docs/kukulu.json` as given, with the owner's
   "similarity": {
     "subject": ["crates/cleanlz4/src"],
     "pairs": [
-      { "id": "independent-vs-c", "role": "negative", "left": "<PRIOR>/lz4_flex/src", "right": "<PRIOR>/lz4/lib" },
-      { "id": "derived-vs-c",     "role": "positive", "left": "<PRIOR>/c2rust-lz4/src", "right": "<PRIOR>/lz4/lib" },
-      { "id": "subject-vs-c",     "role": "test",     "left": "subject", "right": "<PRIOR>/lz4/lib" },
-      { "id": "subject-vs-indep", "role": "test",     "left": "subject", "right": "<PRIOR>/lz4_flex/src" }
+      { "id": "independent-vs-c", "role": "negative", "left": "/home/ericmann/Projects/prior-art/lz4_flex/src", "right": "/home/ericmann/Projects/prior-art/lz4/lib" },
+      { "id": "derived-vs-c",     "role": "positive", "left": "/home/ericmann/Projects/prior-art/c2rust-lz4/src", "right": "/home/ericmann/Projects/prior-art/lz4/lib" },
+      { "id": "subject-vs-c",     "role": "test",     "left": "subject", "right": "/home/ericmann/Projects/prior-art/lz4/lib" },
+      { "id": "subject-vs-indep", "role": "test",     "left": "subject", "right": "/home/ericmann/Projects/prior-art/lz4_flex/src" }
     ]
   }
 }
@@ -297,3 +297,4 @@ If the binding crate lacks one of these, the task blocks and names it. It never 
 - Say `record intervention: <what you did>` for anything done by hand, and `record verdict: #<seq>: <prior-art attempt | false positive | offline test> — <why>` for each denial, as soon as it happens.
 - Do not stage demo denials in this repository. The video's guard demo is recorded in a throwaway copy.
 - See `DEMO-CAPTURE.md` (kept outside this repository) for what to preserve during and after the flight.
+- Phase 0 records the oracle library's version and the lz4 CLI's version (`lz4 -V`) in `testdata/MANIFEST.json`.
