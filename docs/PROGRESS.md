@@ -10,7 +10,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P0-03 Fetch the corpora, write MANIFEST.json and go offline
 - [x] P0-04 Phase 0 end: push and record the manual check
 - [x] P1-01 Oracle FFI: the block functions
-- [ ] P1-02 Oracle FFI: frame compression and decompression
+- [x] P1-02 Oracle FFI: frame compression and decompression
 - [ ] P1-03 The typed error enum
 - [ ] P1-04 XXH32, one-shot and streaming
 - [ ] P1-05 Block decoder: sequences, overlap copies and strict end-of-block rules
@@ -83,3 +83,7 @@ Push: done (origin, build branch). Manual check: NOT VERIFIED (human): make chec
 ### P1-01 — 559d84d
 
 oracle::ffi has compress_bound/compress_default/compress_hc/decompress_safe (safe slice APIs, c_int); oracle::block has Rejected, compress_default, compress_hc(src, level), compress_bound, decompress_safe(src, capacity). Binding signatures guessed from convention, compiled first time. Tests: tests/ffi_block.rs x4.
+
+### P1-02 — dbc95ae
+
+oracle::frame: Prefs (Default impl), compress_frame(chunks,&Prefs), Decoded{Accepted,Rejected,OverCap}, decompress_frames(input,cap), content_checksum_of. ffi.rs: CompressCtx/DecompressCtx RAII, frame_is_error, frame_error_name, frame_compress_bound. Binding exports the version constant. Tests: ffi_frame.rs x7. Binding had all needed preferences fields incl. block checksum.
