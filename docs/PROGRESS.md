@@ -17,7 +17,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P1-06 Reuse one scratch buffer across blocks
 - [x] P1-07 Measure the scratch-buffer change and decide
 - [x] P1-08 Phase 1 end: push and record the manual check
-- [~] P2-01 The full conformance run
+- [x] P2-01 The full conformance run
 - [ ] P2-02 The full malformed run
 - [ ] P2-03 Run no_panic_block for the configured duration
 - [ ] P2-04 Run no_panic_frame for the configured duration
@@ -82,3 +82,7 @@ A(before)=532.1 MB/s. After run 1: 485.4 (slowdown 8.77%, above 7.28%); run 2: 5
 ### P1-08 — 321ad27
 
 Push: done. Manual check: NOT VERIFIED (human): read crates/oracle/tests/dict_corpus.rs (the dictionary differential test) and the two mutant-killing tests, a_block_sharing_nothing_with_the_dictionary_is_not_dict_dependent in crates/oracle/tests/dict.rs and runner_passes_the_dictionary_to_frame_entries in crates/oracle/tests/results.rs; read DESIGN.md Measurements, Scratch-buffer reuse (P1-07), and confirm the keep-or-revert decision follows its table
+
+### P2-01 — d406151
+
+conformance-P2-01.json: passed 2349, total 2349, failed 0; corpus_sha256 fd6392a28a4b239780f073ad70015c93f589163e4d232a9dd11502c24c93ba05; identical to P2-12 apart from task; MANIFEST.json unchanged by make corpus. Per category: block 156, checksums 301, concatenated 6, content-size 401, dictionary 72, frame-independent 45, frame-linked 53, legacy 14, skippable 21, synthetic 1280. DESIGN Measurements section and EVIDENCE (sorted list + table) updated.
