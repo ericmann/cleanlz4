@@ -7,6 +7,7 @@ pub mod config;
 pub mod corpus;
 pub mod craft;
 pub mod craft_frame;
+pub mod dict;
 pub mod diff;
 pub mod ffi;
 pub mod frame;
