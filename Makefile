@@ -18,3 +18,10 @@ manifest-corpora:
 .PHONY: corpus
 corpus:
 	cargo run --release -p oracle --bin gen_corpus -- --suites all
+
+.PHONY: conformance conformance-check
+conformance:
+	cargo run --release -p oracle --bin conformance -- --task $(TASK) --categories $(CATEGORIES)
+
+conformance-check:
+	cargo run --release -p oracle --bin conformance -- --task check --categories all --check

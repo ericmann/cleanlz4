@@ -1,0 +1,13 @@
+{
+  "task": "P1-12",
+  "corpus_sha256": "b3d9df463fc95a8fe662fd023d9c39a7415277109a096f42599e43c836ae58c8",
+  "total": 156,
+  "passed": 156,
+  "failed": 0,
+  "by_category": {
+    "block": {
+      "total": 156,
+      "passed": 156
+    }
+  }
+}

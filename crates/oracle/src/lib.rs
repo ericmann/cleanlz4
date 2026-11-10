@@ -8,4 +8,6 @@ pub mod ffi;
 pub mod frame;
 pub mod manifest;
 pub mod prng;
+pub mod results;
+pub mod runner;
 pub mod synth;
