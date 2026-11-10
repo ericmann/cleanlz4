@@ -39,7 +39,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P2-14 Phase 2 end: push and record the manual check
 - [x] P3-01 Streaming decoder: regular frames
 - [x] P3-02 Streaming decoder: skippable, legacy and concatenated frames, dictionaries and trailing data
-- [ ] P3-03 Chunking-invariance property test
+- [x] P3-03 Chunking-invariance property test
 - [x] P3-04 The output limit and bounded memory
 - [x] P3-05 Tune limits.max_output_bytes
 - [ ] P3-06 Tune stream.chunking_cases
@@ -578,3 +578,7 @@ oracle::malformed (cases, write_all, read_index, outcome, run) + bin malformed (
 ### P3-02 — 4cb0eed
 
 stream.rs: new stages SkipSize/Skipping/LegacySize/LegacyData; boundary dispatches by frames::magic_kind; legacy known magic carries its 4 bytes in buf to the next boundary. frame.rs: decode_legacy_block, magic_kind, LEGACY_MAX_COMPRESSED made pub(crate); one-shot legacy refactored onto decode_legacy_block. Tests stream.rs: 9 new, 19 pass; make conformance-check 2349/2349. Interpretation: under ReturnRemainder bytes of a partial magic taken earlier stay consumed (DESIGN). Codebase note: rustfmt reformats test text so python string patching of tests fails silently; bytewise one-byte-chunk property tests over a 120 KB frame at every offset take minutes, sample large frames.
+
+### P3-03 — 227d1d1
+
+tests/chunking.rs: 3 tests pass, all stream.chunking_cases cases and a tenth as many error cases, 7 s. Per-case seed = fuzz.seed ^ case*0x9E3779B97F4A7C15, printed on failure with lengths and regimes. No decoder changes needed: no failing case.
