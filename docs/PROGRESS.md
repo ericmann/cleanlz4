@@ -60,7 +60,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P5-01 The evidence index and the Done checklist
 - [x] P5-02 Phase 5 end: push and record the manual check
 - [x] R1-01 Spike binary reads the differential cap from the config
-- [ ] R1-02 Hold the output limit to its memory bound, and test it past several blocks
+- [x] R1-02 Hold the output limit to its memory bound, and test it past several blocks
 - [ ] R1-03 Test the differential module's normalizations and cap rule
 - [ ] R1-04 Assert the Dict-ID probe's fixed verdict once dictionaries exist
 - [ ] R1-05 Streaming ReturnRemainder leaves a trailing magic prefix to the caller
@@ -434,3 +434,7 @@ SKIPPED: depends on P4-03
 ### R1-01 — 8ab6a26
 
 Test large_config_values_are_not_spelled_in_oracle_sources added (failed on old probe_frame line, passes now). probe_frame reads cfg.diff.max_output_bytes. Verified probe table still prints. Fmt/clippy fixed (is_multiple_of).
+
+### R1-02 — 75e6bf6
+
+block::reserve_capped (geometric, capped, try_reserve_exact) used by block decode and frame::append_capped (output cap = len + allowance); history trimmed before extend. Alloc failure -> OutputLimitExceeded (Interpretation). Tests: cleanlz4 one_shot_output_capacity_never_exceeds_the_limit; oracle bomb_peak_allocation_is_bounded_past_several_blocks (failed before: peak 33,554,422 vs 18,154,748), realloc added to test allocator (limit_probe already had it). limit_probe release: 1 MiB peak 1; 64 MiB 71,368,704 (+4,259,840); 72 MiB 79,757,312 (+4,259,840); default 1,078,001,664 (+4,259,840). DESIGN.md bound and P3-05 table replaced. Config key unchanged.
