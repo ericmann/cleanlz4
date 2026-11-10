@@ -23,7 +23,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P2-04 Run no_panic_frame for the configured duration
 - [x] P2-05 Run no_panic_stream for the configured duration
 - [x] P2-06 Run diff_roundtrip for the configured duration
-- [ ] P2-07 Run diff_accept for the configured duration
+- [x] P2-07 Run diff_accept for the configured duration
 - [ ] P2-08 Triage crashes and divergences
 - [ ] P2-09 The final benchmark
 - [ ] P2-10 Phase 2 end: push and record the manual check
@@ -106,3 +106,7 @@ fuzz-no_panic_stream-P2-05.json: seconds 3601, runs 30891817, crashes 0, diverge
 ### P2-06 — 31eed93
 
 fuzz-diff_roundtrip-P2-06.json: seconds 3601, runs 61410, crashes 0, divergences 0, corpus_entries 437, seed 1. Crashes: 0 Divergences: 0. The 100 committed divergence inputs were moved to target/divergences-aside before the run and restored after; git status shows no deleted file and no new divergence file.
+
+### P2-07 — e05db52
+
+fuzz-diff_accept-P2-07.json: seconds 3601, runs 14818411, crashes 0, divergences 0, corpus_entries 738, seed 1. Crashes: 0 Divergences: 0. Committed divergence inputs moved aside and restored; no deleted or new divergence files.
