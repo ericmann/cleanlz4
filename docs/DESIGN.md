@@ -24,6 +24,7 @@
 - End of block rule 3 (Block format, "End of block conditions", 3): fewer than 12 bytes of the block's output from the last match's start to the end is `EndOfBlockViolation`. Held by `rule_3_last_match_within_twelve_bytes_of_the_end`.
 - The three rules sit behind one private policy constant, all on, so a later task may relax one in a single place. The document permits rejection ("a conformant decoder is allowed to reject the block as incorrect"); strictness is the default.
 - The low four bits of the final token are ignored: the document sets no requirement on them (Block format, "End of block conditions", 1).
+- The oracle's end-of-block behaviour was observed as a black box in `docs/spikes/P1-06.md` (cleanlz4's own measurement through `crates/oracle`): it rejects rule 1 and rule 2 violations and the empty input, accepts the single zero byte and any final-token low nibble, and rejects rule 3 shapes only at exact output capacity. Differential tests therefore decode the oracle side with slack capacity. Held by `crates/oracle/tests/craft.rs` (the builder) and the spike's table.
 
 ## Spec rules implemented
 
