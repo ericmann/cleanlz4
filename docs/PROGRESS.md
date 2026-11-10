@@ -9,7 +9,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P0-02 Confirm make check and the fuzz toolchain
 - [x] P0-03 Regenerate the corpus, record the baseline conformance run and lock down
 - [x] P0-04 Phase 0 end: push and record the manual check
-- [ ] P1-01 Dictionary differential test: every dictionary entry against the lz4 program
+- [x] P1-01 Dictionary differential test: every dictionary entry against the lz4 program
 - [ ] P1-02 Kill the dict_dependent mutant in the oracle's dict module
 - [ ] P1-03 Kill the dropped-dictionary mutant in the conformance runner
 - [ ] P1-04 Merge is_magic into magic_kind
@@ -50,3 +50,7 @@ Lockdown: P0-03 done, no URL is allowed from here. make corpus: MANIFEST.json un
 ### P0-04 — 52ccc3d
 
 Push: done (origin build/2026-11-10-2). Manual check: NOT VERIFIED (human): testdata/results/conformance-P0-03.json equals 0.1.0's conformance-P2-12.json in corpus_sha256, total, passed and every category; the log entries of P0-01 and P0-02 show both corpora matching testdata/MANIFEST.json, the lz4 program at v1.9.4, the binding at 1.11.1+lz4-1.10.0 and make check green; kukulu_status reports cleanroom.lockdown true
+
+### P1-01 — 4e039a9
+
+Added crates/oracle/tests/dict_corpus.rs (3 tests, all pass first run; the decoder already agreed). Compared 72 dictionary entries: 54 frame (28 with dict_id... 36 with, 18 without per size breakdown: with-id 18+10+8, without 9+5+4) and 18 block-dict; sizes 4096/65536/131072 all covered. Comment fixes in dict.rs, cli.rs, fuzz_logic.rs; DESIGN.md: new decision, two stale statements corrected, spec-rules row replaced. make corpus left MANIFEST.json unchanged; conformance-check 2349/2349.
