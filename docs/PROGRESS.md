@@ -30,7 +30,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P2-05 Content size
 - [x] P2-06 Concatenated frames, skippable frames and trailing data
 - [x] P2-07 The legacy frame
-- [ ] P2-08 Preset dictionary and Dict-ID
+- [x] P2-08 Preset dictionary and Dict-ID
 - [x] P2-09 Spike: the oracle's frame behaviour, and the differential compare module
 - [x] P2-10 Conformance generator: oracle-compressed frame suites
 - [ ] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
@@ -558,3 +558,7 @@ reopened: it was skipped because of P2-12, which is open again
 ### P1-10 — 2acaaa6
 
 cli.rs: wrap_block_in_frame, decompress_frame_with_dict, decompress_block_with_dict (lz4 -d -D -c, black box). dict.rs: dict_block via linked [dict,data] frame, DictBlock{block,dict_dependent}. Tests dict.rs x4 pass. DESIGN entry added. ffi.rs unchanged. Note: P1-13 DESIGN rule table still says dictionary comparison not implemented; fix if a later task touches it.
+
+### P2-08 — 4ea31e1
+
+FrameState::new(desc, verify, Option<&Dictionary>)->Result enforces DictionaryRequired/Mismatch and seeds preset (independent) or history (linked) with dict's last 64KiB. stream.rs call site updated (beyond listed files). oracle::dict::dict_frame added (hand-assembled frames, header accepted-as-truncated check). Tests: 6 in cleanlz4 tests/frame.rs, 3 in oracle tests/dict_frame.rs; DESIGN entry. The earlier P2-09 GAP (Dict-ID frame without dictionary accepted) is now closed in both drivers.
