@@ -75,9 +75,11 @@ fn frame_blocks(frame: &[u8]) -> Option<Vec<(bool, &[u8])>> {
 /// `dict_id` is given. The expected output is the concatenation of `chunks`.
 ///
 /// Linked: one oracle compression of `[dict, chunk1, chunk2, ...]` keeps blocks
-/// 2 onward. Independent: one `dict_block` per chunk. The oracle cannot decode
-/// the result (no dictionary decoder on the permitted surface); the header is
-/// checked to be one it accepts.
+/// 2 onward. Independent: one `dict_block` per chunk. The C library's frame
+/// functions on the permitted surface take no dictionary, so the `lz4` program
+/// (`oracle::cli::decompress_frame_with_dict`) is the oracle for these frames,
+/// compared with cleanlz4 in `tests/dict_corpus.rs`; the header alone is still
+/// checked against the library's frame decoder.
 pub fn dict_frame(
     dict: &[u8],
     chunks: &[&[u8]],

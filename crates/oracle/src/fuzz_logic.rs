@@ -1,5 +1,7 @@
 //! The logic of the fuzz targets, testable on stable Rust. Each function takes
-//! the fuzzer's bytes and panics only on a finding. None of them calls the oracle.
+//! the fuzzer's bytes and panics only on a finding. The `no_panic_*` functions
+//! never call the oracle; `diff_roundtrip` and `diff_accept` compare cleanlz4
+//! with it.
 
 use crate::block::{compress_default, compress_hc, decompress_safe};
 use crate::config::Config;
