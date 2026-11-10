@@ -47,7 +47,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P4-01 Fuzz targets (a): no panic on arbitrary bytes
 - [x] P4-02 Fuzz targets (b) and (c): differential
 - [x] P4-03 The fuzz runner, its results writer and regression replay
-- [ ] P4-04 Run no_panic_block for the configured duration
+- [x] P4-04 Run no_panic_block for the configured duration
 - [ ] P4-05 Run no_panic_frame for the configured duration
 - [ ] P4-06 Run no_panic_stream for the configured duration
 - [ ] P4-07 Run diff_roundtrip for the configured duration
@@ -598,3 +598,7 @@ fuzz_logic.rs: diff_roundtrip, diff_accept(_in), record_divergence(dir,input,lim
 ### P4-03 — 5915567
 
 fuzzrun.rs (TARGETS, fuzz_args, parse_final_stats, assemble_result, regression_name), bin fuzz_run, Makefile fuzz-run/fuzz-smoke, testdata/regressions/index.json = []. Tests fuzzrun x4, regressions x2 pass. make fuzz-smoke foreground exit 0: five targets, 0 crashes, 0 divergences (runs: block 45,814 incl. build, frame 1,148,016, stream 777,419, diff_roundtrip 1,236, diff_accept 120,142 in ~21 s each). Note: diff_roundtrip is slow (about 60 exec/s).
+
+### P4-04 — cc5ee9a
+
+testdata/results/fuzz-no_panic_block-P4-04.json (commit e85cbea): seconds 3601, runs 20,681,767, crashes 0, divergences 0, corpus_entries 1,249, seed 1. Crashes: 0 Divergences: 0. kukulu_verify hit the MCP 1800 s idle timeout (feedback logged) but make fuzz-run finished and wrote the file; results tests pass; EVIDENCE.md lists the file. Lesson: call kukulu_feedback_log only after task_done, since it commits and moves HEAD.
