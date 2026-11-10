@@ -142,26 +142,34 @@ The 100 `testdata/results/divergences/*.bin` files are the `diff_accept` diverge
 | `testdata/results/bench-P4-10.json` | 23 corpus files; cleanlz4 413.8 to 2,224.6 MB/s, oracle 188.0 to 1,957.9 MB/s; no target |
 | `testdata/results/bench-P4-11.json` | 23 corpus files at the final `bench.repeats`; cleanlz4 437.6 to 2,048.7 MB/s, oracle 182.6 to 1,988.1 MB/s; no target |
 
-The fuzz results so far are `fuzz-no_panic_block-P4-04.json`, `fuzz-no_panic_frame-P4-05.json` and `fuzz-no_panic_stream-P4-06.json` `fuzz-diff_roundtrip-P4-07.json` and `fuzz-diff_accept-P4-08.json`.
+The fuzz results are one hour per target (`fuzz.seconds_per_target`): `no_panic_block`, `no_panic_frame`, `no_panic_stream`, `diff_roundtrip` and `diff_accept` (P4-04 to P4-08), plus the `diff_accept` re-run after triage (P4-09). `docs/DESIGN.md` `## Divergence triage` has the 100 divergences of P4-08, all one end-of-block case resolved as the `end-of-block-room` normalization.
 
 ## Done checklist
 
 SPEC section 1, "Done means":
 
-1. **Every requirement in section 6 has its tests: not met.**
-   Shown by `docs/DESIGN.md` (Spec rules implemented) and the tests under
-   `crates/cleanlz4/tests/` and `crates/oracle/tests/`. Missing: dictionary
-   support for frames (`DictionaryRequired`, `DictionaryMismatch`, a supplied
-   dictionary applied to frames; task P2-08), dictionary differential tests
-   (P1-10), the full conformance corpus run (P2-11, P2-12), the malformed corpus
-   (P2-13), and streaming of skippable and legacy frames, dictionaries and the
-   trailing-data policy (P3-02, P3-03).
+1. **Every requirement in section 6 has its tests: met.**
+   Shown by `docs/DESIGN.md` (Spec rules implemented, Differential rules) and
+   the tests under `crates/cleanlz4/tests/` and `crates/oracle/tests/`. The
+   evidence files are `testdata/results/conformance-P2-12.json` (2349 of 2349
+   passed across all ten categories, dictionaries included) and
+   `testdata/results/malformed-P2-13.json` (144 of 144 matched, 0 panics).
+   Dictionary decoding is checked against the `lz4` program as a black box
+   (SPEC section 9 Q2, owner decision), because the binding has no dictionary
+   decoder; frames with a dictionary have no oracle decode, so their expected
+   output is the known data.
 2. **Every command in section 7 exits zero: owed to the summarize stage.**
-   `make check` ran green on every committed task through `kukulu_verify`; the
-   fuzz command was never run.
+   `make check` ran green on every committed task through `kukulu_verify`;
+   `make corpus`, `make conformance`, `make malformed`, `make fuzz-smoke` and
+   `make fuzz-run` (five targets) each exited zero when run.
 3. **The fuzz campaign has run for its configured duration with zero crashes and
-   zero divergences: not met.**
-   Six fuzz results exist (P4-04 to P4-09); the 100 `diff_accept` divergences of P4-08 were triaged in P4-09 (normalization `end-of-block-room`) and the re-run found none.
+   zero divergences: met.**
+   Five targets ran 3,601 s each with 0 crashes (`fuzz-*-P4-04` to `P4-08`).
+   `diff_accept` found 100 divergences (the file cap), all one case, triaged in
+   P4-09 as a permitted choice (`end-of-block-room`); its full-duration re-run
+   (`fuzz-diff_accept-P4-09.json`, 3,615 s) found 0 crashes and 0 divergences.
+   `docs/DESIGN.md` `## Measurements` records that `diff_roundtrip` was still
+   finding coverage late in its hour and recommends a longer duration.
 4. **`kukulu_similarity` and `kukulu_attest` have produced `docs/SIMILARITY.md`
    and a verifying bundle: owed to the summarize stage.**
 5. **A draft PR is open: owed to the summarize stage** (`kukulu_run_finish`
@@ -169,6 +177,8 @@ SPEC section 1, "Done means":
 
 ### Blocked and skipped tasks
 
-- P1-10 (blocked): the binding crate has no `LZ4_decompress_safe_usingDict`.
-- Skipped because of it: P2-08, P2-11, P2-12, P2-13, P3-02, P3-03, P3-06, and
-  P4-01 to P4-09 and P4-12.
+None. P1-10 was blocked at first (the binding has no
+`LZ4_decompress_safe_usingDict`); under SPEC section 9 Q2 the owner chose the
+`lz4` program as the dictionary oracle, P1-10 was redone that way and the tasks
+that had been skipped because of it (P2-08, P2-11, P2-12, P2-13, P3-02, P3-03,
+P3-06, P4-01 to P4-09, P4-12) ran.
