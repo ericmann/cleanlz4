@@ -348,10 +348,11 @@ fn content_size_larger_than_the_data_is_rejected() {
         decompress_frame(&sized_frame(4, &blocks)),
         Err(Error::ContentSizeMismatch)
     );
-    // A huge declared size allocates nothing and is still just a mismatch.
+    // A huge declared size allocates nothing; it passes the output limit, so it
+    // fails at the header (P3-04), before any block is read.
     assert_eq!(
         decompress_frame(&sized_frame(u64::MAX, &blocks)),
-        Err(Error::ContentSizeMismatch)
+        Err(Error::OutputLimitExceeded)
     );
 }
 

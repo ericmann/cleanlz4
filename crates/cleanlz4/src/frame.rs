@@ -142,6 +142,26 @@ pub fn parse_frame_descriptor(input: &[u8]) -> Result<(FrameDescriptor, usize)> 
     ))
 }
 
+/// The bound for decoding one block: the smaller of the block maximum and the
+/// remaining output allowance, and whether the allowance is the smaller one.
+pub(crate) fn block_bound(block_max: usize, allowance: u64) -> (usize, bool) {
+    let allowed = usize::try_from(allowance).unwrap_or(usize::MAX);
+    if allowed < block_max {
+        (allowed, true)
+    } else {
+        (block_max, false)
+    }
+}
+
+/// Name the limit a block decode hit: the output allowance when it was the
+/// smaller bound, else the block's maximum size.
+pub(crate) fn limit_error(e: Error, allowance_bounds: bool) -> Error {
+    match e {
+        Error::OutputLimitExceeded if !allowance_bounds => Error::BlockSizeExceeded,
+        other => other,
+    }
+}
+
 /// A data block's size word (Frame format, "Data Blocks", "Block Size").
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) struct BlockHeader {
@@ -221,23 +241,30 @@ impl FrameState {
     }
 
     /// Decode one data block's `data` (without any block checksum), appending
-    /// the decoded bytes to `out`.
+    /// the decoded bytes to `out`; returns how many. `allowance` is how many
+    /// more bytes the output limit still permits: a block that would pass it
+    /// is `OutputLimitExceeded`, raised before the bytes are written.
     pub(crate) fn decode_data_block(
         &mut self,
         header: BlockHeader,
         data: &[u8],
         out: &mut Vec<u8>,
-    ) -> Result<()> {
+        allowance: u64,
+    ) -> Result<usize> {
         let max = self.desc.block_max_size.bytes();
         if header.size > max {
             return Err(Error::BlockSizeExceeded);
         }
         if header.uncompressed {
+            if data.len() as u64 > allowance {
+                return Err(Error::OutputLimitExceeded);
+            }
             self.account(data.len())?;
             out.extend_from_slice(data);
             self.produced(data);
-            return Ok(());
+            return Ok(data.len());
         }
+        let (bound, allowance_bounds) = block_bound(max, allowance);
         let mut block = Vec::new();
         // Linked blocks see the previous output as a prefix; independent ones see none.
         let prefix: &[u8] = if self.desc.block_independence {
@@ -245,16 +272,12 @@ impl FrameState {
         } else {
             &self.history
         };
-        match decode_block(data, prefix, &mut block, max) {
-            Ok(()) => {}
-            // The block's decoded size passed the frame's maximum.
-            Err(Error::OutputLimitExceeded) => return Err(Error::BlockSizeExceeded),
-            Err(e) => return Err(e),
-        }
+        decode_block(data, prefix, &mut block, bound)
+            .map_err(|e| limit_error(e, allowance_bounds))?;
         self.account(block.len())?;
         out.extend_from_slice(&block);
         self.produced(&block);
-        Ok(())
+        Ok(block.len())
     }
 
     /// Count `n` more decoded bytes; more than the declared content size is
@@ -353,8 +376,13 @@ fn decode_regular_frame(
     input: &[u8],
     options: &DecodeOptions,
     out: &mut Vec<u8>,
+    remaining: &mut u64,
 ) -> Result<(FrameDescriptor, usize)> {
     let (desc, header_len) = parse_frame_descriptor(input)?;
+    // Fail fast: a declared size past the allowance cannot be decoded.
+    if desc.content_size.is_some_and(|size| size > *remaining) {
+        return Err(Error::OutputLimitExceeded);
+    }
     let mut state = FrameState::new(desc, options.verify_checksums);
     let mut pos = header_len;
     loop {
@@ -375,7 +403,8 @@ fn decode_regular_frame(
             pos = skip(input, pos, 4)?;
             state.verify_block_checksum(data, stored)?;
         }
-        state.decode_data_block(header, data, out)?;
+        let n = state.decode_data_block(header, data, out, *remaining)?;
+        *remaining = remaining.saturating_sub(n as u64);
     }
     let mut stored_content = None;
     if state.descriptor().content_checksum {
@@ -397,7 +426,7 @@ fn is_magic(word: u32) -> bool {
 /// frame"), appending to `out`; returns the bytes it used. The frame ends at
 /// the end of input, at a known magic number (left unconsumed) or at a zero
 /// block size (consumed: the documented Linux kernel extension).
-fn decode_legacy_frame(input: &[u8], out: &mut Vec<u8>) -> Result<usize> {
+fn decode_legacy_frame(input: &[u8], out: &mut Vec<u8>, remaining: &mut u64) -> Result<usize> {
     let mut pos = 4usize;
     loop {
         if pos >= input.len() {
@@ -418,11 +447,9 @@ fn decode_legacy_frame(input: &[u8], out: &mut Vec<u8>) -> Result<usize> {
         let end = skip(input, start, size)?;
         let data = input.get(start..end).ok_or(Error::TruncatedInput)?;
         let mut block = Vec::new();
-        match decode_block(data, &[], &mut block, LEGACY_BLOCK_BYTES) {
-            Ok(()) => {}
-            Err(Error::OutputLimitExceeded) => return Err(Error::BlockSizeExceeded),
-            Err(e) => return Err(e),
-        }
+        let (bound, allowance_bounds) = block_bound(LEGACY_BLOCK_BYTES, *remaining);
+        decode_block(data, &[], &mut block, bound).map_err(|e| limit_error(e, allowance_bounds))?;
+        *remaining = remaining.saturating_sub(block.len() as u64);
         out.extend_from_slice(&block);
         pos = end;
     }
@@ -447,12 +474,13 @@ pub(crate) fn decode_frames(input: &[u8], options: &DecodeOptions) -> Result<Fra
     let mut out = Vec::new();
     let mut descriptors = Vec::new();
     let mut kinds = Vec::new();
+    let mut remaining = options.max_output_bytes;
     let mut pos = 0usize;
     while pos < input.len() {
         let rest = input.get(pos..).ok_or(Error::TruncatedInput)?;
         match classify(rest) {
             Boundary::Regular => {
-                let (desc, used) = decode_regular_frame(rest, options, &mut out)?;
+                let (desc, used) = decode_regular_frame(rest, options, &mut out, &mut remaining)?;
                 descriptors.push(desc);
                 kinds.push(FrameKind::Regular);
                 pos = pos.saturating_add(used);
@@ -464,7 +492,7 @@ pub(crate) fn decode_frames(input: &[u8], options: &DecodeOptions) -> Result<Fra
             }
             Boundary::PartialMagic => return Err(Error::TruncatedInput),
             Boundary::Legacy => {
-                let used = decode_legacy_frame(rest, &mut out)?;
+                let used = decode_legacy_frame(rest, &mut out, &mut remaining)?;
                 kinds.push(FrameKind::Legacy);
                 pos = pos.saturating_add(used);
             }

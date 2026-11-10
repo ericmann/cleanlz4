@@ -73,6 +73,8 @@ pub struct Decoder {
     descriptor: Option<FrameDescriptor>,
     /// Regular frames decoded so far.
     frames_done: usize,
+    /// How many more decoded bytes the output limit permits.
+    remaining: u64,
     /// A frame ended and `FrameDone` is still to be reported.
     frame_done_pending: bool,
     error: Option<Error>,
@@ -81,6 +83,7 @@ pub struct Decoder {
 impl Decoder {
     /// A decoder for a flow of frames under `options`.
     pub fn new(options: DecodeOptions) -> Self {
+        let remaining = options.max_output_bytes;
         Decoder {
             options,
             stage: Stage::Boundary,
@@ -90,6 +93,7 @@ impl Decoder {
             frame: None,
             descriptor: None,
             frames_done: 0,
+            remaining,
             frame_done_pending: false,
             error: None,
         }
@@ -218,6 +222,10 @@ impl Decoder {
                 loop {
                     match parse_frame_descriptor(&self.buf) {
                         Ok((desc, _len)) => {
+                            // Fail fast: a declared size past the allowance cannot be decoded.
+                            if desc.content_size.is_some_and(|size| size > self.remaining) {
+                                return Err(Error::OutputLimitExceeded);
+                            }
                             self.descriptor = Some(desc);
                             self.frame = Some(FrameState::new(desc, self.options.verify_checksums));
                             self.buf.clear();
@@ -271,7 +279,8 @@ impl Decoder {
                         read_u32_le(&self.buf, header.size).ok_or(Error::TruncatedInput)?;
                     frame.verify_block_checksum(data, stored)?;
                 }
-                frame.decode_data_block(header, data, &mut self.pending)?;
+                let n = frame.decode_data_block(header, data, &mut self.pending, self.remaining)?;
+                self.remaining = self.remaining.saturating_sub(n as u64);
                 self.frame = Some(frame);
                 self.buf.clear();
                 self.stage = Stage::BlockHeader;
