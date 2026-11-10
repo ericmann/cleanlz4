@@ -51,7 +51,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P4-05 Run no_panic_frame for the configured duration
 - [x] P4-06 Run no_panic_stream for the configured duration
 - [x] P4-07 Run diff_roundtrip for the configured duration
-- [ ] P4-08 Run diff_accept for the configured duration
+- [x] P4-08 Run diff_accept for the configured duration
 - [ ] P4-09 Triage crashes and divergences
 - [x] P4-10 Benchmarks against the oracle
 - [x] P4-11 Tune bench.repeats
@@ -614,3 +614,7 @@ fuzz-no_panic_stream-P4-06.json: seconds 3601, runs 21,051,494, crashes 0, diver
 ### P4-07 — 776276f
 
 fuzz-diff_roundtrip-P4-07.json: seconds 3601, runs 58,050, crashes 0, divergences 0, corpus_entries 444, seed 1. Crashes: 0 Divergences: 0. kukulu_verify MCP idle timeout again; run finished in background; EVIDENCE.md lists the file. Low run count is the oracle compressing up to 300 KiB per input.
+
+### P4-08 — ab53cd7
+
+fuzz-diff_accept-P4-08.json: seconds 3601, runs 21,607,948, crashes 0, divergences 100 (the fuzz.max_divergence_files cap was reached by about 1900 s), corpus_entries 820, seed 1. Crashes: 0 Divergences: 100. 100 inputs staged under testdata/results/divergences/; no code changed; P4-09 triages. EVIDENCE.md lists the file.
