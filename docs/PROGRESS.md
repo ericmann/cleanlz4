@@ -22,7 +22,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-11 Conformance generator: the block suite and the manifest's entries
 - [x] P1-12 Conformance runner and the results for category block
 - [x] P1-13 DESIGN.md: the Phase 1 spec-rule report
-- [ ] P1-14 Phase 1 end: push and record the manual check
+- [x] P1-14 Phase 1 end: push and record the manual check
 - [ ] P2-01 Frame descriptor parsing and introspection
 - [ ] P2-02 Options, and one regular frame with independent blocks
 - [ ] P2-03 Linked blocks
@@ -131,3 +131,7 @@ Conformance block: 156 of 156 passed (testdata/results/conformance-P1-12.json, c
 ### P1-13 — db1bbf8
 
 Rule table written from reading the code; dictionary oracle comparison listed as not implemented (P1-10 blocked). Test design.rs x1. Manual check: NOT VERIFIED (human): the DESIGN.md rule table for Phase 1 matches the code and the document sections.
+
+### P1-14 — 8652007
+
+Push: done. Manual check: NOT VERIFIED (human): read DESIGN.md's rule table against docs/spec/lz4_Block_format.md and the XXH32 section of docs/spec/xxhash_spec.md; read docs/spikes/P1-06.md and confirm each end-of-block decision follows its table; testdata/results/conformance-P1-12.json shows passed == total for category block. Note: P1-10 (dictionary differential) is BLOCKED (binding lacks LZ4_decompress_safe_usingDict).
