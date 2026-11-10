@@ -102,3 +102,34 @@ fn content_size_frames_roundtrip() {
         }
     }
 }
+
+#[test]
+fn concatenated_oracle_frames_decode() {
+    let cfg = Config::load().expect("config");
+    let all = inputs(cfg.fuzz.seed);
+    let mut input = Vec::new();
+    let mut want = Vec::new();
+    let mut frames = 0usize;
+    for (i, (_, data)) in all.iter().enumerate().take(8) {
+        let prefs = Prefs {
+            block_size_id: 4 + (i % 4) as u8,
+            linked: i % 2 == 0,
+            content_checksum: i % 3 == 0,
+            block_checksum: i % 5 == 0,
+            ..Prefs::default()
+        };
+        input.extend(compress_frame(&[data], &prefs));
+        want.extend_from_slice(data);
+        frames += 1;
+    }
+    let out = cleanlz4::decompress_frame_with(&input, &cleanlz4::DecodeOptions::default())
+        .expect("decodes");
+    assert!(out.data == want);
+    assert_eq!(out.descriptors.len(), frames);
+    assert_eq!(out.consumed, input.len());
+    // The oracle agrees on the same bytes.
+    match oracle::frame::decompress_frames(&input, want.len() + 1) {
+        oracle::frame::Decoded::Accepted(v) => assert!(v == want),
+        other => panic!("oracle: {other:?}"),
+    }
+}

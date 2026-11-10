@@ -2,7 +2,7 @@
 
 use cleanlz4::xxh32::xxh32;
 use cleanlz4::{
-    decompress_frame, decompress_frame_with, DecodeOptions, Error, TrailingData,
+    decompress_frame, decompress_frame_with, DecodeOptions, Error, FrameKind, TrailingData,
     DEFAULT_MAX_OUTPUT_BYTES,
 };
 
@@ -365,4 +365,161 @@ fn content_size_zero_with_an_empty_frame_is_accepted() {
         decompress_frame(&sized_frame(0, &[(true, vec![])])).expect("ok"),
         Vec::<u8>::new()
     );
+}
+
+/// A skippable frame with magic 0x184D2A5<low> around `data`.
+fn skippable(low: u8, data: &[u8]) -> Vec<u8> {
+    let mut f = vec![0x50 | low, 0x2A, 0x4D, 0x18];
+    f.extend_from_slice(&(data.len() as u32).to_le_bytes());
+    f.extend_from_slice(data);
+    f
+}
+
+fn remainder_policy() -> DecodeOptions {
+    DecodeOptions {
+        trailing_data: TrailingData::ReturnRemainder,
+        ..DecodeOptions::default()
+    }
+}
+
+#[test]
+fn empty_input_is_ok_and_empty() {
+    assert_eq!(decompress_frame(&[]).expect("ok"), Vec::<u8>::new());
+    let out = decompress_frame_with(&[], &DecodeOptions::default()).expect("ok");
+    assert_eq!(
+        (out.consumed, out.kinds.len(), out.descriptors.len()),
+        (0, 0, 0)
+    );
+}
+
+#[test]
+fn two_concatenated_frames_decode_in_order() {
+    let mut input = frame(&[(true, b"first ".to_vec())]);
+    input.extend(frame(&[(false, literal_block(b"second"))]));
+    let out = decompress_frame_with(&input, &DecodeOptions::default()).expect("ok");
+    assert_eq!(out.data, b"first second");
+    assert_eq!(out.consumed, input.len());
+    assert_eq!(out.descriptors.len(), 2);
+    assert_eq!(out.kinds, [FrameKind::Regular, FrameKind::Regular]);
+}
+
+#[test]
+fn all_sixteen_skippable_magics_are_skipped() {
+    for low in 0u8..16 {
+        let out = decompress_frame_with(&skippable(low, b"user data"), &DecodeOptions::default())
+            .unwrap_or_else(|e| panic!("magic {low:#x}: {e}"));
+        assert!(out.data.is_empty());
+        assert_eq!(out.kinds, [FrameKind::Skippable]);
+        assert!(out.descriptors.is_empty());
+    }
+    // A magic just outside the range is not skippable.
+    let mut bad = skippable(0, b"x");
+    bad[0] = 0x4F;
+    assert_eq!(decompress_frame(&bad), Err(Error::BadMagic));
+}
+
+#[test]
+fn skippable_frame_between_two_frames() {
+    let mut input = frame(&[(true, b"a".to_vec())]);
+    input.extend(skippable(3, &[9; 100]));
+    input.extend(skippable(0, &[]));
+    input.extend(frame(&[(true, b"b".to_vec())]));
+    let out = decompress_frame_with(&input, &DecodeOptions::default()).expect("ok");
+    assert_eq!(out.data, b"ab");
+    assert_eq!(out.consumed, input.len());
+    assert_eq!(
+        out.kinds,
+        [
+            FrameKind::Regular,
+            FrameKind::Skippable,
+            FrameKind::Skippable,
+            FrameKind::Regular
+        ]
+    );
+}
+
+#[test]
+fn truncated_skippable_frame_is_truncated_input() {
+    let f = skippable(0, &[1, 2, 3, 4, 5]);
+    for cut in 1..f.len() {
+        assert_eq!(
+            decompress_frame(&f[..cut]),
+            Err(Error::TruncatedInput),
+            "cut {cut}"
+        );
+    }
+    // The size field claims more than there is.
+    let mut f = skippable(0, &[1, 2, 3]);
+    f[4] = 200;
+    assert_eq!(decompress_frame(&f), Err(Error::TruncatedInput));
+}
+
+#[test]
+fn garbage_at_the_start_is_bad_magic() {
+    assert_eq!(
+        decompress_frame(&[0xDE, 0xAD, 0xBE, 0xEF, 1, 2, 3]),
+        Err(Error::BadMagic)
+    );
+    assert_eq!(decompress_frame(&[0xFF]), Err(Error::BadMagic));
+    assert_eq!(
+        decompress_frame_with(&[0xDE, 0xAD, 0xBE, 0xEF], &remainder_policy()),
+        Err(Error::BadMagic)
+    );
+}
+
+#[test]
+fn garbage_after_a_frame_is_trailing_data() {
+    let mut input = frame(&[(true, b"a".to_vec())]);
+    input.extend_from_slice(&[0xDE, 0xAD, 0xBE, 0xEF]);
+    assert_eq!(decompress_frame(&input), Err(Error::TrailingData));
+}
+
+#[test]
+fn return_remainder_reports_where_it_stopped() {
+    let f = frame(&[(true, b"abc".to_vec())]);
+    let mut input = f.clone();
+    input.extend_from_slice(&[0xDE, 0xAD, 0xBE, 0xEF, 7, 7]);
+    let out = decompress_frame_with(&input, &remainder_policy()).expect("ok");
+    assert_eq!(out.data, b"abc");
+    assert_eq!(out.consumed, f.len());
+}
+
+#[test]
+fn a_partial_magic_at_the_end_is_truncated_input() {
+    let f = frame(&[(true, b"abc".to_vec())]);
+    let partials: [&[u8]; 6] = [
+        &[0x04],
+        &[0x04, 0x22],
+        &[0x04, 0x22, 0x4D],
+        &[0x5A, 0x2A],
+        &[0x02, 0x21, 0x4C],
+        &[0x52],
+    ];
+    for p in partials {
+        let mut input = f.clone();
+        input.extend_from_slice(p);
+        for opts in [DecodeOptions::default(), remainder_policy()] {
+            assert_eq!(
+                decompress_frame_with(&input, &opts),
+                Err(Error::TruncatedInput),
+                "{p:?}"
+            );
+        }
+    }
+}
+
+#[test]
+fn a_short_non_magic_tail_follows_the_trailing_policy() {
+    let f = frame(&[(true, b"abc".to_vec())]);
+    for tail in [&[0xFFu8][..], &[0x04, 0x23], &[0x00, 0x00, 0x00]] {
+        let mut input = f.clone();
+        input.extend_from_slice(tail);
+        assert_eq!(
+            decompress_frame(&input),
+            Err(Error::TrailingData),
+            "{tail:?}"
+        );
+        let out = decompress_frame_with(&input, &remainder_policy()).expect("ok");
+        assert_eq!(out.consumed, f.len(), "{tail:?}");
+    }
 }

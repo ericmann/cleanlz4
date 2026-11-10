@@ -3,7 +3,7 @@
 use crate::block::decode_block;
 use crate::error::{Error, Result};
 use crate::xxh32::{xxh32, Xxh32};
-use crate::{DecodeOptions, FrameKind, FrameOutput};
+use crate::{DecodeOptions, FrameKind, FrameOutput, TrailingData};
 
 /// The frame magic number, read little-endian (Frame format, "Magic Number").
 const FRAME_MAGIC: u32 = 0x184D_2204;
@@ -303,11 +303,53 @@ fn skip(input: &[u8], pos: usize, n: usize) -> Result<usize> {
     Ok(end)
 }
 
-/// Decode a complete input slice holding one regular frame.
-pub(crate) fn decode_frames(input: &[u8], options: &DecodeOptions) -> Result<FrameOutput> {
+/// The legacy frame's magic number (Frame format, "Legacy frame", "Magic Number").
+const LEGACY_MAGIC: u32 = 0x184C_2102;
+/// The first skippable magic number; the low nibble may be anything
+/// (Frame format, "Skippable Frames", "Magic Number").
+const SKIPPABLE_MAGIC_BASE: u32 = 0x184D_2A50;
+const SKIPPABLE_MAGIC_MASK: u32 = 0xFFFF_FFF0;
+
+/// What a frame boundary holds.
+enum Boundary {
+    Regular,
+    Skippable,
+    Legacy,
+    /// Fewer than four bytes that begin a known magic number.
+    PartialMagic,
+    /// Bytes that are not a magic number.
+    Unknown,
+}
+
+/// Whether `bytes` (at most three) begin the little-endian form of a known magic number.
+fn is_magic_prefix(bytes: &[u8]) -> bool {
+    let n = bytes.len();
+    let begins = |magic: u32| magic.to_le_bytes().get(..n) == Some(bytes);
+    begins(FRAME_MAGIC)
+        || begins(LEGACY_MAGIC)
+        || (0..16u32).any(|low| begins(SKIPPABLE_MAGIC_BASE | low))
+}
+
+fn classify(rest: &[u8]) -> Boundary {
+    match read_u32_le(rest, 0) {
+        Some(m) if m == FRAME_MAGIC => Boundary::Regular,
+        Some(m) if m & SKIPPABLE_MAGIC_MASK == SKIPPABLE_MAGIC_BASE => Boundary::Skippable,
+        Some(m) if m == LEGACY_MAGIC => Boundary::Legacy,
+        Some(_) => Boundary::Unknown,
+        None if is_magic_prefix(rest) => Boundary::PartialMagic,
+        None => Boundary::Unknown,
+    }
+}
+
+/// Decode one regular frame at the start of `input`, appending to `out`;
+/// returns its descriptor and the bytes it used.
+fn decode_regular_frame(
+    input: &[u8],
+    options: &DecodeOptions,
+    out: &mut Vec<u8>,
+) -> Result<(FrameDescriptor, usize)> {
     let (desc, header_len) = parse_frame_descriptor(input)?;
     let mut state = FrameState::new(desc, options.verify_checksums);
-    let mut out = Vec::new();
     let mut pos = header_len;
     loop {
         let word = read_u32_le(input, pos).ok_or(Error::TruncatedInput)?;
@@ -327,7 +369,7 @@ pub(crate) fn decode_frames(input: &[u8], options: &DecodeOptions) -> Result<Fra
             pos = skip(input, pos, 4)?;
             state.verify_block_checksum(data, stored)?;
         }
-        state.decode_data_block(header, data, &mut out)?;
+        state.decode_data_block(header, data, out)?;
     }
     let mut stored_content = None;
     if state.descriptor().content_checksum {
@@ -335,15 +377,63 @@ pub(crate) fn decode_frames(input: &[u8], options: &DecodeOptions) -> Result<Fra
         pos = skip(input, pos, 4)?;
     }
     state.finish(stored_content)?;
-    if pos < input.len() {
-        return Err(Error::TrailingData);
+    Ok((desc, pos))
+}
+
+/// Skip one skippable frame at the start of `input`; returns the bytes it used
+/// (Frame format, "Skippable Frames").
+fn skip_skippable_frame(input: &[u8]) -> Result<usize> {
+    let size = read_u32_le(input, 4).ok_or(Error::TruncatedInput)?;
+    skip(input, 8, size as usize)
+}
+
+/// Decode every frame in a complete input slice, in order.
+///
+/// Frame boundary rule (Frame format, "Frame Concatenation": decoding
+/// concatenated frames "is left outside of this specification"): with no
+/// bytes left the flow is finished; a regular or skippable magic starts that
+/// frame; one to three bytes that begin a known magic are `TruncatedInput`;
+/// any other bytes are `BadMagic` when nothing has been decoded or skipped yet
+/// and follow the trailing-data policy afterwards.
+pub(crate) fn decode_frames(input: &[u8], options: &DecodeOptions) -> Result<FrameOutput> {
+    let mut out = Vec::new();
+    let mut descriptors = Vec::new();
+    let mut kinds = Vec::new();
+    let mut pos = 0usize;
+    while pos < input.len() {
+        let rest = input.get(pos..).ok_or(Error::TruncatedInput)?;
+        match classify(rest) {
+            Boundary::Regular => {
+                let (desc, used) = decode_regular_frame(rest, options, &mut out)?;
+                descriptors.push(desc);
+                kinds.push(FrameKind::Regular);
+                pos = pos.saturating_add(used);
+            }
+            Boundary::Skippable => {
+                let used = skip_skippable_frame(rest)?;
+                kinds.push(FrameKind::Skippable);
+                pos = pos.saturating_add(used);
+            }
+            Boundary::PartialMagic => return Err(Error::TruncatedInput),
+            // The legacy frame is decoded by a later task; until then it is not a magic number here.
+            Boundary::Legacy => return Err(Error::BadMagic),
+            Boundary::Unknown => {
+                if kinds.is_empty() {
+                    return Err(Error::BadMagic);
+                }
+                match options.trailing_data {
+                    TrailingData::Error => return Err(Error::TrailingData),
+                    TrailingData::ReturnRemainder => break,
+                }
+            }
+        }
     }
     Ok(FrameOutput {
         data: out,
         consumed: pos,
         checksums_verified: options.verify_checksums,
-        descriptors: vec![desc],
-        kinds: vec![FrameKind::Regular],
+        descriptors,
+        kinds,
     })
 }
 
