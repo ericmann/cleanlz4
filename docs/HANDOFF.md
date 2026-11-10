@@ -100,3 +100,15 @@ Blocked: P1-10 came up as open at the start of the round and was blocked again, 
 Interpretation: R1-02 maps an allocation failure to `OutputLimitExceeded` (no allocation error variant exists). R1-06 order: combination i has hi = i / 4, lo = i % 4; flags from the bits of hi, block size id 4 + (hi + lo) % 4. R1-03 mutants were applied by sed and restored, since no mutate tool was available to the implementer.
 
 Reviewer notes: no conformance-P2-12 result exists, so R1-06 wrote no fresh conformance file; `make conformance-check` passes 2236 of 2236. The compiler diagnostic for the missing function printed a path under `~/.cargo/registry/`; the file was not opened.
+
+## Round 2
+
+Head before this section: 611f2fd. Counts: 42 done, 1 blocked, 20 skipped, 63 total, 0 open.
+
+Done: R2-01 (`legacy_output_capacity_never_exceeds_the_limit` in crates/cleanlz4/tests/limits.rs; a hand-built legacy frame of three 8 MiB blocks and a 5-byte block; DESIGN.md Output limit "Held by" list updated; frame.rs unchanged), R2-02 (`frame_combos_are_distinct_and_every_level_meets_every_block_size` and `manifest_frame_entries_match_the_generator` in crates/oracle/tests/corpus.rs; corpus.rs and MANIFEST.json unchanged).
+
+Mutants, applied by hand with sed and restored (no mutate tool was available): R2-01 `out.extend_from_slice(&block)` fails the new test (capacity 33,554,432). R2-02 both corpus.rs mutants fail both new tests.
+
+Blocked: P1-10 is still blocked (binding crate lacks `LZ4_decompress_safe_usingDict`); P2-08, P2-11 and later tasks stay skipped.
+
+Interpretation: R2-02 groups combinations by level value from Config. Clippy required `repeat_n` in the R2-01 test.
