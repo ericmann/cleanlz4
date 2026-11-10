@@ -18,7 +18,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-07 Align the end-of-block policy with the oracle
 - [x] P1-08 Dictionary-prefixed block decoding
 - [x] P1-09 Synthetic inputs and block round-trip tests against the oracle
-- [ ] P1-10 Oracle dictionary blocks and the dictionary differential test
+- [x] P1-10 Oracle dictionary blocks and the dictionary differential test
 - [x] P1-11 Conformance generator: the block suite and the manifest's entries
 - [x] P1-12 Conformance runner and the results for category block
 - [x] P1-13 DESIGN.md: the Phase 1 spec-rule report
@@ -554,3 +554,7 @@ reopened: it was skipped because of P3-02, which is open again
 ### R1-07 — reopened
 
 reopened: it was skipped because of P2-12, which is open again
+
+### P1-10 — 2acaaa6
+
+cli.rs: wrap_block_in_frame, decompress_frame_with_dict, decompress_block_with_dict (lz4 -d -D -c, black box). dict.rs: dict_block via linked [dict,data] frame, DictBlock{block,dict_dependent}. Tests dict.rs x4 pass. DESIGN entry added. ffi.rs unchanged. Note: P1-13 DESIGN rule table still says dictionary comparison not implemented; fix if a later task touches it.
