@@ -28,7 +28,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P2-09 The final benchmark
 - [x] P2-10 Phase 2 end: push and record the manual check
 - [x] P3-01 The CHANGELOG entry for 0.2.0 and the crate versions
-- [ ] P3-02 Refresh EVIDENCE.md and README.md
+- [x] P3-02 Refresh EVIDENCE.md and README.md
 - [ ] P3-03 Phase 3 end: push and record the manual check
 
 ## Log
@@ -126,3 +126,7 @@ Push: done. Manual check: NOT VERIFIED (human): testdata/results/conformance-P2-
 ### P3-01 — df370a6
 
 Versions 0.2.0 in both crates; Cargo.lock and fuzz/Cargo.lock diffs are only the two version lines. CHANGELOG [0.2.0] - 2026-11-10 (date -u +%F) with link line; entry cites each result file's figures. New crates/oracle/tests/release.rs (3 tests, no version literal). Fuzz build ok. Interpretation: scratch buffer kept per P1-07; no blocked or skipped tasks.
+
+### P3-02 — 7e53782
+
+EVIDENCE.md: Results table gained a Flight column (0.1.0 / 0.2.0) with a row for every file of this flight; Done checklist rewritten for SPEC 0.3 section 1 (items 1,2,3,5 met; 4 owed to summarize; 6 owed to end of run); blocked/skipped: none. README gained a 0.2.0 section and the added commands. New test evidence_results_table_names_every_result_file (passes with evidence_index_lists_every_result_file). Interpretation: item 2 marked met, naming each command's task; no fuzz-P2-08 re-run exists since nothing was triaged.
