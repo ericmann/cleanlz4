@@ -44,16 +44,16 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P3-05 Tune limits.max_output_bytes
 - [-] P3-06 Tune stream.chunking_cases
 - [x] P3-07 Phase 3 end: push and record the manual check
-- [ ] P4-01 Fuzz targets (a): no panic on arbitrary bytes
-- [ ] P4-02 Fuzz targets (b) and (c): differential
-- [ ] P4-03 The fuzz runner, its results writer and regression replay
-- [ ] P4-04 Run no_panic_block for the configured duration
-- [ ] P4-05 Run no_panic_frame for the configured duration
-- [ ] P4-06 Run no_panic_stream for the configured duration
-- [ ] P4-07 Run diff_roundtrip for the configured duration
-- [ ] P4-08 Run diff_accept for the configured duration
-- [ ] P4-09 Triage crashes and divergences
-- [ ] P4-10 Benchmarks against the oracle
+- [-] P4-01 Fuzz targets (a): no panic on arbitrary bytes
+- [-] P4-02 Fuzz targets (b) and (c): differential
+- [-] P4-03 The fuzz runner, its results writer and regression replay
+- [-] P4-04 Run no_panic_block for the configured duration
+- [-] P4-05 Run no_panic_frame for the configured duration
+- [-] P4-06 Run no_panic_stream for the configured duration
+- [-] P4-07 Run diff_roundtrip for the configured duration
+- [-] P4-08 Run diff_accept for the configured duration
+- [-] P4-09 Triage crashes and divergences
+- [x] P4-10 Benchmarks against the oracle
 - [ ] P4-11 Tune bench.repeats
 - [ ] P4-12 Tune fuzz.seconds_per_target
 - [ ] P4-13 Phase 4 end: push and record the manual check
@@ -219,3 +219,43 @@ SKIPPED: depends on P3-03
 ### P3-07 — 9cfff5f
 
 Push: done. Manual check: NOT VERIFIED (human): read the streaming API in crates/cleanlz4/src/stream.rs for ergonomics; confirm DESIGN.md's Measurements has the limit table and the chunking coverage table; run cargo test -p oracle --test limits and watch the bomb test's peak figure. CAUTION: the chunking coverage table does not exist: P3-02, P3-03 and P3-06 were auto-skipped (they depend on skipped P2-08), so streaming does not yet handle skippable or legacy frames, dictionaries or the trailing-data policy beyond the regular-frame boundary, and stream.chunking_cases was not tuned.
+
+### P4-01 — skipped
+
+SKIPPED: depends on P3-02
+
+### P4-02 — skipped
+
+SKIPPED: depends on P4-01
+
+### P4-03 — skipped
+
+SKIPPED: depends on P4-02
+
+### P4-04 — skipped
+
+SKIPPED: depends on P4-03
+
+### P4-05 — skipped
+
+SKIPPED: depends on P4-03
+
+### P4-06 — skipped
+
+SKIPPED: depends on P4-03
+
+### P4-07 — skipped
+
+SKIPPED: depends on P4-03
+
+### P4-08 — skipped
+
+SKIPPED: depends on P4-03
+
+### P4-09 — skipped
+
+SKIPPED: depends on P4-03
+
+### P4-10 — 5445530
+
+bench-P4-10.json: 23 corpus files, repeats = bench.repeats (10), best time. cleanlz4 slowest 413.8 MB/s (silesia/webster), fastest 2224.6 MB/s (silesia/x-ray); oracle 188.0 (canterbury/grammar.lsp, small-file overhead of decompress_frames) to 1957.9. Large text files: cleanlz4 about a third to a half of the oracle's rate. oracle::bench: rate_mb_s, best_seconds, measure; example bench_decode (--task, --repeats, --only); make bench TASK=. No decoder change. Tests bench.rs x2.
