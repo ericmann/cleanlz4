@@ -523,3 +523,116 @@ fn a_short_non_magic_tail_follows_the_trailing_policy() {
         assert_eq!(out.consumed, f.len(), "{tail:?}");
     }
 }
+
+const LEGACY: [u8; 4] = [0x02, 0x21, 0x4C, 0x18];
+
+/// A legacy frame: the magic, then each block with its 4-byte compressed size.
+fn legacy(blocks: &[Vec<u8>]) -> Vec<u8> {
+    let mut f = LEGACY.to_vec();
+    for b in blocks {
+        f.extend_from_slice(&(b.len() as u32).to_le_bytes());
+        f.extend_from_slice(b);
+    }
+    f
+}
+
+fn kinds_of(input: &[u8]) -> Vec<FrameKind> {
+    decompress_frame_with(input, &DecodeOptions::default())
+        .expect("ok")
+        .kinds
+}
+
+#[test]
+fn legacy_frame_with_one_block() {
+    let f = legacy(&[literal_block(b"legacy!")]);
+    assert_eq!(decompress_frame(&f).expect("ok"), b"legacy!");
+    assert_eq!(kinds_of(&f), [FrameKind::Legacy]);
+}
+
+#[test]
+fn legacy_frame_ends_at_end_of_input() {
+    let f = legacy(&[literal_block(b"one"), literal_block(b"two")]);
+    let out = decompress_frame_with(&f, &DecodeOptions::default()).expect("ok");
+    assert_eq!(out.data, b"onetwo");
+    assert_eq!(out.consumed, f.len());
+    // A legacy frame with no blocks is empty.
+    assert_eq!(decompress_frame(&LEGACY).expect("ok"), Vec::<u8>::new());
+}
+
+#[test]
+fn legacy_frame_ends_at_the_next_magic_number() {
+    let mut input = legacy(&[literal_block(b"old ")]);
+    input.extend(frame(&[(true, b"new ".to_vec())]));
+    input.extend(legacy(&[literal_block(b"older")]));
+    input.extend(skippable(1, b"zz"));
+    let out = decompress_frame_with(&input, &DecodeOptions::default()).expect("ok");
+    assert_eq!(out.data, b"old new older");
+    assert_eq!(
+        out.kinds,
+        [
+            FrameKind::Legacy,
+            FrameKind::Regular,
+            FrameKind::Legacy,
+            FrameKind::Skippable
+        ]
+    );
+    assert_eq!(out.consumed, input.len());
+}
+
+#[test]
+fn legacy_frame_ends_at_a_zero_block_size() {
+    // The documented extension: four zero bytes end the frame and are consumed.
+    let mut input = legacy(&[literal_block(b"abc")]);
+    input.extend_from_slice(&[0, 0, 0, 0]);
+    let out = decompress_frame_with(&input, &DecodeOptions::default()).expect("ok");
+    assert_eq!(out.data, b"abc");
+    assert_eq!(out.consumed, input.len());
+    input.extend(frame(&[(true, b"def".to_vec())]));
+    let out = decompress_frame_with(&input, &DecodeOptions::default()).expect("ok");
+    assert_eq!(out.data, b"abcdef");
+    assert_eq!(out.kinds, [FrameKind::Legacy, FrameKind::Regular]);
+}
+
+#[test]
+fn legacy_block_size_out_of_range_is_rejected() {
+    for size in [
+        0x7FFF_FFFFu32,
+        0x0100_0000,
+        8 * 1024 * 1024 + 8 * 1024 * 1024 / 255 + 17,
+    ] {
+        let mut f = LEGACY.to_vec();
+        f.extend_from_slice(&size.to_le_bytes());
+        assert_eq!(
+            decompress_frame(&f),
+            Err(Error::BlockSizeExceeded),
+            "{size}"
+        );
+    }
+    // A block that decodes to more than 8 MiB.
+    let total: usize = 8 * 1024 * 1024 + 100;
+    let extra = total - 4 - 15;
+    let mut b = vec![0x1F, b'a', 1, 0];
+    b.extend(std::iter::repeat_n(255u8, extra / 255));
+    b.push((extra % 255) as u8);
+    b.extend(literal_block(b"12345"));
+    assert_eq!(
+        decompress_frame(&legacy(&[b])),
+        Err(Error::BlockSizeExceeded)
+    );
+}
+
+#[test]
+fn legacy_truncated_block_is_truncated_input() {
+    let f = legacy(&[literal_block(b"abcdef")]);
+    // Every cut inside the block, and one to three bytes where a size should be.
+    for cut in 5..f.len() {
+        assert_eq!(
+            decompress_frame(&f[..cut]),
+            Err(Error::TruncatedInput),
+            "cut {cut}"
+        );
+    }
+    let mut g = f.clone();
+    g.extend_from_slice(&[1, 2]);
+    assert_eq!(decompress_frame(&g), Err(Error::TruncatedInput));
+}

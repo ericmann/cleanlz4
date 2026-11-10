@@ -310,6 +310,12 @@ const LEGACY_MAGIC: u32 = 0x184C_2102;
 const SKIPPABLE_MAGIC_BASE: u32 = 0x184D_2A50;
 const SKIPPABLE_MAGIC_MASK: u32 = 0xFFFF_FFF0;
 
+/// The legacy frame's fixed block size (Frame format, "Legacy frame": "Fixed block size : 8 MB").
+const LEGACY_BLOCK_BYTES: usize = 8 << 20;
+/// The largest compressed legacy block: the block format's worst-case growth of
+/// an 8 MiB block (one extra byte per 255, plus a small constant).
+const LEGACY_MAX_COMPRESSED: usize = LEGACY_BLOCK_BYTES + LEGACY_BLOCK_BYTES / 255 + 16;
+
 /// What a frame boundary holds.
 enum Boundary {
     Regular,
@@ -380,6 +386,48 @@ fn decode_regular_frame(
     Ok((desc, pos))
 }
 
+/// Whether `word` is a known frame magic number.
+fn is_magic(word: u32) -> bool {
+    word == FRAME_MAGIC
+        || word == LEGACY_MAGIC
+        || word & SKIPPABLE_MAGIC_MASK == SKIPPABLE_MAGIC_BASE
+}
+
+/// Decode one legacy frame at the start of `input` (Frame format, "Legacy
+/// frame"), appending to `out`; returns the bytes it used. The frame ends at
+/// the end of input, at a known magic number (left unconsumed) or at a zero
+/// block size (consumed: the documented Linux kernel extension).
+fn decode_legacy_frame(input: &[u8], out: &mut Vec<u8>) -> Result<usize> {
+    let mut pos = 4usize;
+    loop {
+        if pos >= input.len() {
+            return Ok(pos);
+        }
+        let word = read_u32_le(input, pos).ok_or(Error::TruncatedInput)?;
+        if word == 0 {
+            return Ok(pos.saturating_add(4));
+        }
+        if is_magic(word) {
+            return Ok(pos);
+        }
+        let size = word as usize;
+        if size > LEGACY_MAX_COMPRESSED {
+            return Err(Error::BlockSizeExceeded);
+        }
+        let start = pos.saturating_add(4);
+        let end = skip(input, start, size)?;
+        let data = input.get(start..end).ok_or(Error::TruncatedInput)?;
+        let mut block = Vec::new();
+        match decode_block(data, &[], &mut block, LEGACY_BLOCK_BYTES) {
+            Ok(()) => {}
+            Err(Error::OutputLimitExceeded) => return Err(Error::BlockSizeExceeded),
+            Err(e) => return Err(e),
+        }
+        out.extend_from_slice(&block);
+        pos = end;
+    }
+}
+
 /// Skip one skippable frame at the start of `input`; returns the bytes it used
 /// (Frame format, "Skippable Frames").
 fn skip_skippable_frame(input: &[u8]) -> Result<usize> {
@@ -415,8 +463,11 @@ pub(crate) fn decode_frames(input: &[u8], options: &DecodeOptions) -> Result<Fra
                 pos = pos.saturating_add(used);
             }
             Boundary::PartialMagic => return Err(Error::TruncatedInput),
-            // The legacy frame is decoded by a later task; until then it is not a magic number here.
-            Boundary::Legacy => return Err(Error::BadMagic),
+            Boundary::Legacy => {
+                let used = decode_legacy_frame(rest, &mut out)?;
+                kinds.push(FrameKind::Legacy);
+                pos = pos.saturating_add(used);
+            }
             Boundary::Unknown => {
                 if kinds.is_empty() {
                     return Err(Error::BadMagic);
