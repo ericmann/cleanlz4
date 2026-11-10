@@ -62,7 +62,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] R1-01 Spike binary reads the differential cap from the config
 - [x] R1-02 Hold the output limit to its memory bound, and test it past several blocks
 - [x] R1-03 Test the differential module's normalizations and cap rule
-- [ ] R1-04 Assert the Dict-ID probe's fixed verdict once dictionaries exist
+- [x] R1-04 Assert the Dict-ID probe's fixed verdict once dictionaries exist
 - [ ] R1-05 Streaming ReturnRemainder leaves a trailing magic prefix to the caller
 - [x] R1-06 Frame suites: every level meets every block size
 - [ ] R1-07 Refresh the evidence index after the reopened tasks
@@ -626,3 +626,7 @@ Read the five results: crashes 0 everywhere; divergences 0 except diff_accept (P
 ### P4-12 — 98e0574
 
 Table in DESIGN Measurements. cov at 60 s -> end, last NEW second (share of 3,601 s): no_panic_block 115->115, 356 s (10%); no_panic_frame 712->761, 2501 s (69%); no_panic_stream 931->938, 1125 s (31%); diff_roundtrip 777->778, 3351 s (93%); diff_accept 647->652, 2607 s (72%). Criterion (all below 90%) fails for diff_roundtrip only, so fuzz.seconds_per_target is unchanged (3600) and the recommendation is to raise it (names diff_roundtrip), together with the protected docs/kukulu.json timeouts. All five logs were available.
+
+### R1-04 — 0f4915e
+
+tests/diff.rs: the Dict-ID probe now asserts cleanlz4::decompress_frame_with(default options) == Err(DictionaryRequired) and the comparison stays Agree; every other probe keeps its fixed-verdict assertion. All tests pass.
