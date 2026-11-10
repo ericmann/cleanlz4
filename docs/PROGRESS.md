@@ -30,6 +30,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P3-01 The CHANGELOG entry for 0.2.0 and the crate versions
 - [x] P3-02 Refresh EVIDENCE.md and README.md
 - [x] P3-03 Phase 3 end: push and record the manual check
+- [ ] R1-01 Test that the streaming legacy scratch buffer dies with its frame
 
 ## Log
 
