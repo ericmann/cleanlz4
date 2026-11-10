@@ -1,0 +1,10 @@
+{
+  "task": "P2-03",
+  "target": "no_panic_block",
+  "seconds": 3601,
+  "runs": 37841791,
+  "crashes": 0,
+  "divergences": 0,
+  "corpus_entries": 1194,
+  "seed": 1
+}
