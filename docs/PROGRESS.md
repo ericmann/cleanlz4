@@ -30,8 +30,8 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P2-05 Content size
 - [x] P2-06 Concatenated frames, skippable frames and trailing data
 - [x] P2-07 The legacy frame
-- [ ] P2-08 Preset dictionary and Dict-ID
-- [ ] P2-09 Spike: the oracle's frame behaviour, and the differential compare module
+- [-] P2-08 Preset dictionary and Dict-ID
+- [x] P2-09 Spike: the oracle's frame behaviour, and the differential compare module
 - [ ] P2-10 Conformance generator: oracle-compressed frame suites
 - [ ] P2-11 Conformance generator: dictionary, skippable, legacy and concatenated suites
 - [ ] P2-12 The full conformance run and its results
@@ -163,3 +163,11 @@ frame.rs: decode_frames is now the frame loop (classify() -> Boundary{Regular,Sk
 ### P2-07 — 7cdf7d9
 
 decode_legacy_frame in frame.rs; LEGACY_BLOCK_BYTES 8 MiB, LEGACY_MAX_COMPRESSED = 8MiB+8MiB/255+16. Independent legacy blocks suffice: lz4 CLI 20 MiB legacy output decodes (no OffsetOutOfRange), so no history added. oracle::cli: compress_legacy (lz4 -l -f -q in out), cli_version. Tests 6 + 3.
+
+### P2-08 — skipped
+
+SKIPPED: depends on P1-10
+
+### P2-09 — 2ac0ed6
+
+docs/spikes/P2-09.md. Oracle differs from fixed verdicts only on: legacy frame (oracle rejects frameType_unknown) -> normalization legacy-frame; Dict-ID without dictionary (oracle accepts) -> retry with empty dictionary on DictionaryRequired. zero-offset normalization carried from P1-07. craft_frame.rs (FrameSpec/BlockSpec/build/skippable/legacy/probes()), diff.rs (Verdict, NORMALIZATIONS, Ours, judge, run_frames_with, compare_frame(_using), compare_block). GAP: P2-08 skipped so cleanlz4 does not yet reject a Dict-ID frame without a dictionary (accepts); test every_probe_... exempts that probe. diff.max_output_bytes is passed to cleanlz4 but not enforced until P3-04; judge treats ours output > cap as Skipped.
