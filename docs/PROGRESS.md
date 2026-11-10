@@ -26,7 +26,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P2-01 Frame descriptor parsing and introspection
 - [x] P2-02 Options, and one regular frame with independent blocks
 - [x] P2-03 Linked blocks
-- [ ] P2-04 Block and content checksums
+- [x] P2-04 Block and content checksums
 - [ ] P2-05 Content size
 - [ ] P2-06 Concatenated frames, skippable frames and trailing data
 - [ ] P2-07 The legacy frame
@@ -147,3 +147,7 @@ lib.rs: Dictionary, TrailingData, FrameKind, DecodeOptions(Default), FrameOutput
 ### P2-03 — a6a49f9
 
 FrameState keeps a 65,536-byte history (Vec, drained front) when linked; remember() called after every block; compressed blocks decode with history as dict. Independent frames keep none. Oracle linked round trips pass for all synth inputs and block sizes. Tests: 4 new cleanlz4 + 1 oracle.
+
+### P2-04 — b5e45cb
+
+FrameState::new(desc, verify); verify_block_checksum(data, stored) (called before decode); finish(stored_content: Option<u32>); content hash fed only when verifying and flag set. FrameOutput.checksums_verified = options.verify_checksums. Checksum bytes still consumed when verification is off (truncation still TruncatedInput). Tests: 5 cleanlz4 + 2 oracle.
