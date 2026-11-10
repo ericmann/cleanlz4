@@ -1,0 +1,10 @@
+{
+  "task": "P2-05",
+  "target": "no_panic_stream",
+  "seconds": 3601,
+  "runs": 30891817,
+  "crashes": 0,
+  "divergences": 0,
+  "corpus_entries": 1008,
+  "seed": 1
+}
