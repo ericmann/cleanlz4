@@ -33,6 +33,34 @@
 
 ## Spec rules implemented
 
+Phase 1 report: every rule implemented so far, the section it implements, the function and the test that holds it.
+
+| Rule | Document and section | Function | Test |
+|---|---|---|---|
+| Four accumulators start from the seed; under 16 bytes a single accumulator starts at seed plus PRIME32_5 | xxHash spec, "XXH32 Algorithm Description", Step 1 | `Xxh32::new`, `Xxh32::digest` | `matches_oracle_content_checksum_for_lengths_0_to_300` |
+| 16-byte stripes, four little-endian lanes, round per lane | xxHash spec, "XXH32 Algorithm Description", Step 2 | `consume_stripe`, `round` | `streaming_equals_one_shot_for_every_split` |
+| Accumulators converge with rotations 1, 7, 12, 18 | xxHash spec, "XXH32 Algorithm Description", Step 3 | `Xxh32::digest` | `matches_oracle_for_large_random_inputs` |
+| The low 32 bits of the input length are added | xxHash spec, "XXH32 Algorithm Description", Step 4 | `Xxh32::digest` | `lengths_around_stripe_boundaries_differ` |
+| Remaining bytes: four-byte words, then single bytes | xxHash spec, "XXH32 Algorithm Description", Step 5 | `finish` | `matches_oracle_content_checksum_for_lengths_0_to_300` |
+| Final avalanche mix | xxHash spec, "XXH32 Algorithm Description", Step 6 | `finish` | `matches_oracle_content_checksum_for_lengths_0_to_300` |
+| Output is the 32-bit value (frame formats store it little-endian) | xxHash spec, "XXH32 Algorithm Description", Step 7 | `xxh32` | `header_checksum_byte_matches_oracle_frames`, `block_checksum_matches_oracle_frames` |
+| Token: high nibble literal length, low nibble match length less 4 | Block format, "Compressed block format" | `decode_block_with` | `literal_only_block`, `match_copies_from_history` |
+| Literal length of 15 or more is extended by bytes until one is below 255 | Block format, "Compressed block format" (examples 1 to 3) | `read_length` | `literal_length_examples_48_280_and_15` |
+| Literals follow the token and length bytes | Block format, "Compressed block format" | `take` | `literal_only_block`, `truncation_in_length_literals_and_offset_is_rejected` |
+| Offset is two bytes little-endian; 0 is invalid | Block format, "Compressed block format" | `decode_block_with` | `zero_offset_is_rejected` |
+| Match length is the field plus 4, extended like literal length | Block format, "Compressed block format" | `read_length`, `decode_block_with` | `match_length_extension_bytes` |
+| Overlapping matches repeat bytes just written | Block format, "Compressed block format" | `copy_match` | `overlapping_match_with_offset_1_repeats_the_last_byte` |
+| Rule 1: the last sequence is literals only; enforced | Block format, "End of block conditions", 1 | `decode_block_with` | `rule_1_block_ending_after_a_match`, `end_of_block_probes_agree_with_the_oracle` |
+| Rule 2: the last 5 bytes are literals; enforced (P1-07) | Block format, "End of block conditions", 2 | `decode_block_with` | `rule_2_fewer_than_five_final_literals`, `end_of_block_probes_agree_with_the_oracle` |
+| Rule 3: the last match starts 12 bytes before the end; not enforced (P1-07: the oracle accepts such blocks) | Block format, "End of block conditions", 3 | `decode_block_with` (policy switch) | `rule_3_last_match_within_twelve_bytes_of_the_end`, `end_of_block_probes_agree_with_the_oracle` |
+| Empty input is rejected; the single byte 0x00 is the empty block | Block format, "End of block conditions", 2 (Special) | `decode_block_with` | `single_zero_token_is_the_empty_block` |
+| The final token's low four bits are ignored | Block format, "End of block conditions", 1 | `decode_block_with` | `end_of_block_probes_agree_with_the_oracle` (N1 probes) |
+| Length sums are checked; overflow or passing the limit is an error before any copy | Block format, "Implementation notes", Large lengths | `read_length`, `check_limit` | `output_limit_is_enforced_before_copying` |
+| Every read and write stays in bounds; offsets cannot reach before the start | Block format, "Implementation notes", Safe decoding | `take`, `byte`, `copy_match` | `offset_before_output_start_is_rejected`, `every_prefix_of_small_oracle_blocks_agrees`, `single_byte_corruptions_of_small_oracle_blocks_agree` |
+| Dictionary prefix: offsets continue into the dictionary's tail | Block format, "Compressed block format" (offset); Frame format, "Dictionary ID" | `copy_match` | `match_reaches_into_the_dictionary_tail`, `only_the_reachable_tail_of_a_long_dictionary_matters` |
+| Dictionary blocks made by the oracle compared with cleanlz4 | SPEC section 6.5 (`LZ4_decompress_safe_usingDict`) | not implemented: task P1-10 is blocked because the binding crate lacks the function | none |
+| Block round trips against the oracle, synthetic inputs and corpora | Block format, "Compressed block format" | `decompress_block` | `synthetic_inputs_roundtrip_default_and_hc`, `random_blocks_roundtrip`, conformance results `conformance-P1-12.json` |
+
 ## Differential rules
 
 - Zero offset (Block format, "Compressed block format": "0 is an invalid `offset` value ... denotes an invalid (corrupted) block"): the oracle accepted a corrupted block whose offset became 0 (found by `single_byte_corruptions_of_small_oracle_blocks_agree`), while cleanlz4 returns `ZeroOffset`. In block differentials, cleanlz4 `ZeroOffset` against an oracle accept is allowed; every other accept/reject pair must agree. Decoding on the oracle side uses the original length plus 65,536 bytes of capacity (P1-06).
