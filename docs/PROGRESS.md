@@ -55,8 +55,8 @@ Started: 2026-11-10T00:53:38.909Z
 - [-] P4-09 Triage crashes and divergences
 - [x] P4-10 Benchmarks against the oracle
 - [x] P4-11 Tune bench.repeats
-- [ ] P4-12 Tune fuzz.seconds_per_target
-- [ ] P4-13 Phase 4 end: push and record the manual check
+- [-] P4-12 Tune fuzz.seconds_per_target
+- [x] P4-13 Phase 4 end: push and record the manual check
 - [ ] P5-01 The evidence index and the Done checklist
 - [ ] P5-02 Phase 5 end: push and record the manual check
 
@@ -263,3 +263,11 @@ bench-P4-10.json: 23 corpus files, repeats = bench.repeats (10), best time. clea
 ### P4-11 — 2950d3c
 
 Spread (Canterbury, 3 runs each): repeats 3 -> 9.43%; 10 (key, before) -> 7.28%; 30 (tripled) -> 7.36%. Criterion: key spread >5% but tripled spread not under half, so bench.repeats stays 10 (tuned: no). After: make bench TASK=P4-11 at 10 -> bench-P4-11.json (cleanlz4 437.6 to 2048.7 MB/s). Interpretation: the three counts compared are 3, 10, 30. bench_decode.rs touched (not in listed files): --only cantrbry aliases to canterbury. Scratch result files were deleted, not committed.
+
+### P4-12 — skipped
+
+SKIPPED: depends on P4-03
+
+### P4-13 — c188920
+
+Push: done. Manual check: NOT VERIFIED (human): every testdata/results/fuzz-*.json shows crashes == 0 and divergences == 0 at its newest task id, or DESIGN.md's Divergence triage resolves each one; every run's seconds is at least fuzz.seconds_per_target; read bench-P4-10.json (actuals only, no target); act on any recommendation P4-12 recorded. CAUTION: P4-01 to P4-09 and P4-12 were auto-skipped (chain from P3-02, which waits on skipped P2-08, which waits on blocked P1-10), so no fuzz target, fuzz run or fuzz result file exists and fuzz.seconds_per_target / fuzz.smoke_seconds were never used.
