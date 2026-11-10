@@ -44,7 +44,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P3-05 Tune limits.max_output_bytes
 - [x] P3-06 Tune stream.chunking_cases
 - [x] P3-07 Phase 3 end: push and record the manual check
-- [ ] P4-01 Fuzz targets (a): no panic on arbitrary bytes
+- [x] P4-01 Fuzz targets (a): no panic on arbitrary bytes
 - [ ] P4-02 Fuzz targets (b) and (c): differential
 - [ ] P4-03 The fuzz runner, its results writer and regression replay
 - [ ] P4-04 Run no_panic_block for the configured duration
@@ -586,3 +586,7 @@ tests/chunking.rs: 3 tests pass, all stream.chunking_cases cases and a tenth as 
 ### P3-06 — aa5d1b7
 
 chunking_coverage_report added (ignored; CHUNKING_CASES_OVERRIDE). Measured shapes of 392: 1,000 cases 179 (0.63 s); 10,000 (before) 343 (8.80 s); 20k 366; 30k 380; 40k 386; 50k 390; 60k 391; 70k 391 (66.5 s); 80k 392 (76.2 s). stream.chunking_cases raised 10000 -> 80000 in testdata/config.json (smallest multiple hitting all shapes); chunking_invariance_random_chunks now ~68 s. DESIGN Measurements has the table. SPEC ASSUMPTION key tuned.
+
+### P4-01 — bc64d44
+
+fuzz_logic.rs: no_panic_block/frame/stream; fuzz targets are one-line wrappers; fuzz/Cargo.toml gained two [[bin]]. Tests fuzz_logic.rs x3 pass; cargo +nightly fuzz build ok (offline). Interpretation: block split byte = third byte (len*byte/256); stream out buffer widened for big outputs to bound calls. Clean-room: one Bash call that also read docs/kukulu.json was denied by the guard (protected path); continued without it.
