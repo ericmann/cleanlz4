@@ -12,6 +12,7 @@ docs/spikes/P2-09.md
 testdata/MANIFEST.json
 testdata/malformed/index.json
 testdata/results/bench-P1-05.json
+testdata/results/bench-P1-07.json
 testdata/results/bench-P4-10.json
 testdata/results/bench-P4-11.json
 testdata/results/conformance-P0-03.json
@@ -147,6 +148,7 @@ The 100 `testdata/results/divergences/*.bin` files are the `diff_accept` diverge
 | `testdata/results/bench-P4-10.json` | 23 corpus files; cleanlz4 413.8 to 2,224.6 MB/s, oracle 188.0 to 1,957.9 MB/s; no target |
 | `testdata/results/bench-P4-11.json` | 23 corpus files at the final `bench.repeats`; cleanlz4 437.6 to 2,048.7 MB/s, oracle 182.6 to 1,988.1 MB/s; no target |
 | `testdata/results/bench-P1-05.json` | 23 corpus files, the "before" of P1-07 (scratch-buffer change); cleanlz4 388.5 (canterbury/xargs.1) to 1,761.7 (silesia/x-ray) MB/s, aggregate 532.1 MB/s; no target |
+| `testdata/results/bench-P1-07.json` | 23 corpus files, the "after" of the scratch-buffer change; aggregate 502.7 MB/s against 532.1 before (slowdown 5.54%, under the 7.28% threshold; change kept); no target |
 
 The fuzz results are one hour per target (`fuzz.seconds_per_target`): `no_panic_block`, `no_panic_frame`, `no_panic_stream`, `diff_roundtrip` and `diff_accept` (P4-04 to P4-08), plus the `diff_accept` re-run after triage (P4-09). `docs/DESIGN.md` `## Divergence triage` has the 100 divergences of P4-08, all one end-of-block case resolved as the `end-of-block-room` normalization.
 

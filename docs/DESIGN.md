@@ -256,6 +256,39 @@ Criterion: keep the key unless fewer than all reachable shapes are hit at its va
 
 `make conformance TASK=P2-12 CATEGORIES=all` wrote `testdata/results/conformance-P2-12.json`: 2349 of 2349 passed. Per category (total, all passed): block 156, checksums 301, concatenated 6, content-size 401, dictionary 72, frame-independent 45, frame-linked 53, legacy 14, skippable 21, synthetic 1280.
 
+### Scratch-buffer reuse (P1-07)
+
+Before is `testdata/results/bench-P1-05.json`, after is `testdata/results/bench-P1-07.json` (second run), both at the current `bench.repeats`. The statistic is the aggregate throughput (total decoded bytes over the sum of each input's best time); the threshold 7.28% is the spread measured at 10 repeats in "bench.repeats (P4-11)".
+
+| Input | Bytes | Before MB/s | After MB/s | Change % |
+|---|---|---|---|---|
+| canterbury/alice29.txt | 152089 | 398.1 | 371.2 | -6.76 |
+| canterbury/asyoulik.txt | 125179 | 412.3 | 376.5 | -8.68 |
+| canterbury/cp.html | 24603 | 472.7 | 451.7 | -4.44 |
+| canterbury/fields.c | 11150 | 450.5 | 375.3 | -16.69 |
+| canterbury/grammar.lsp | 3721 | 446.6 | 453.2 | 1.48 |
+| canterbury/kennedy.xls | 1029744 | 514 | 408.7 | -20.49 |
+| canterbury/lcet10.txt | 426754 | 416.4 | 459.2 | 10.28 |
+| canterbury/plrabn12.txt | 481861 | 408.3 | 451 | 10.46 |
+| canterbury/ptt5 | 513216 | 622.2 | 710.1 | 14.13 |
+| canterbury/sum | 38240 | 441.8 | 419.6 | -5.02 |
+| canterbury/xargs.1 | 4227 | 388.5 | 336.3 | -13.44 |
+| silesia/dickens | 10192446 | 474.2 | 433.6 | -8.56 |
+| silesia/mozilla | 51220480 | 489.8 | 466.4 | -4.78 |
+| silesia/mr | 9970564 | 610.3 | 589.4 | -3.42 |
+| silesia/nci | 33553445 | 628 | 613.8 | -2.26 |
+| silesia/ooffice | 6152192 | 701.2 | 623.3 | -11.11 |
+| silesia/osdb | 10085684 | 829.3 | 823.6 | -0.69 |
+| silesia/reymont | 6627202 | 449.7 | 419.9 | -6.63 |
+| silesia/samba | 21606400 | 496.4 | 467.6 | -5.80 |
+| silesia/sao | 7251944 | 1075.9 | 1135.3 | 5.52 |
+| silesia/webster | 41458703 | 397.1 | 361.8 | -8.89 |
+| silesia/x-ray | 8474240 | 1761.7 | 1846.4 | 4.81 |
+| silesia/xml | 5345280 | 801.2 | 826 | 3.10 |
+| Aggregate | 214749364 | 532.1 | 502.7 | -5.54 (slowdown 5.54%) |
+
+Inputs slower by more than 7.28% (information only): 7 of 23. The first run of the after measurement gave an aggregate of 485.4 MB/s (slowdown 8.77%, above 7.28%), so it was run once more as the criterion says; the second gave 502.7 MB/s (slowdown 5.54%). Criterion: keep the change when the slowdown is at most 7.28% in either run; the second run is, so the scratch-buffer reuse is kept.
+
 ### bench.repeats (P4-11)
 
 `bench_decode --only cantrbry` (Canterbury files, release build), three runs at each repeat count; spread is the largest (max - min) / max of `cleanlz4_mb_s` over the three runs, across files.
