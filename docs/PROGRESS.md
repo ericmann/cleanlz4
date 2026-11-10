@@ -12,7 +12,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-01 Oracle FFI: the block functions
 - [x] P1-02 Oracle FFI: frame compression and decompression
 - [x] P1-03 The typed error enum
-- [ ] P1-04 XXH32, one-shot and streaming
+- [x] P1-04 XXH32, one-shot and streaming
 - [ ] P1-05 Block decoder: sequences, overlap copies and strict end-of-block rules
 - [ ] P1-06 Spike: the oracle's end-of-block behaviour
 - [ ] P1-07 Align the end-of-block policy with the oracle
@@ -91,3 +91,7 @@ oracle::frame: Prefs (Default impl), compress_frame(chunks,&Prefs), Decoded{Acce
 ### P1-03 — 26e5f16
 
 cleanlz4::Error (17 unit variants, Copy), Error::ALL, Display, std Error, Result alias, re-exported from lib. Tests: error.rs x3. DESIGN entry for BlockSizeExceeded.
+
+### P1-04 — 103574e
+
+cleanlz4::xxh32::{xxh32(input,seed), Xxh32{new,update,digest}}. Matches oracle content checksum for 0..=300 and large inputs, header-checksum byte and block checksum. Uses slice::as_chunks (clippy chunks_exact_to_as_chunks lint demands it for const sizes). Tests: 3 unit + 5 oracle. DESIGN entries per Step added.
