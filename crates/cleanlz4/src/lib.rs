@@ -24,7 +24,13 @@ pub const DEFAULT_MAX_OUTPUT_BYTES: u64 = 1 << 30;
 /// Decode one LZ4 block into a new buffer, failing if the output would exceed
 /// `max_output` bytes.
 pub fn decompress_block(input: &[u8], max_output: usize) -> Result<Vec<u8>> {
+    decompress_block_with_dict(input, &[], max_output)
+}
+
+/// Decode one LZ4 block whose matches may reach into `dict`, the bytes that sit
+/// just before the block's output.
+pub fn decompress_block_with_dict(input: &[u8], dict: &[u8], max_output: usize) -> Result<Vec<u8>> {
     let mut dst = Vec::new();
-    block::decode_block(input, &mut dst, max_output)?;
+    block::decode_block(input, dict, &mut dst, max_output)?;
     Ok(dst)
 }

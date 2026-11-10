@@ -76,12 +76,30 @@ fn check_limit(dst_len: usize, extra: usize, max_len: usize) -> Result<()> {
 
 /// Copy `len` bytes from `offset` bytes back; bytes just written are read again
 /// when `len` exceeds `offset` (Block format: "bytes just copied are copied again").
-fn copy_match(dst: &mut Vec<u8>, offset: usize, len: usize) -> Result<()> {
+/// An offset that reaches before `dst[0]` continues into the tail of `dict`,
+/// whose last byte is the byte just before `dst[0]`.
+fn copy_match(dst: &mut Vec<u8>, dict: &[u8], offset: usize, len: usize) -> Result<()> {
+    let mut remaining = len;
+    if offset > dst.len() {
+        let back = offset.saturating_sub(dst.len());
+        let dict_start = dict
+            .len()
+            .checked_sub(back)
+            .ok_or(Error::OffsetOutOfRange)?;
+        let n = remaining.min(back);
+        let end = dict_start.checked_add(n).ok_or(Error::OffsetOutOfRange)?;
+        let part = dict.get(dict_start..end).ok_or(Error::OffsetOutOfRange)?;
+        dst.extend_from_slice(part);
+        remaining = remaining.saturating_sub(n);
+    }
+    if remaining == 0 {
+        return Ok(());
+    }
+    // From here the source starts inside `dst`.
     let start = dst
         .len()
         .checked_sub(offset)
         .ok_or(Error::OffsetOutOfRange)?;
-    let mut remaining = len;
     while remaining > 0 {
         // The pattern repeats with period `offset`, so each pass copies from `start`.
         let n = remaining.min(offset);
@@ -96,13 +114,20 @@ fn copy_match(dst: &mut Vec<u8>, offset: usize, len: usize) -> Result<()> {
 }
 
 /// Decode one block, appending to `dst`; `dst.len()` never exceeds `max_len`.
-/// Offsets resolve against everything already in `dst`.
-pub(crate) fn decode_block(src: &[u8], dst: &mut Vec<u8>, max_len: usize) -> Result<()> {
-    decode_block_with(src, dst, max_len, EOB)
+/// Offsets resolve against everything already in `dst`, then against the tail
+/// of `dict`, which sits just before `dst[0]`.
+pub(crate) fn decode_block(
+    src: &[u8],
+    dict: &[u8],
+    dst: &mut Vec<u8>,
+    max_len: usize,
+) -> Result<()> {
+    decode_block_with(src, dict, dst, max_len, EOB)
 }
 
 pub(crate) fn decode_block_with(
     src: &[u8],
+    dict: &[u8],
     dst: &mut Vec<u8>,
     max_len: usize,
     policy: EndOfBlockPolicy,
@@ -144,7 +169,7 @@ pub(crate) fn decode_block_with(
         if offset == 0 {
             return Err(Error::ZeroOffset);
         }
-        if offset > dst.len() {
+        if offset > dst.len().saturating_add(dict.len()) {
             return Err(Error::OffsetOutOfRange);
         }
         let extra = read_length(src, &mut pos, usize::from(token & 0x0F))?;
@@ -154,7 +179,7 @@ pub(crate) fn decode_block_with(
         check_limit(dst.len(), match_len, max_len)?;
         dst.reserve(match_len);
         last_match_start = Some(dst.len());
-        copy_match(dst, offset, match_len)?;
+        copy_match(dst, dict, offset, match_len)?;
 
         if pos == src.len() && policy.last_sequence_is_literals_only {
             return Err(Error::EndOfBlockViolation);
@@ -205,7 +230,7 @@ mod tests {
 
     fn decode(src: &[u8]) -> Result<Vec<u8>> {
         let mut d = Vec::new();
-        decode_block(src, &mut d, 1 << 20)?;
+        decode_block(src, &[], &mut d, 1 << 20)?;
         Ok(d)
     }
 
@@ -256,7 +281,7 @@ mod tests {
         let mut dst = b"0123456789".to_vec();
         let mut b = seq(b"", Some((10, 12)));
         b.extend(seq(b"12345", None));
-        decode_block(&b, &mut dst, 1 << 20).expect("ok");
+        decode_block(&b, &[], &mut dst, 1 << 20).expect("ok");
         assert_eq!(dst, b"012345678901234567890112345");
     }
 
@@ -316,18 +341,18 @@ mod tests {
         let mut dst = Vec::new();
         let b = valid_block();
         assert_eq!(
-            decode_block(&b, &mut dst, 10),
+            decode_block(&b, &[], &mut dst, 10),
             Err(Error::OutputLimitExceeded)
         );
         // The limit hit at the match: only the literals were written.
         assert_eq!(dst, b"abcd");
         let mut dst = Vec::new();
-        decode_block(&b, &mut dst, 21).expect("exact fit");
+        decode_block(&b, &[], &mut dst, 21).expect("exact fit");
         assert_eq!(dst.len(), 21);
         // A literal length far beyond the limit with no data behind it.
         let mut dst = Vec::new();
         assert_eq!(
-            decode_block(&[0xF0, 255, 255, 255, 0], &mut dst, 100),
+            decode_block(&[0xF0, 255, 255, 255, 0], &[], &mut dst, 100),
             Err(Error::OutputLimitExceeded)
         );
         assert!(dst.is_empty());
@@ -348,7 +373,7 @@ mod tests {
         let mut d = Vec::new();
         let mut p = EOB;
         p.last_five_are_literals = false;
-        decode_block_with(&b, &mut d, 1 << 20, p).expect("ok without rule 2");
+        decode_block_with(&b, &[], &mut d, 1 << 20, p).expect("ok without rule 2");
     }
 
     #[test]
@@ -362,13 +387,79 @@ mod tests {
         let mut p = EOB;
         p.last_match_twelve_from_end = true;
         assert_eq!(
-            decode_block_with(&b, &mut d, 1 << 20, p),
+            decode_block_with(&b, &[], &mut d, 1 << 20, p),
             Err(Error::EndOfBlockViolation)
         );
         // Exactly twelve bytes from the match's start to the end is accepted.
         let mut b = seq(b"abcd", Some((4, 7)));
         b.extend(seq(b"12345", None));
         let mut d = Vec::new();
-        decode_block_with(&b, &mut d, 1 << 20, p).expect("twelve is enough");
+        decode_block_with(&b, &[], &mut d, 1 << 20, p).expect("twelve is enough");
+    }
+
+    fn decode_dict(src: &[u8], dict: &[u8]) -> Result<Vec<u8>> {
+        let mut d = Vec::new();
+        decode_block(src, dict, &mut d, 1 << 20)?;
+        Ok(d)
+    }
+
+    #[test]
+    fn match_reaches_into_the_dictionary_tail() {
+        // Offset 4 from an empty output is the dictionary's last four bytes.
+        let mut b = seq(b"", Some((4, 12)));
+        b.extend(seq(b"12345", None));
+        let out = decode_dict(&b, b"xxxxWXYZ").expect("ok");
+        assert_eq!(out, b"WXYZWXYZWXYZ12345");
+    }
+
+    #[test]
+    fn match_starts_in_the_dictionary_and_continues_into_output() {
+        // The history is the dictionary "XYZ" then the output; after the literal
+        // 'a', offset 3 points at 'Y'.
+        let mut b = seq(b"a", Some((3, 10)));
+        b.extend(seq(b"12345", None));
+        let out = decode_dict(&b, b"XYZ").expect("ok");
+        // history: X Y Z a ; copying from 'Y': Y Z a Y Z a Y Z a Y
+        assert_eq!(out, b"aYZaYZaYZaY12345");
+        // A match that starts in the dictionary and runs into the output.
+        let mut b = seq(b"ab", Some((4, 6)));
+        b.extend(seq(b"12345", None));
+        let out = decode_dict(&b, b"..YZ").expect("ok");
+        // history: . . Y Z a b ; offset 4 from after "ab" is 'Y'.
+        assert_eq!(out, b"abYZabYZ12345");
+    }
+
+    #[test]
+    fn offset_past_the_dictionary_start_is_rejected() {
+        let mut b = seq(b"ab", Some((7, 6)));
+        b.extend(seq(b"12345", None));
+        // dst 2 + dict 4 = 6 reachable; 7 is not.
+        assert_eq!(decode_dict(&b, b"WXYZ"), Err(Error::OffsetOutOfRange));
+        let mut b = seq(b"ab", Some((6, 6)));
+        b.extend(seq(b"12345", None));
+        assert!(decode_dict(&b, b"WXYZ").is_ok());
+    }
+
+    #[test]
+    fn empty_dictionary_behaves_like_no_dictionary() {
+        for b in [valid_block(), seq(b"hello", None)] {
+            assert_eq!(decode_dict(&b, &[]), decode(&b));
+        }
+        let mut b = seq(b"ab", Some((3, 6)));
+        b.extend(seq(b"12345", None));
+        assert_eq!(decode_dict(&b, &[]), Err(Error::OffsetOutOfRange));
+    }
+
+    #[test]
+    fn only_the_reachable_tail_of_a_long_dictionary_matters() {
+        let mut b = seq(b"", Some((65_535, 12)));
+        b.extend(seq(b"12345", None));
+        let mut long = vec![9u8; 100_000];
+        let tail: Vec<u8> = (0..65_535u32).map(|i| (i % 251) as u8).collect();
+        long.extend(&tail);
+        let a = decode_dict(&b, &long).expect("ok");
+        let c = decode_dict(&b, &tail).expect("ok");
+        assert_eq!(a, c);
+        assert_eq!(a.get(..12), tail.get(..12));
     }
 }
