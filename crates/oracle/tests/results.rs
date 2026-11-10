@@ -175,3 +175,21 @@ fn runner_passes_the_dictionary_to_frame_entries() {
     );
     assert!(report.failures.is_empty(), "{:?}", report.failures);
 }
+
+#[test]
+fn evidence_results_table_names_every_result_file() {
+    let evidence = std::fs::read_to_string(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/EVIDENCE.md"),
+    )
+    .expect("docs/EVIDENCE.md");
+    let (_, table) = evidence
+        .split_once("## Results")
+        .expect("a Results heading");
+    for p in files() {
+        let name = p.file_name().expect("name").to_string_lossy().into_owned();
+        assert!(
+            table.contains(&name),
+            "{name} is not in the Results section"
+        );
+    }
+}
