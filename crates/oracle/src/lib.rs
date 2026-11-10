@@ -5,6 +5,8 @@ pub mod cli;
 pub mod config;
 pub mod corpus;
 pub mod craft;
+pub mod craft_frame;
+pub mod diff;
 pub mod ffi;
 pub mod frame;
 pub mod manifest;
