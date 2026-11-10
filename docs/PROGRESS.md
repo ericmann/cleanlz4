@@ -11,7 +11,7 @@ Started: 2026-11-10T15:48:48.480Z
 - [x] P0-04 Phase 0 end: push and record the manual check
 - [x] P1-01 Dictionary differential test: every dictionary entry against the lz4 program
 - [x] P1-02 Kill the dict_dependent mutant in the oracle's dict module
-- [ ] P1-03 Kill the dropped-dictionary mutant in the conformance runner
+- [x] P1-03 Kill the dropped-dictionary mutant in the conformance runner
 - [ ] P1-04 Merge is_magic into magic_kind
 - [ ] P1-05 Benchmark before the scratch-buffer change
 - [ ] P1-06 Reuse one scratch buffer across blocks
@@ -58,3 +58,7 @@ Added crates/oracle/tests/dict_corpus.rs (3 tests, all pass first run; the decod
 ### P1-02 — 3df514c
 
 Added a_block_sharing_nothing_with_the_dictionary_is_not_dict_dependent in tests/dict.rs. Mutant (Ok(_) => true) fails it: "size 4096: labelled dict_dependent" at tests/dict.rs:99; undone, git diff --exit-code on dict.rs clean. dict.rs unchanged.
+
+### P1-03 — e099856
+
+Added runner_passes_the_dictionary_to_frame_entries in tests/results.rs. Mutant (condition -> false) fails it: assertion `left == right` failed: failures: [("dictionary/canterbury/alice29.txt/d4096/indep-id", "the frame needs a dictionary and none was supplied"), ...]; undone, runner.rs diff clean. kukulu_verify with runner.rs ran make conformance-check: 2349 of 2349 passed.
