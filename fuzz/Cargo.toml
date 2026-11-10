@@ -34,3 +34,17 @@ path = "fuzz_targets/no_panic_stream.rs"
 test = false
 doc = false
 bench = false
+
+[[bin]]
+name = "diff_roundtrip"
+path = "fuzz_targets/diff_roundtrip.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "diff_accept"
+path = "fuzz_targets/diff_accept.rs"
+test = false
+doc = false
+bench = false
