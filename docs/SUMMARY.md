@@ -149,3 +149,14 @@ The band comes from the Rust-vs-Rust controls only, and it applies to `subject-v
 - subject-vs-c, comment_jaccard: 0.0001 (c = n/a, not separated)
 
 Controls: rust-independent-vs-indep (negative) and rust-derived-vs-indep (positive). Raw scores and limits are in `docs/SIMILARITY.md`.
+
+## Attestation
+
+- **Directory:** `docs/attestation/`. Archiving moves it to `docs/flights/cleanlz4-0-2-0/attestation/`.
+- **Commit:** `057c088`.
+- **Manifest:** `9c329c0a5342ddb0614a9c1cdaaf603b9d19757f3271212ca035079b9dbb92c8`
+- **Signer fingerprint:** `sha256:29eb2de703efe67ab50bf992d6c66c1e75d824010c727b1a76b0b336a5ed9f75`
+- **Verifier:** `verify-attestation: PASS` (mode clean-room, enforcement hook, every check true).
+- **Coverage gaps:** 1, printed as a note: `{"kind":"intervention","seq":4}`.
+- **Other notes:** one more: "implementer: the endpoint reported claude-sonnet-5-5; routing declared sonnet".
+- **Evidence:** the 128 files in the fenced list of `docs/EVIDENCE.md`.
