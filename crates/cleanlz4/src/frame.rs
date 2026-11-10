@@ -168,12 +168,32 @@ pub(crate) fn parse_block_header(word: u32) -> BlockHeader {
 #[derive(Debug)]
 pub(crate) struct FrameState {
     desc: FrameDescriptor,
+    /// The last `WINDOW` bytes of this frame's decoded output; kept only when
+    /// blocks are linked.
+    history: Vec<u8>,
 }
+
+/// The LZ4 window (Frame format, "Block Independence flag": "up to LZ4 window
+/// size, which is 64 KB").
+const WINDOW: usize = 64 << 10;
 
 impl FrameState {
     /// Start a frame from its parsed descriptor.
     pub(crate) fn new(desc: FrameDescriptor) -> Self {
-        FrameState { desc }
+        FrameState {
+            desc,
+            history: Vec::new(),
+        }
+    }
+
+    /// Remember decoded bytes for the next linked block, keeping the last `WINDOW`.
+    fn remember(&mut self, block: &[u8]) {
+        if self.desc.block_independence {
+            return;
+        }
+        self.history.extend_from_slice(block);
+        let excess = self.history.len().saturating_sub(WINDOW);
+        self.history.drain(..excess);
     }
 
     /// The frame's descriptor.
@@ -195,16 +215,24 @@ impl FrameState {
         }
         if header.uncompressed {
             out.extend_from_slice(data);
+            self.remember(data);
             return Ok(());
         }
         let mut block = Vec::new();
-        match decode_block(data, &[], &mut block, max) {
+        // Linked blocks see the previous output as a prefix; independent ones see none.
+        let prefix: &[u8] = if self.desc.block_independence {
+            &[]
+        } else {
+            &self.history
+        };
+        match decode_block(data, prefix, &mut block, max) {
             Ok(()) => {}
             // The block's decoded size passed the frame's maximum.
             Err(Error::OutputLimitExceeded) => return Err(Error::BlockSizeExceeded),
             Err(e) => return Err(e),
         }
         out.extend_from_slice(&block);
+        self.remember(&block);
         Ok(())
     }
 

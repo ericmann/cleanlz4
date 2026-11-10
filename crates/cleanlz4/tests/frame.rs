@@ -31,7 +31,12 @@ fn block_word(size: usize, uncompressed: bool) -> [u8; 4] {
 
 /// A frame of 64 KB-max blocks, each `(uncompressed, data)`.
 fn frame(blocks: &[(bool, Vec<u8>)]) -> Vec<u8> {
-    let mut f = header(flg(0), bd(4));
+    frame_with(flg(0), blocks)
+}
+
+/// The same with an explicit FLG byte.
+fn frame_with(flg: u8, blocks: &[(bool, Vec<u8>)]) -> Vec<u8> {
+    let mut f = header(flg, bd(4));
     for (uncompressed, data) in blocks {
         f.extend_from_slice(&block_word(data.len(), *uncompressed));
         f.extend_from_slice(data);
@@ -139,4 +144,65 @@ fn default_options_have_the_documented_values() {
     assert_eq!(o.dictionary, None);
     assert_eq!(o.trailing_data, TrailingData::Error);
     assert!(o.verify_checksums);
+}
+
+/// FLG for linked blocks: version 01 and no independence bit.
+const LINKED: u8 = 0x40;
+
+/// A compressed block of no literals and one match, then five final literals.
+fn match_block(offset: u16, match_len: usize) -> Vec<u8> {
+    assert!((4..=18).contains(&match_len));
+    let mut b = vec![(match_len - 4) as u8];
+    b.extend_from_slice(&offset.to_le_bytes());
+    b.extend(literal_block(b"12345"));
+    b
+}
+
+#[test]
+fn linked_block_copies_from_the_previous_block() {
+    let blocks = [
+        (false, literal_block(b"abcdefgh")),
+        (false, match_block(8, 8)),
+    ];
+    let out = decompress_frame(&frame_with(LINKED, &blocks)).expect("ok");
+    assert_eq!(out, b"abcdefghabcdefgh12345");
+}
+
+#[test]
+fn linked_block_copies_from_a_previous_uncompressed_block() {
+    let blocks = [(true, b"abcdefgh".to_vec()), (false, match_block(8, 8))];
+    let out = decompress_frame(&frame_with(LINKED, &blocks)).expect("ok");
+    assert_eq!(out, b"abcdefghabcdefgh12345");
+}
+
+#[test]
+fn independent_frame_rejects_an_offset_into_the_previous_block() {
+    let blocks = [(true, b"abcdefgh".to_vec()), (false, match_block(8, 8))];
+    assert_eq!(
+        decompress_frame(&frame(&blocks)),
+        Err(Error::OffsetOutOfRange)
+    );
+}
+
+#[test]
+fn history_reaches_back_65535_bytes_across_blocks() {
+    let big: Vec<u8> = (0..65_536u32).map(|i| (i % 251) as u8).collect();
+    // One block back: 65,535 bytes before the end of a 65,536-byte block.
+    let blocks = [(true, big.clone()), (false, match_block(65_535, 8))];
+    let out = decompress_frame(&frame_with(LINKED, &blocks)).expect("ok");
+    assert_eq!(out.len(), 65_536 + 8 + 5);
+    assert_eq!(&out[65_536..65_544], &big[1..9]);
+    // Across two blocks: a 10-byte block between, so the offset points at big[11..].
+    let blocks = [
+        (true, big.clone()),
+        (true, b"0123456789".to_vec()),
+        (false, match_block(65_535, 8)),
+    ];
+    let out = decompress_frame(&frame_with(LINKED, &blocks)).expect("ok");
+    assert_eq!(&out[65_546..65_554], &big[11..19]);
+    // Many blocks later the history is still only the last 64 KB.
+    let mut blocks = vec![(true, big.clone()); 3];
+    blocks.push((false, match_block(65_535, 8)));
+    let out = decompress_frame(&frame_with(LINKED, &blocks)).expect("ok");
+    assert_eq!(&out[3 * 65_536..3 * 65_536 + 8], &big[1..9]);
 }
