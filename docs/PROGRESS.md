@@ -68,6 +68,8 @@ Started: 2026-11-10T00:53:38.909Z
 - [-] R1-07 Refresh the evidence index after the reopened tasks
 - [x] R2-01 Test that a legacy frame's output capacity stays within the limit
 - [x] R2-02 Test the frame-combination generator itself, and the manifest against it
+- [ ] R3-01 Streaming decoder: skippable, legacy and concatenated frames and the trailing-data policy (no dictionaries)
+- [ ] R3-02 The malformed corpus and its results, without the Dict-ID case
 
 ## Log
 
