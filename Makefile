@@ -25,3 +25,7 @@ conformance:
 
 conformance-check:
 	cargo run --release -p oracle --bin conformance -- --task check --categories all --check
+
+.PHONY: bench
+bench:
+	cargo run --release -p oracle --example bench_decode -- --task $(TASK)
