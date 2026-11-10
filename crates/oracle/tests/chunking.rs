@@ -15,6 +15,9 @@ struct Plan {
     len: usize,
     in_chunk: usize,
     out_chunk: usize,
+    /// Which of the seven regimes each chunk size came from.
+    in_regime: usize,
+    out_regime: usize,
     rng: Prng,
 }
 
@@ -22,13 +25,14 @@ fn case_seed(cfg: &Config, case: u64) -> u64 {
     cfg.fuzz.seed ^ case.wrapping_mul(0x9E37_79B9_7F4A_7C15)
 }
 
-fn regime(rng: &mut Prng, len: usize) -> usize {
+/// A chunk size and the index of the regime it came from.
+fn regime(rng: &mut Prng, len: usize) -> (usize, usize) {
     let mut pick = rng.below(7);
     // The one-byte regimes are only for inputs that stay quick.
     if len > 4096 && pick == 0 {
         pick = 1;
     }
-    match pick {
+    let size = match pick {
         0 => 1,
         1 => 2,
         2 => 3,
@@ -36,7 +40,8 @@ fn regime(rng: &mut Prng, len: usize) -> usize {
         4 => 64,
         5 => 4096,
         _ => 1 + rng.below(70_000) as usize,
-    }
+    };
+    (size, pick as usize)
 }
 
 fn plan(cfg: &Config, case: u64) -> Plan {
@@ -44,13 +49,15 @@ fn plan(cfg: &Config, case: u64) -> Plan {
     let mut rng = Prng::new(seed);
     let big = case % 50 == 49;
     let len = rng.below(if big { 300 << 10 } else { 16 << 10 }) as usize;
-    let in_chunk = regime(&mut rng, len);
-    let out_chunk = regime(&mut rng, len);
+    let (in_chunk, in_regime) = regime(&mut rng, len);
+    let (out_chunk, out_regime) = regime(&mut rng, len);
     Plan {
         seed,
         len,
         in_chunk,
         out_chunk,
+        in_regime,
+        out_regime,
         rng,
     }
 }
@@ -90,7 +97,8 @@ fn make_input(rng: &mut Prng, len: usize) -> Vec<u8> {
     }
 }
 
-fn make_frame(cfg: &Config, rng: &mut Prng, data: &[u8]) -> Vec<u8> {
+/// A random frame of `data` and whether its blocks are linked.
+fn make_frame(cfg: &Config, rng: &mut Prng, data: &[u8]) -> (Vec<u8>, bool) {
     let levels = &cfg.conformance.frame_levels;
     let prefs = Prefs {
         block_size_id: 4 + rng.below(4) as u8,
@@ -101,34 +109,49 @@ fn make_frame(cfg: &Config, rng: &mut Prng, data: &[u8]) -> Vec<u8> {
         level: levels[rng.below(levels.len() as u64) as usize],
         ..Prefs::default()
     };
-    compress_frame(&[data], &prefs)
+    (compress_frame(&[data], &prefs), prefs.linked)
+}
+
+/// What a case decodes and the shape it exercises.
+struct Built {
+    input: Vec<u8>,
+    expected: Vec<u8>,
+    linked: bool,
+    /// 0 single frame, 1 two frames, 2 skippable first, 3 legacy.
+    mix: usize,
 }
 
 /// The input to decode and the bytes it must decode to.
-fn build(cfg: &Config, case: u64, p: &mut Plan) -> (Vec<u8>, Vec<u8>) {
+fn build(cfg: &Config, case: u64, p: &mut Plan) -> Built {
     let data = make_input(&mut p.rng, p.len);
-    let frame = make_frame(cfg, &mut p.rng, &data);
+    let (frame, linked) = make_frame(cfg, &mut p.rng, &data);
+    let done = |input: Vec<u8>, expected: Vec<u8>, mix: usize| Built {
+        input,
+        expected,
+        linked,
+        mix,
+    };
     if case % 10 != 9 {
-        return (frame, data);
+        return done(frame, data, 0);
     }
     match (case / 10) % 3 {
         0 => {
             let len2 = p.rng.below(4096) as usize;
             let other = make_input(&mut p.rng, len2);
-            let second = make_frame(cfg, &mut p.rng, &other);
-            ([frame, second].concat(), [data, other].concat())
+            let (second, _) = make_frame(cfg, &mut p.rng, &other);
+            done([frame, second].concat(), [data, other].concat(), 1)
         }
         1 => {
             let user = p.rng.below(100) as usize;
             let mut bytes = vec![0u8; user];
             p.rng.fill(&mut bytes);
             let low = p.rng.below(16) as u8;
-            ([skippable(low, &bytes), frame].concat(), data)
+            done([skippable(low, &bytes), frame].concat(), data, 2)
         }
         _ => {
             let block = compress_default(&data);
             let zero_end = p.rng.below(2) == 0;
-            (legacy(&[block], zero_end), data)
+            done(legacy(&[block], zero_end), data, 3)
         }
     }
 }
@@ -152,23 +175,55 @@ fn stream(input: &[u8], in_chunk: usize, out_chunk: usize) -> Result<(Vec<u8>, u
     panic!("the decoder made no progress");
 }
 
+/// Run one case: streamed equals one-shot equals the original. Returns its shape.
+fn check_case(cfg: &Config, case: u64) -> (usize, usize, bool, usize) {
+    let mut p = plan(cfg, case);
+    let built = build(cfg, case, &mut p);
+    let tag = format!(
+        "case {case} seed {} len {} in {} out {}",
+        p.seed, p.len, p.in_chunk, p.out_chunk
+    );
+    let one_shot = decompress_frame(&built.input).unwrap_or_else(|e| panic!("{tag}: one-shot {e}"));
+    assert_eq!(one_shot, built.expected, "{tag}: one-shot");
+    let (out, consumed) =
+        stream(&built.input, p.in_chunk, p.out_chunk).unwrap_or_else(|e| panic!("{tag}: {e}"));
+    assert_eq!(out, one_shot, "{tag}: streamed");
+    assert_eq!(consumed, built.input.len(), "{tag}: consumed");
+    (p.in_regime, p.out_regime, built.linked, built.mix)
+}
+
 #[test]
 fn chunking_invariance_random_chunks() {
     let cfg = Config::load().expect("config");
     for case in 0..cfg.stream.chunking_cases {
-        let mut p = plan(&cfg, case);
-        let (input, expected) = build(&cfg, case, &mut p);
-        let tag = format!(
-            "case {case} seed {} len {} in {} out {}",
-            p.seed, p.len, p.in_chunk, p.out_chunk
-        );
-        let one_shot = decompress_frame(&input).unwrap_or_else(|e| panic!("{tag}: one-shot {e}"));
-        assert_eq!(one_shot, expected, "{tag}: one-shot");
-        let (out, consumed) =
-            stream(&input, p.in_chunk, p.out_chunk).unwrap_or_else(|e| panic!("{tag}: {e}"));
-        assert_eq!(out, one_shot, "{tag}: streamed");
-        assert_eq!(consumed, input.len(), "{tag}: consumed");
+        check_case(&cfg, case);
     }
+}
+
+/// Prints the wall time and how many of the shapes (input regime, output
+/// regime, linked or independent, frame kind mix) a run hits. The case count is
+/// `CHUNKING_CASES_OVERRIDE`, else the config key.
+#[test]
+#[ignore]
+fn chunking_coverage_report() {
+    let cfg = Config::load().expect("config");
+    let cases = std::env::var("CHUNKING_CASES_OVERRIDE")
+        .ok()
+        .and_then(|v| v.parse::<u64>().ok())
+        .unwrap_or(cfg.stream.chunking_cases);
+    let start = std::time::Instant::now();
+    let mut shapes = std::collections::BTreeSet::new();
+    for case in 0..cases {
+        shapes.insert(check_case(&cfg, case));
+    }
+    // 7 regimes in, 7 out, 2 linkage settings, 4 kind mixes: every shape is
+    // reachable, since the one-byte regimes only need an input up to 4 KiB.
+    let reachable = 7 * 7 * 2 * 4;
+    println!(
+        "chunking coverage: cases {cases}, wall {:.2?}, shapes {} of {reachable}",
+        start.elapsed(),
+        shapes.len()
+    );
 }
 
 #[test]
@@ -176,7 +231,7 @@ fn chunking_invariance_on_errors() {
     let cfg = Config::load().expect("config");
     for case in 0..cfg.stream.chunking_cases / 10 {
         let mut p = plan(&cfg, case);
-        let (mut input, _) = build(&cfg, case, &mut p);
+        let mut input = build(&cfg, case, &mut p).input;
         if p.rng.below(2) == 0 {
             let cut = p.rng.below(input.len() as u64) as usize;
             input.truncate(cut);

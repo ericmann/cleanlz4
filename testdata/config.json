@@ -8,7 +8,7 @@
     "max_divergence_files": 100
   },
   "bench": { "repeats": 10 },
-  "stream": { "chunking_cases": 10000 },
+  "stream": { "chunking_cases": 80000 },
   "dict": { "sizes_bytes": [4096, 65536, 131072] },
   "conformance": {
     "hc_levels": [4, 9, 12],

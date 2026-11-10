@@ -106,6 +106,24 @@ Phase 1 report: every rule implemented so far, the section it implements, the fu
 
 ## Measurements
 
+### stream.chunking_cases (P3-06)
+
+`CHUNKING_CASES_OVERRIDE=<n> cargo test -p oracle --test chunking -- --ignored --nocapture` runs `chunking_coverage_report`: the same generator and the full streamed-versus-one-shot check, counting distinct shapes (input regime x output regime x linked or independent x frame kind mix; 7 x 7 x 2 x 4 = 392, all reachable because the one-byte regimes only need an input up to 4 KiB).
+
+| cases | role | wall time | shapes hit |
+|---|---|---|---|
+| 1,000 | one tenth of the key | 0.63 s | 179 of 392 |
+| 10,000 | the key (before) | 8.80 s | 343 of 392 |
+| 20,000 | 2x | 17.03 s | 366 of 392 |
+| 30,000 | 3x | 28.08 s | 380 of 392 |
+| 40,000 | 4x | 37.91 s | 386 of 392 |
+| 50,000 | 5x | 48.45 s | 390 of 392 |
+| 60,000 | 6x | 59.31 s | 391 of 392 |
+| 70,000 | 7x | 66.52 s | 391 of 392 |
+| 80,000 | 8x (after) | 76.18 s | 392 of 392 |
+
+Criterion: keep the key unless fewer than all reachable shapes are hit at its value; then raise it to the smallest multiple that hits them all, provided `chunking_invariance_random_chunks` stays under five minutes. The key hit 343 of 392, so `stream.chunking_cases` is now 80,000; `chunking_invariance_random_chunks` finishes in about 68 s.
+
 ### Full conformance run (P2-12)
 
 `make conformance TASK=P2-12 CATEGORIES=all` wrote `testdata/results/conformance-P2-12.json`: 2349 of 2349 passed. Per category (total, all passed): block 156, checksums 301, concatenated 6, content-size 401, dictionary 72, frame-independent 45, frame-linked 53, legacy 14, skippable 21, synthetic 1280.
