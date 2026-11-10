@@ -137,3 +137,41 @@ fn evidence_index_lists_every_result_file() {
         );
     }
 }
+
+#[test]
+fn runner_passes_the_dictionary_to_frame_entries() {
+    let entries: Vec<Entry> = oracle::manifest::Manifest::load()
+        .expect("manifest")
+        .conformance
+        .expect("conformance section; run `make corpus`")
+        .entries
+        .into_iter()
+        .filter(|e| e.category == "dictionary")
+        .collect();
+    assert!(
+        entries
+            .iter()
+            .any(|e| e.kind == "frame" && e.extra.contains_key("dict_id")),
+        "no frame entry with a dict_id"
+    );
+    assert!(
+        entries
+            .iter()
+            .any(|e| e.kind == "frame" && !e.extra.contains_key("dict_id")),
+        "no frame entry without a dict_id"
+    );
+    let refs: Vec<&Entry> = entries.iter().collect();
+    let report = run_entries(
+        &refs,
+        &oracle::corpus::conformance_dir(),
+        &oracle::runner::cleanlz4_decoder,
+    );
+    assert!(report.total > 0);
+    assert_eq!(report.total, entries.len() as u64);
+    assert_eq!(
+        report.passed, report.total,
+        "failures: {:?}",
+        report.failures
+    );
+    assert!(report.failures.is_empty(), "{:?}", report.failures);
+}
