@@ -23,7 +23,7 @@ Started: 2026-11-10T00:53:38.909Z
 - [x] P1-12 Conformance runner and the results for category block
 - [x] P1-13 DESIGN.md: the Phase 1 spec-rule report
 - [x] P1-14 Phase 1 end: push and record the manual check
-- [ ] P2-01 Frame descriptor parsing and introspection
+- [x] P2-01 Frame descriptor parsing and introspection
 - [ ] P2-02 Options, and one regular frame with independent blocks
 - [ ] P2-03 Linked blocks
 - [ ] P2-04 Block and content checksums
@@ -135,3 +135,7 @@ Rule table written from reading the code; dictionary oracle comparison listed as
 ### P1-14 — 8652007
 
 Push: done. Manual check: NOT VERIFIED (human): read DESIGN.md's rule table against docs/spec/lz4_Block_format.md and the XXH32 section of docs/spec/xxhash_spec.md; read docs/spikes/P1-06.md and confirm each end-of-block decision follows its table; testdata/results/conformance-P1-12.json shows passed == total for category block. Note: P1-10 (dictionary differential) is BLOCKED (binding lacks LZ4_decompress_safe_usingDict).
+
+### P2-01 — 530414f
+
+frame.rs: BlockMaxSize{bytes()}, FrameDescriptor (Copy), parse_frame_descriptor(input)->(desc, header_len); re-exported from lib. Check order as specified. Oracle Dict-ID: prefs dict_id 0 means no Dict-ID field, non-zero sets the flag (observed, descriptor.rs asserts it). 9 unit tests + 64-combination oracle test. Footgun: python-based edits fail silently when rustfmt reformatted the text; run clippy locally before kukulu_verify.
