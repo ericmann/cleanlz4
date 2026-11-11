@@ -1,5 +1,6 @@
 //! The `lz4` command-line program, run as a black box (SPEC section 6.5, last
-//! paragraph). Used only to make legacy frames.
+//! paragraph). It makes legacy frames (`lz4 -l`) and is the oracle for
+//! dictionary decoding (`lz4 -d -D <dict>`), SPEC section 6.5.
 
 use std::path::PathBuf;
 use std::process::Command;

@@ -210,6 +210,9 @@ pub(crate) struct FrameState {
     content_hash: Xxh32,
     /// Decoded bytes so far, compared with the descriptor's content size.
     decoded: u64,
+    /// The one buffer every compressed block of this frame decodes into; it
+    /// never holds more than one block and dies with the frame.
+    scratch: Vec<u8>,
 }
 
 /// The LZ4 window (Frame format, "Block Independence flag": "up to LZ4 window
@@ -258,6 +261,7 @@ impl FrameState {
             verify,
             content_hash: Xxh32::new(0),
             decoded: 0,
+            scratch: Vec::new(),
         })
     }
 
@@ -317,7 +321,8 @@ impl FrameState {
             return Ok(data.len());
         }
         let (bound, allowance_bounds) = block_bound(max, allowance);
-        let mut block = Vec::new();
+        let mut block = core::mem::take(&mut self.scratch);
+        block.clear();
         // Linked blocks see the previous output as a prefix; independent ones see
         // only the preset dictionary, if any.
         let prefix: &[u8] = if self.desc.block_independence {
@@ -330,7 +335,9 @@ impl FrameState {
         self.account(block.len())?;
         append_capped(out, &block, allowance)?;
         self.produced(&block);
-        Ok(block.len())
+        let n = block.len();
+        self.scratch = block;
+        Ok(n)
     }
 
     /// Count `n` more decoded bytes; more than the declared content size is
@@ -468,19 +475,13 @@ fn decode_regular_frame(
     Ok((desc, pos))
 }
 
-/// Whether `word` is a known frame magic number.
-fn is_magic(word: u32) -> bool {
-    word == FRAME_MAGIC
-        || word == LEGACY_MAGIC
-        || word & SKIPPABLE_MAGIC_MASK == SKIPPABLE_MAGIC_BASE
-}
-
 /// Decode one legacy frame at the start of `input` (Frame format, "Legacy
 /// frame"), appending to `out`; returns the bytes it used. The frame ends at
 /// the end of input, at a known magic number (left unconsumed) or at a zero
 /// block size (consumed: the documented Linux kernel extension).
 fn decode_legacy_frame(input: &[u8], out: &mut Vec<u8>, remaining: &mut u64) -> Result<usize> {
     let mut pos = 4usize;
+    let mut scratch = Vec::new();
     loop {
         if pos >= input.len() {
             return Ok(pos);
@@ -489,7 +490,7 @@ fn decode_legacy_frame(input: &[u8], out: &mut Vec<u8>, remaining: &mut u64) -> 
         if word == 0 {
             return Ok(pos.saturating_add(4));
         }
-        if is_magic(word) {
+        if magic_kind(word).is_some() {
             return Ok(pos);
         }
         let size = word as usize;
@@ -499,22 +500,24 @@ fn decode_legacy_frame(input: &[u8], out: &mut Vec<u8>, remaining: &mut u64) -> 
         let start = pos.saturating_add(4);
         let end = skip(input, start, size)?;
         let data = input.get(start..end).ok_or(Error::TruncatedInput)?;
-        decode_legacy_block(data, out, remaining)?;
+        decode_legacy_block(data, &mut scratch, out, remaining)?;
         pos = end;
     }
 }
 
-/// Decode one legacy block, appending to `out` and charging `remaining`.
+/// Decode one legacy block through `scratch` (the frame's one reused buffer),
+/// appending to `out` and charging `remaining`.
 pub(crate) fn decode_legacy_block(
     data: &[u8],
+    scratch: &mut Vec<u8>,
     out: &mut Vec<u8>,
     remaining: &mut u64,
 ) -> Result<()> {
-    let mut block = Vec::new();
+    scratch.clear();
     let (bound, allowance_bounds) = block_bound(LEGACY_BLOCK_BYTES, *remaining);
-    decode_block(data, &[], &mut block, bound).map_err(|e| limit_error(e, allowance_bounds))?;
-    append_capped(out, &block, *remaining)?;
-    *remaining = remaining.saturating_sub(block.len() as u64);
+    decode_block(data, &[], scratch, bound).map_err(|e| limit_error(e, allowance_bounds))?;
+    append_capped(out, scratch, *remaining)?;
+    *remaining = remaining.saturating_sub(scratch.len() as u64);
     Ok(())
 }
 
@@ -595,6 +598,26 @@ pub(crate) fn decode_frames(input: &[u8], options: &DecodeOptions) -> Result<Fra
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn magic_kind_names_the_three_kinds_and_nothing_else() {
+        assert_eq!(magic_kind(0x184D_2204), Some(FrameKind::Regular));
+        assert_eq!(magic_kind(0x184C_2102), Some(FrameKind::Legacy));
+        for word in 0x184D_2A50..=0x184D_2A5F_u32 {
+            assert_eq!(magic_kind(word), Some(FrameKind::Skippable), "{word:#x}");
+        }
+        for word in [
+            0,
+            0x184D_2203,
+            0x184D_2205,
+            0x184D_2A4F,
+            0x184D_2A60,
+            0x184C_2101,
+            u32::MAX,
+        ] {
+            assert_eq!(magic_kind(word), None, "{word:#x}");
+        }
+    }
 
     /// Build a header by the document's layout, with a valid checksum.
     fn header(flg: u8, bd: u8, size: Option<u64>, dict: Option<u32>) -> Vec<u8> {

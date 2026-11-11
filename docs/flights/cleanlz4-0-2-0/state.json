@@ -1,0 +1,129 @@
+{
+  "round": 1,
+  "implemented": true,
+  "reviewed": true,
+  "verdict": "APPROVED",
+  "summarized": true,
+  "halted": null,
+  "preexistingUntracked": [],
+  "policies": {
+    "signing": "auto",
+    "push": true,
+    "pr": "draft",
+    "feedback": true,
+    "archive": true,
+    "finalize": "auto",
+    "mergeMethod": "merge",
+    "syncBase": true
+  },
+  "signing": "on",
+  "rounds": [
+    {
+      "round": 1,
+      "fixTasks": 1,
+      "unblocked": 0,
+      "verdict": "CHANGES REQUESTED",
+      "nonConverging": false,
+      "sources": {
+        "review": 0,
+        "mutation": 1,
+        "blocked": 0
+      },
+      "at": "2026-11-10T22:40:41.515Z"
+    },
+    {
+      "round": 2,
+      "fixTasks": 0,
+      "unblocked": 0,
+      "verdict": "APPROVED",
+      "sources": {
+        "review": 0,
+        "mutation": 0,
+        "blocked": 0
+      },
+      "at": "2026-11-10T22:47:17.060Z"
+    }
+  ],
+  "archived": {
+    "slug": "cleanlz4",
+    "dir": "docs/flights/cleanlz4",
+    "at": "2026-11-10T09:48:06.379Z"
+  },
+  "breaking": false,
+  "cleanroom": {
+    "genesis": "cda8f0ccbf29f917ecfaec70dea256e410ef1a57c598ea7c90773b600cb93002",
+    "policyHash": "dc6815a9c95ed4abd79f489f6114059d1044f0f84f374ef72f164fe1dba9b740",
+    "guardHash": "f499a625f596d9cb2ffb25e4d5579a26a92ac20c969bb57f70892813bc6c94b6",
+    "loggerHash": "c1e8a950a01be6c24cab4a92b8e7e0c6d687aecbe8888a1f9db3fb6cdc9ff54e",
+    "hooksHash": "3917311222b19bf78a53e094717cf2a3501707478cc0846725e1e7524d4aa228",
+    "cleanroomHash": "5bf2e40efd0faaf935d62e40aee80daa8c9591f4587f2a6486dfb95cb4f0260b"
+  },
+  "timeline": [
+    {
+      "event": "start",
+      "stage": "plan",
+      "round": 0,
+      "at": "2026-11-10T15:21:10.627Z"
+    },
+    {
+      "event": "end",
+      "stage": "plan",
+      "round": 0,
+      "at": "2026-11-10T15:48:31.487Z"
+    },
+    {
+      "event": "start",
+      "stage": "implement",
+      "round": 0,
+      "at": "2026-11-10T15:48:31.487Z"
+    },
+    {
+      "event": "end",
+      "stage": "implement",
+      "round": 0,
+      "at": "2026-11-10T21:54:12.026Z"
+    },
+    {
+      "event": "start",
+      "stage": "review",
+      "round": 0,
+      "at": "2026-11-10T21:54:12.026Z"
+    },
+    {
+      "event": "end",
+      "stage": "review",
+      "round": 0,
+      "at": "2026-11-10T22:41:10.734Z"
+    },
+    {
+      "event": "start",
+      "stage": "implement",
+      "round": 1,
+      "at": "2026-11-10T22:41:10.734Z"
+    },
+    {
+      "event": "end",
+      "stage": "implement",
+      "round": 1,
+      "at": "2026-11-10T22:43:45.170Z"
+    },
+    {
+      "event": "start",
+      "stage": "review",
+      "round": 1,
+      "at": "2026-11-10T22:43:45.170Z"
+    },
+    {
+      "event": "end",
+      "stage": "review",
+      "round": 1,
+      "at": "2026-11-10T22:47:40.091Z"
+    },
+    {
+      "event": "start",
+      "stage": "summarize",
+      "round": 1,
+      "at": "2026-11-10T22:47:40.091Z"
+    }
+  ]
+}

@@ -725,3 +725,13 @@ fn independent_frame_uses_the_dictionary_for_every_block() {
     let out = decompress_frame_with(&f, &with_dict(b"ABCDEFGH", None)).expect("ok");
     assert_eq!(out.data, b"ABCDEFGH12345ABCDEFGH12345");
 }
+
+#[test]
+fn legacy_frame_ends_before_a_second_legacy_frame() {
+    let mut input = legacy(&[literal_block(b"first ")]);
+    input.extend(legacy(&[literal_block(b"second")]));
+    let out = decompress_frame_with(&input, &DecodeOptions::default()).expect("ok");
+    assert_eq!(out.data, b"first second");
+    assert_eq!(out.kinds, [FrameKind::Legacy, FrameKind::Legacy]);
+    assert_eq!(out.consumed, input.len());
+}
