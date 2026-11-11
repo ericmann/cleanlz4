@@ -1,6 +1,22 @@
 # cleanlz4 — Specification
 
-Version: 0.3 Status: draft for owner review. Drives the **0.2.0 flight**, on top of the 0.1.0 codebase.
+Version: 0.4 Status: draft for owner review. Drives the **0.2.1 flight**, on top of the 0.2.0 codebase. Flight slug: `cleanlz4-0-2-1`.
+
+**Changes in 0.4 (2026-11-11):** this version scopes the third flight, a patch release that changes no decoder code. It settles the spec issues the 0.2.0 summary raised (`docs/flights/cleanlz4-0-2-0/SUMMARY.md`, Spec issues). The planner reads that summary for context, not as work to repeat.
+- **Header:** names the flight slug, because the title-derived slug is taken by the 0.1.0 archive.
+- **§1:** the attestation bundle is read at its archived path, and the PR stays a draft.
+- **§4:** `xxh32.rs` imports nothing crate-internal, matching the code and `CLAUDE.md`.
+- **§5.1:** drops the stray table header and names the statistic for any before/after measurement.
+- **§5.3:** says what to write when Kūkulu takes only one control pair per role.
+- **§5.4:** result files carry the flight's version in their task id, and the writer never overwrites one.
+- **§8 is rewritten** for this flight. The work it schedules:
+  - a no-overwrite guard on the results writer;
+  - a strict corpus-manifest check;
+  - an assertion that kills the `block.rs` zero-offset mutant without relying on a hang;
+  - a re-verification without hour-long fuzz runs, since no decoder code changes;
+  - the `0.2.1` changelog entry.
+- **§9** resolves Q4 from the 0.2.0 run.
+- **Policies:** this flight's `docs/kukulu.json` sets `"policies": { "finalize": "draft" }`, so the summarize stage leaves the PR a draft for the owner's checks and never asks for auto-merge.
 
 **Changes in 0.3 (2026-11-10):** this version scopes the second flight, a hardening release. It builds on 0.1.0 and does not rebuild it.
 - **§5.3** adds same-language similarity controls. 0.1.0's "independence not supported" verdict came only from Rust-vs-Rust n-gram metrics, which were judged against Rust-vs-C controls.
@@ -15,7 +31,7 @@ Version: 0.3 Status: draft for owner review. Drives the **0.2.0 flight**, on top
 
 **Changes in 0.2 (2026-11-10):** §6.5 records the owner's §9 Q2 decision from the first flight. The binding crate lacks `LZ4_decompress_safe_usingDict`, so the `lz4` command-line program, run as a black box, is the oracle for dictionary decoding (clean-room record seq 681). That function is removed from the permitted C API, which now has fifteen functions; the oracle never called it. §9 Q2 is marked resolved.
 
-The Kūkulu planner reads this file in full and derives the build plan from it. §1 to §7 describe the whole product, as built in 0.1.0 and settled since. §8 lists only the work of this flight. The 0.1.0 flight's plan, review and summary are archived in `docs/flights/cleanlz4/`, and the planner reads that summary for context, not as work to repeat. This is a clean-room flight: `docs/cleanroom.json` is committed on the base branch before the first `/kukulu:go-flight`, and every stage runs under it.
+The Kūkulu planner reads this file in full and derives the build plan from it. §1 to §7 describe the whole product, as built in 0.1.0 and 0.2.0 and settled since. §8 lists only the work of this flight. The earlier flights' plans, reviews and summaries are archived in `docs/flights/cleanlz4/` (0.1.0) and `docs/flights/cleanlz4-0-2-0/` (0.2.0), and the planner reads those summaries for context, not as work to repeat. This is a clean-room flight: `docs/cleanroom.json` is committed on the base branch before the first `/kukulu:go-flight`, and every stage runs under it.
 
 ## 1. Overview
 
@@ -34,9 +50,9 @@ Done means:
 - every requirement in §6 has its tests;
 - every command in §7 exits zero;
 - the fuzz campaign has run for its configured duration with zero crashes, and every divergence is triaged in `DESIGN.md`;
-- `kukulu_similarity` has produced `docs/SIMILARITY.md` with the same-language controls in §5.3, and `kukulu_attest` has produced a bundle under `docs/attestation/` that passes `verify.mjs`;
+- `kukulu_similarity` has produced `docs/SIMILARITY.md` with the controls in §5.3, and `kukulu_attest` has produced a bundle that passes `verify.mjs`. The bundle is written under `docs/attestation/`, and archiving moves it to `docs/flights/<slug>/attestation/`, where the owner verifies it;
 - `CHANGELOG.md` has a numbered entry for the release, and the crate versions match it;
-- a draft PR is open.
+- a draft PR is open, and it stays a draft until the owner's manual checks are done (`policies.finalize: "draft"`).
 
 ## 2. Goals and non-goals
 
@@ -94,7 +110,7 @@ Each is checkable by grep, by a test, or by the guard. The planner turns the mec
 
 | Path | Responsibility | May import |
 |---|---|---|
-| `crates/cleanlz4/src/xxh32.rs` | XXH32, one-shot and streaming | `core`, `std`, `error` |
+| `crates/cleanlz4/src/xxh32.rs` | XXH32, one-shot and streaming | `core`, `std` |
 | `crates/cleanlz4/src/block.rs` | Block decoding into a caller-provided window | `core`, `std`, `error` |
 | `crates/cleanlz4/src/frame.rs` | Frame parsing, block sequencing, checksums, skippable and legacy frames, the one-shot driver | `block`, `xxh32`, `error` (never `stream`) |
 | `crates/cleanlz4/src/stream.rs` | Streaming decoder state machine, built on `frame`'s primitives | `frame`, `block`, `xxh32`, `error` |
@@ -110,9 +126,7 @@ Each is checkable by grep, by a test, or by the guard. The planner turns the mec
 
 ### 5.1 Tunables
 
-| Key | Default | Meaning |
-|---|---|---|
-`testdata/config.json` holds every key, and its number is written nowhere else. The defaults below are the values 0.1.0 shipped. This flight changes none of them. Keys under `conformance.*` and `diff.*` are generator and harness settings, and `testdata/config.json` holds their values.
+`testdata/config.json` holds every key, and its number is written nowhere else. The defaults below are the values 0.1.0 shipped, and 0.2.0 kept them. This flight changes none of them, and adds only the key named in §8 Phase 1. Keys under `conformance.*` and `diff.*` are generator and harness settings, and `testdata/config.json` holds their values.
 
 | Key | Default | Meaning | Status after 0.1.0 (task ids are 0.1.0's) |
 |---|---|---|---|
@@ -125,6 +139,8 @@ Each is checkable by grep, by a test, or by the guard. The planner turns the mec
 | `bench.repeats` | 10 | Repetitions per benchmark input | Measured (P4-11); kept |
 | `stream.chunking_cases` | 80,000 | Cases in the chunking-invariance property test | Tuned (P3-06): 392 of 392 shapes hit |
 | `dict.sizes_bytes` | [4096, 65536, 131072] | Dictionary sizes in the conformance corpus | A plan choice |
+
+**Measuring a change.** Any before/after benchmark comparison judges the aggregate throughput over all inputs, and its threshold is the run-to-run spread recorded under `DESIGN.md`'s Measurements. A change over the threshold gets one confirming run before any revert. 0.2.0 measured about 3 points of noise between runs on the owner's machine.
 
 ### 5.2 Corpora (fetched in 0.1.0; never committed)
 
@@ -175,7 +191,13 @@ Add these pairs to the block above:
 { "id": "rust-derived-vs-indep",     "role": "positive", "left": "/home/ericmann/Projects/prior-art/lz4_flex-disguised/src", "right": "/home/ericmann/Projects/prior-art/lz4_flex/src" }
 ```
 
-**Reading the result.** Judge `subject-vs-indep` against the two Rust-vs-Rust controls, and `subject-vs-c` against the two Rust-vs-C controls. Score every pair; no pair is dropped. If `kukulu_similarity` scores every test pair against every control instead of only the matching language pairing (§9 Q4), `SUMMARY.md` reports both readings. It says which control band applies to each test pair, and repeats the tool's own verdict verbatim. The verdict is never reworded or overridden.
+**Reading the result.** Judge `subject-vs-indep` against the two Rust-vs-Rust controls, and `subject-vs-c` against the two Rust-vs-C controls. `SUMMARY.md` says which control band applies to each test pair, and repeats the tool's own verdict verbatim. The verdict is never reworded or overridden.
+
+**When the tool takes one band (new in 0.4).** Kūkulu 0.8.0 refuses a `pairs` list with more than one `negative` or more than one `positive` pair, and every tool then fails to load the config (§9 Q4). If the running Kūkulu still refuses, the planner writes the four pairs 0.2.0 used, and no others:
+- `rust-independent-vs-indep` (negative) and `rust-derived-vs-indep` (positive), from the block above;
+- `subject-vs-indep` and `subject-vs-c` (test).
+
+`independent-vs-c` and `derived-vs-c` are then left out. `SUMMARY.md` says so, applies the band to `subject-vs-indep` only, and reads `subject-vs-c` against 0.1.0's `docs/flights/cleanlz4/SIMILARITY.md`. If the running Kūkulu accepts several pairs per role, the planner writes all six and every pair is scored.
 
 ### 5.4 Result files (the demo's data)
 
@@ -192,6 +214,8 @@ Committed in the same commit as the work that produced them, under `testdata/res
     - `{ "task", "inputs": [ { "name", "bytes", "cleanlz4_mb_s", "c_mb_s" } ] }`.
 
 `docs/DESIGN.md` and these files are the only places results live. `SUMMARY.md` quotes them.
+
+**Task ids in result files (new in 0.4).** Task ids restart at `P0-01` every flight, and review-fix ids repeat too (`malformed-R3-02.json` is 0.1.0's). From this flight on, the `TASK` passed to every runner is the release version, a hyphen and the task id, for example `make conformance TASK=0.2.1-P2-01 CATEGORIES=all`, which writes `conformance-0.2.1-P2-01.json` with `"task": "0.2.1-P2-01"`. Earlier flights' files keep their names. The results writer refuses to overwrite an existing file: it exits non-zero and names the path.
 
 ## 6. Interfaces
 
@@ -314,56 +338,62 @@ If the binding crate lacks one of these, the task blocks and names it. It never 
 - data: `make corpus`, `make conformance TASK=<id> CATEGORIES=<list|all>`, `make conformance-check`, `make malformed TASK=<id>`, `make bench TASK=<id>`
 - all checks: `make check`
 
-## 8. Phases (the 0.2.0 flight)
+## 8. Phases (the 0.2.1 flight)
 
-**Already built in 0.1.0, not to be rebuilt:**
+**Already built in 0.1.0 and 0.2.0, not to be rebuilt:**
 - the workspace, `make check` and the deps and spec-source scripts;
-- XXH32, the block, frame and streaming decoders, the output limit;
-- the conformance and malformed corpora and their runners;
+- XXH32, the block, frame and streaming decoders, the output limit, and 0.2.0's one scratch buffer per frame;
+- the conformance and malformed corpora and their runners, and the dictionary differential test;
 - the five fuzz targets and their runner, and the benchmarks;
 - `docs/EVIDENCE.md`.
 
-The summary and every decision are in `docs/flights/cleanlz4/SUMMARY.md` and `docs/DESIGN.md`. This flight changes the existing code only where a task below names it. The public API and every error variant stay as they are, so the release is `0.2.0` with no breaking change.
+The summaries and every decision are in `docs/flights/cleanlz4/SUMMARY.md`, `docs/flights/cleanlz4-0-2-0/SUMMARY.md` and `docs/DESIGN.md`.
+
+**This flight changes nothing under `crates/cleanlz4/src/`.** The decoder, the public API and every error variant stay as 0.2.0 shipped them, so the release is `0.2.1`, a patch with no breaking change. New tests may go under `crates/cleanlz4/tests/`. If a task finds that a decoder change is needed, it blocks and names the change; it is never made in this flight. The planner makes this a constraint rule.
+
+Every `TASK` passed to a runner in this flight is `0.2.1-<task-id>` (§5.4).
 
 ### Phase 0 — Baseline and lockdown
 
-- Confirm the 0.1.0 baseline on the base branch:
-    - `make check` is green;
-    - `node scripts/verify-spec-sources.mjs` passes;
-    - `cargo test -p oracle --test manifest` shows the corpora on disk matching `testdata/MANIFEST.json`.
-- Run `make corpus` and `make conformance-check`. The result must be 2349 of 2349, as in 0.1.0.
-- **This is the lockdown task** (`lockdown.after` in the policy). This flight adds no dependency, so nothing needs the network before or after it. A task that seems to need a new crate blocks instead.
-- **Manual check:** the baseline numbers match 0.1.0's results files.
+Phase 0 has three tasks, and **`P0-03` is the lockdown task**: `lockdown.after` in `docs/cleanroom.json` is `P0-03`, and that file is never edited. This flight adds no dependency, so nothing needs the network before or after it. A task that seems to need a new crate blocks instead.
 
-### Phase 1 — Close the 0.1.0 review notes
+- **P0-01:**
+    - check that `testdata/corpora/cantrbry/` and `testdata/corpora/silesia/` exist before running `cargo test -p oracle --test manifest`, because that test passes when the directory is absent;
+    - check that the test shows both corpora matching `testdata/MANIFEST.json`;
+    - check that `lz4 -V` and the binding crate's version match those the manifest records.
+- **P0-02:** `make check` is green, `node scripts/verify-spec-sources.mjs` passes, and `cargo +nightly fuzz build` succeeds offline.
+- **P0-03:** run `make corpus`, then `make conformance TASK=0.2.1-P0-03 CATEGORIES=all`. The result must be 2349 of 2349 with the same `corpus_sha256` as 0.2.0's `conformance-P2-01.json`. A result that is only printed does not exist (§3.6), so `make conformance-check` alone is not enough here.
+- **Manual check:** `conformance-0.2.1-P0-03.json` matches 0.2.0's `conformance-P2-01.json` in `corpus_sha256`, total, passed and every category.
 
-- **Dictionary-frame differential test.** Add a committed test in `crates/oracle/tests/` that decodes every `dictionary` entry of the conformance corpus with both the `lz4` program (`oracle::cli::decompress_frame_with_dict`) and cleanlz4. Both must produce the entry's expected bytes. Frames whose Dict-ID has no dictionary go through cleanlz4 only, and must return `DictionaryRequired`. This closes the gap §1's Correctness property left open: until now, dictionary frames were checked only against known data. Update the stale wording that says the oracle cannot decode these frames:
-    - the `dict_frame` doc comment in `crates/oracle/src/dict.rs`;
-    - the comments in `crates/oracle/src/cli.rs` and `crates/oracle/src/fuzz_logic.rs`.
-- **Kill the two surviving mutants:**
-    - `crates/oracle/src/dict.rs`: a test that a block with no data in common with the dictionary is labelled not `dict_dependent`.
-    - `crates/oracle/src/runner.rs`: dropping the dictionary from frame entries must fail a test that `cargo test --workspace` runs. The binding for `make conformance-check` in `docs/kukulu.json` must also cover `crates/oracle/src/runner.rs` and `crates/oracle/src/dict.rs`, not only `crates/cleanlz4/src/`.
-- **Decoder cleanups**, with no change to the API or behavior:
-    - merge `is_magic` and `magic_kind` in `crates/cleanlz4/src/frame.rs` into one function;
-    - reuse one scratch buffer across blocks instead of allocating a `Vec` per block. The memory bound in §6.1 must still hold.
-- **Measure the scratch-buffer change** with `make bench`, before and after, following the tuning protocol. Keep the change unless it is slower than before by more than the spread `bench.repeats` measured in 0.1.0. Record the table under `DESIGN.md`'s Measurements.
-- **Manual check:** read the new dictionary differential test and the two mutant-killing tests.
+### Phase 1 — Close the 0.2.0 notes
+
+- **The results writer never overwrites.** The shared writer in `crates/oracle` that every runner uses refuses to write a result file that already exists: it exits non-zero and names the path. Add a test that writes one file into a scratch directory, then shows the second write fails and leaves the first file's bytes unchanged.
+- **A strict corpus check.** Add an `#[ignore]` test to `crates/oracle/tests/manifest.rs` that fails when `testdata/corpora/` or either corpus directory is absent, and otherwise checks every file against `testdata/MANIFEST.json` as the existing test does. The existing test keeps passing when the corpora are absent, so `cargo test --workspace` still runs on a machine without them. `CLAUDE.md`'s Commands gain the strict form, `cargo test -p oracle --test manifest -- --ignored`, and later flights' Phase 0 runs that instead of the manual directory check.
+- **Kill the zero-offset mutant by assertion.** In 0.2.0's review, deleting the zero-offset check in `crates/cleanlz4/src/block.rs` was caught only because a test hung until its timeout. Add a test under `crates/cleanlz4/tests/` that decodes a minimal block whose first match has offset 0 and asserts the zero-offset error variant.
+    - Apply the mutant by hand, see the new test fail, and restore the file. `git diff --exit-code -- crates/cleanlz4/src/` must be clean afterwards.
+    - If the mutated decoder never returns, the test must still fail by assertion, not by hanging. It runs the decode on a thread and fails when the thread has not returned within `test.hang_seconds`. That is a new key in `testdata/config.json`, default 10, marked ⚠️ ASSUMPTION.
+    - Record the decision in `DESIGN.md` with "Block format, Offset" as its section.
+- **Docs agree with the code.** The `xxh32.rs` row of `CLAUDE.md`'s module map and §4 both say `core`, `std`. `docs/EVIDENCE.md` and `README.md` give the attestation bundle's archived path, `docs/flights/<slug>/attestation/`, wherever they name the bundle.
+- **Manual check:** read the three new tests, and confirm that the zero-offset test failed by assertion when the mutant was applied (the task's log quotes the failure line).
 
 ### Phase 2 — Re-verify
 
-- A full conformance run (`conformance-<task-id>.json`, every category) and a full malformed run (`malformed-<task-id>.json`). They must give 2349 of 2349, and 144 of 144 with 0 panics.
-- Each of the five fuzz targets runs for `fuzz.seconds_per_target`, one task per target, under the long-run and fuzz-run protocols. Before each `diff_*` run, empty the divergence directory: move the committed inputs aside and restore them afterwards. If any new divergence appears, a triage task follows and records it in `DESIGN.md`'s Divergence triage.
-- The final benchmark (`bench-<task-id>.json`), with actual figures and no target.
-- **Manual check:** zero crashes, and every divergence triaged.
+No decoder code changes, so this flight runs no hour-long fuzz campaign; 0.2.0's five one-hour runs stand for the decoder.
+- A full conformance run (`conformance-0.2.1-<task-id>.json`, every category). It must give 2349 of 2349.
+- A full malformed run (`malformed-0.2.1-<task-id>.json`). It must give 144 of 144 with 0 panics.
+- `make fuzz-smoke`. Every target must finish its `fuzz.smoke_seconds` with no crash. It writes no result file, so the task's log quotes each target's final line.
+- No benchmark: the decoder is unchanged, and 0.2.0's `bench-P2-09.json` stands.
+- **Manual check:** the two result files show the counts above, and the smoke log shows no crash.
 
 ### Phase 3 — Evidence and release prep
 
-- Refresh `docs/EVIDENCE.md`, so it lists every result file the flight added, and refresh `README.md`.
-- Add the `## [0.2.0] - <date>` entry to `CHANGELOG.md`, covering everything this flight changed. Set `version = "0.2.0"` in `crates/cleanlz4/Cargo.toml` and `crates/oracle/Cargo.toml`. The entry must be on the build branch before its PR is merged, because `kukulu_release` reads it at the merge commit.
-- The summarize stage, not an implement task, runs `kukulu_similarity` with every pair in §5.3 and `kukulu_attest`, and writes `SUMMARY.md`. The planner schedules no implement task for them.
+- Add the `## [0.2.1] - <date>` entry to `CHANGELOG.md`, covering everything this flight changed. Set `version = "0.2.1"` in `crates/cleanlz4/Cargo.toml` and `crates/oracle/Cargo.toml`. The entry must be on the build branch before its PR is merged, because `kukulu_release` reads it at the merge commit.
+- Then refresh `docs/EVIDENCE.md`, so it lists every result file the flight added, and refresh `README.md`.
+- The summarize stage, not an implement task, runs `kukulu_similarity` with the pairs §5.3 says to write and `kukulu_attest`, and writes `SUMMARY.md`. The planner schedules no implement task for them.
 - **Manual check:**
-    - the owner reads `docs/SIMILARITY.md` against the same-language controls;
-    - the owner runs `node docs/attestation/verify.mjs docs/attestation --key sha256:<owner's fingerprint>` from a clean checkout on a second machine.
+    - the owner reads `docs/SIMILARITY.md` as §5.3 directs;
+    - the owner runs `node docs/flights/cleanlz4-0-2-1/attestation/verify.mjs docs/flights/cleanlz4-0-2-1/attestation --key sha256:<owner's fingerprint>` from a clean checkout on a second machine;
+    - the owner marks the draft PR ready and merges it.
 
 ## 9. Open questions
 
@@ -374,7 +404,7 @@ The summary and every decision are in `docs/flights/cleanlz4/SUMMARY.md` and `do
     - §6.4's "`docs/spec/` wins" governs the rest.
 2. **The binding crate's surface.** If it lacks a §6.5 function, the task blocks. The owner either swaps the binding crate or permits the `lz4` CLI as the oracle for that case. *Resolved (0.2):* the binding crate lacked `LZ4_decompress_safe_usingDict`, and the owner permitted the `lz4` CLI as the dictionary oracle (see §6.5).
 3. **Dictionary test inputs.** The oracle generates dictionaries from corpus slices. The planner fixes their sizes as config keys. *Resolved (0.1.0):* `dict.sizes_bytes`, see §5.1.
-4. **How `kukulu_similarity` pairs controls with tests.** Does it calibrate each test pair against all controls, or only against the controls of the same language pairing? The summarizer reads the answer off `docs/SIMILARITY.md`, without reading the tool's source, and reports per §5.3. If the tool pools every control into one band, the owner raises it as Kūkulu feedback, and this flight carries on.
+4. **How `kukulu_similarity` pairs controls with tests.** Does it calibrate each test pair against all controls, or only against the controls of the same language pairing? The summarizer reads the answer off `docs/SIMILARITY.md`, without reading the tool's source, and reports per §5.3. If the tool pools every control into one band, the owner raises it as Kūkulu feedback, and this flight carries on. *Resolved (0.2.0):* Kūkulu 0.8.0 takes exactly one negative and one positive pair, so a run has one band. 0.2.0 used the Rust-vs-Rust band, and §5.3 says what to write while that holds. It is logged as Kūkulu feedback.
 
 ## Operator notes (read before starting the flight)
 
@@ -383,8 +413,11 @@ The summary and every decision are in `docs/flights/cleanlz4/SUMMARY.md` and `do
 - See `DEMO-CAPTURE.md` (kept outside this repository) for what to preserve during and after the flight.
 - Phase 0 of 0.1.0 recorded the oracle library's version and the lz4 CLI's version (`lz4 -V`) in `testdata/MANIFEST.json`. This flight must run with the same versions. A mismatch blocks Phase 0.
 
-**Before starting the 0.2.0 flight:**
-- Prepare the two new similarity trees in §5.3 (the cleanflate path, and the disguised `lz4_flex` copy) at the paths given. If you cannot, say so before the flight, as for the `c2rust` tree.
+**Before starting the 0.2.1 flight:**
+- Merge this spec's PR, then run `/kukulu:go-flight` from a fresh session on an up-to-date `main` (`git switch main && git pull --ff-only`).
+- Confirm the §5.3 trees still exist at the paths given. The planner cannot check them, because the guard denies those paths, and `kukulu_similarity` refuses a missing directory.
 - Make sure `testdata/corpora/` is present. Never run `git clean -x` here: it deletes the gitignored corpora and the conformance corpus, and this flight cannot download them.
-- Fuzz runs take an hour each, which is longer than the MCP idle timeout of 1,800 s. Either raise `MCP_TOOL_TIMEOUT` for the session, or expect the implementer to wait for the result file, as it did in 0.1.0.
-- A clean-room log stash (`clean-room log (session)`) from the end of the 0.1.0 flight may still be in `git stash list`. Leave it; nothing in this flight needs it.
+- This flight runs no hour-long fuzz campaign, so the MCP idle timeout (1,800 s) should not be hit. The longest call is a full conformance or malformed run.
+- Clean-room log stashes from the ends of earlier flights may be in `git stash list` (`clean-room log (session)`, and two from the 0.2.0 release). Leave them; nothing in this flight needs them.
+
+**After the flight:** the clean-room guard blocks `gh` and `git push` for agents, so the owner merges the PR and pushes `main` by hand. Before asking for `release it`, check out `main` and fast-forward it to `origin/main`, so the release tool tags the right merge commit.
