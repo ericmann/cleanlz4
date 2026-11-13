@@ -1,0 +1,71 @@
+c6ba853e6d4980a764d0654e2328cb8c1ee4245eGchore: build summarysummarize-
+09c7642d5026dd461e8c0a5af308ede85bb0c91dGchore: similarity scoredsummarize-
+55a6e0dd2df2a28d019836b35168ed7857c8592cGchore: build summarysummarize-
+0f7126803cd3a7209c988602c325e48b19b2042cGchore: stage summarizecontroller-
+dabd703178ba6b7f8f0c55b259f439e4b8e326acGreview: round 2 approvedreview-
+a085c3f272620ab803888692b23290d18e3590cdGchore: pipeline friction (review)review-
+9b5957138652b95a16fac97fb91d0d1c839afa1bGchore: stage reviewcontroller-
+b8adc2ad68aed0a5a4d466bf494c3b2c51293722Gchore: round 1 implementedfix-
+9825ccd00d3c0190d2f11429f9b8d51f8985d718Gchore: handoff for reviewfix-
+4b407274fd80c50f4a7709003e6c73c1ddbf80e1Gprogress: R1-01 donefixR1-01
+1b9d5b070e32e58f27e4f2583818435d1a1c0004GR1-01: Test that the streaming legacy scratch buffer dies with its framefixR1-01
+3c0f0cff432405d03476762178dbf38d3d2661c0Gchore: start review-fix round 1fix-
+56ecec096dbfa40cea2833e86d195d9d770a9183Gchore: stage implementcontroller-
+f190275490a0e5a786a870303cc82c2eca660ee7Greview: round 1review-
+9900891fb31a375b9be4028dab927bec1802fa77Gchore: pipeline friction (review)review-
+2c87cf870fdd4ccd90a628bc0207f5fafddaf6a4Gchore: pipeline friction (review)review-
+bfb30d7c5b4427d8ded770c210b4ddc98a2a7b35Gchore: stage reviewcontroller-
+0e0339e0d64717c69fd5abe0b84efc1df686016eGchore: round 0 implementedimplement-
+6aa95db1a4de0da23d05b6c0a1cf66acd9f06eafGchore: handoff for reviewimplement-
+b25ae5e0e2fdfc322b61ef98a641c2aa76714983Gprogress: P3-03 doneimplementP3-03
+2895c5281632b061bb4c082b3ac7937530abb2fbGP3-03: Phase 3 end: push and record the manual checkimplementP3-03
+f0b3ad9f55dc6def9b2206d7c4352db7fa9846f8Gprogress: P3-02 doneimplementP3-02
+7e537821567b1396e27457220bac54e8ddbd4996GP3-02: Refresh EVIDENCE.md and README.mdimplementP3-02
+ca11d1fbbd714ae343d3c22cbaac04ddec80f54eGprogress: P3-01 doneimplementP3-01
+df370a62f83b6b4907c43332462394d856010fdcGP3-01: The CHANGELOG entry for 0.2.0 and the crate versionsimplementP3-01
+99e77559a93b77f5d170aad970b84673644ba2e4Gprogress: P2-10 doneimplementP2-10
+9a1a0d41d1ab9fcd542225dc18e43a1d236a4dbbGP2-10: Phase 2 end: push and record the manual checkimplementP2-10
+e5cb890d9e22c33d8801c5ca1ac455b78f768f9dGprogress: P2-09 doneimplementP2-09
+c7a48539834fe075b919158257ab521c54c60937GP2-09: The final benchmarkimplementP2-09
+ccc67bbcbf10cfcb2521055a9d09511b7bdc1180Gprogress: P2-08 doneimplementP2-08
+9b93d4cc83354cc32eb4374e5517e57bbaed6c24GP2-08: Triage crashes and divergencesimplementP2-08
+38c4475c71674226a9ecc05ed852ca4fea9323f2Gprogress: P2-07 doneimplementP2-07
+e05db52d16cdfbbca495b45bba3e9c897ae123c4GP2-07: Run diff_accept for the configured durationimplementP2-07
+790ed75759f6fb34d3084d17447d5b5c45d3a55aGprogress: P2-06 doneimplementP2-06
+31eed93fb832be5bfa78bfa44239b3e2053f78beGP2-06: Run diff_roundtrip for the configured durationimplementP2-06
+09ff7e9bdbc24cd404fa90eba341214887521b34Gprogress: P2-05 doneimplementP2-05
+44c7fa47844592400b8987b039935144df90a45eGP2-05: Run no_panic_stream for the configured durationimplementP2-05
+25d7a9f6afe6bc51baec8b9e6372cd016a409493Gprogress: P2-04 doneimplementP2-04
+b9e29b0de1bcc7ac92e74b951e090c21dbe78dd3GP2-04: Run no_panic_frame for the configured durationimplementP2-04
+0be874349a19b359b995c4148a0486bb1894eda9Gchore: pipeline friction (implement)implement-
+748c6a117a5545a38bc31e58a1ce6c6f5ad0c7e9Gprogress: P2-03 doneimplementP2-03
+e4c08b4382d12d6689aee74966b89d7d074af4fbGP2-03: Run no_panic_block for the configured durationimplementP2-03
+ba91769fbf9f0be0c6f111ceba6a46005aabe106Gprogress: P2-02 doneimplementP2-02
+c507c2b5a95574806dcefdbdcf53ea5b736b1dacGP2-02: The full malformed runimplementP2-02
+1307f248b136f4c28ac767187407743ae20d49d0Gprogress: P2-01 doneimplementP2-01
+d406151cec36fad255ada1e54d381a5e7fc525e1GP2-01: The full conformance runimplementP2-01
+8a5c595c90eb1c856b477ab1a407c9587684b5a4Gprogress: P1-08 doneimplementP1-08
+321ad2772c3316d9db696855bc151d51653e609bGP1-08: Phase 1 end: push and record the manual checkimplementP1-08
+27a2e8a44a8b010b3c654a34aa4c032fd0dc136eGprogress: P1-07 doneimplementP1-07
+9a9eb3189ce398fd16185d58f3733a39676129e7GP1-07: Measure the scratch-buffer change and decideimplementP1-07
+5afa2efdd70ded07e4206b4954f3228462a75374Gprogress: P1-06 doneimplementP1-06
+0c003d3e0d17912944ee7fcb751ade7caaf7ade4GP1-06: Reuse one scratch buffer across blocksimplementP1-06
+8c547c900b82a02594722df297c3f89e36335a42Gprogress: P1-05 doneimplementP1-05
+679e56f818cae9e71f52417e97c5bf86a7999dffGP1-05: Benchmark before the scratch-buffer changeimplementP1-05
+ea3614c9ee1ef51de2a8d924707b245182c0f87bGprogress: P1-04 doneimplementP1-04
+a4dc3ed5900d0a9ea3de9221cc4ee16accbfe2fdGP1-04: Merge is_magic into magic_kindimplementP1-04
+0b31fc032592a2c7d050a1947843eb35e99176eeGprogress: P1-03 doneimplementP1-03
+e09985611a942629a3e6dffd84df3a48ab518975GP1-03: Kill the dropped-dictionary mutant in the conformance runnerimplementP1-03
+ccd74a08795c53ab994f3bfd1a6520a54a2b2082Gprogress: P1-02 doneimplementP1-02
+3df514c8796f5a20f79792170bf26cdc12945f24GP1-02: Kill the dict_dependent mutant in the oracle dict moduleimplementP1-02
+d970c4b46526f2bc6ca9d76a5e1612708eddb621Gprogress: P1-01 doneimplementP1-01
+4e039a96e972afabed0ad0eb1727721dc52d9c79GP1-01: Dictionary differential test: every dictionary entry against the lz4 programimplementP1-01
+d25a0c72ebea583bb58cf9c40f72343cc6ccbb42Gprogress: P0-04 doneimplementP0-04
+52ccc3d768b2cf170dfe4f45f38368871df614beGP0-04: Phase 0 end: push and record the manual checkimplementP0-04
+c07c6b5e2d8813ee8794d7aa1b5731dfb69d5980Gprogress: P0-03 doneimplementP0-03
+baa94def4cf6161f79ad04457b925b3386a4df04GP0-03: Regenerate the corpus, record the baseline conformance run and lock downimplementP0-03
+49cf70a36df7baeea2774ef0998b9e2954473d9fGprogress: P0-02 doneimplementP0-02
+4d9be0d964ca9238d61a81aaffbe3c02e6ecb333GP0-02: Confirm make check and the fuzz toolchainimplementP0-02
+8536b361a0e9b8032b6d6134bd77f66d098dae95Gprogress: P0-01 doneimplementP0-01
+70eab32c7a08e21d5d6ad7f7121b638eca8cb421GP0-01: Confirm the corpora, the tool versions and the spec sourcesimplementP0-01
+21fc4de8f605ae445a43965f9a3d36abb1aaf419Gchore: start implementation runimplement-

@@ -1,0 +1,10 @@
+{
+  "task": "P4-07",
+  "target": "diff_roundtrip",
+  "seconds": 3601,
+  "runs": 58050,
+  "crashes": 0,
+  "divergences": 0,
+  "corpus_entries": 444,
+  "seed": 1
+}

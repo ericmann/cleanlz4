@@ -1,0 +1,10 @@
+{
+  "task": "P4-06",
+  "target": "no_panic_stream",
+  "seconds": 3601,
+  "runs": 21051494,
+  "crashes": 0,
+  "divergences": 0,
+  "corpus_entries": 895,
+  "seed": 1
+}

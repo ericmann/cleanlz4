@@ -1,0 +1,10 @@
+{
+  "task": "P2-06",
+  "target": "diff_roundtrip",
+  "seconds": 3601,
+  "runs": 61410,
+  "crashes": 0,
+  "divergences": 0,
+  "corpus_entries": 437,
+  "seed": 1
+}

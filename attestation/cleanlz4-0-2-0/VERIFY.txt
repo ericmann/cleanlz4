@@ -1,0 +1,8 @@
+Kūkulu attestation bundle
+flight: cleanlz4-0-2-0
+mode: clean-room
+enforcement: hook
+signer: sha256:29eb2de703efe67ab50bf992d6c66c1e75d824010c727b1a76b0b336a5ed9f75
+verify: node verify.mjs . --key sha256:29eb2de703efe67ab50bf992d6c66c1e75d824010c727b1a76b0b336a5ed9f75
+expected exit status: 0
+Get the signer's fingerprint from a source other than this directory (the project's README, a signed tag, a DNS TXT record) and compare it with the signer line above before trusting this bundle.
