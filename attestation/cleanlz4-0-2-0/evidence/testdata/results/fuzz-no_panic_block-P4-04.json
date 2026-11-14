@@ -1,0 +1,10 @@
+{
+  "task": "P4-04",
+  "target": "no_panic_block",
+  "seconds": 3601,
+  "runs": 20681767,
+  "crashes": 0,
+  "divergences": 0,
+  "corpus_entries": 1249,
+  "seed": 1
+}

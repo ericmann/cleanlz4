@@ -35,6 +35,25 @@ frame formats and XXH32, written from the three documents in `docs/spec/` alone.
 See `CHANGELOG.md` for the entry and `docs/EVIDENCE.md` for the result files.
 0.1.0's plan, review and summary are under `docs/flights/cleanlz4/`.
 
+## Attestation
+
+The 0.2.0 flight's clean-room attestation bundle is published in
+`attestation/cleanlz4-0-2-0/`, with a `SHA256SUMS` and a `VERIFY.txt`, and as a
+tarball on the v0.2.0 release. It was signed by the key with this fingerprint:
+
+```text
+sha256:29eb2de703efe67ab50bf992d6c66c1e75d824010c727b1a76b0b336a5ed9f75
+```
+
+The same fingerprint is published on <https://kukulu.tech>. To verify the
+bundle offline (needs Node 22 or later, nothing else):
+
+```text
+git clone --depth 1 https://github.com/ericmann/cleanlz4 && node cleanlz4/attestation/cleanlz4-0-2-0/verify.mjs cleanlz4/attestation/cleanlz4-0-2-0 --key sha256:29eb2de703efe67ab50bf992d6c66c1e75d824010c727b1a76b0b336a5ed9f75
+```
+
+The last line it prints is `verify-attestation: PASS`, and it exits 0.
+
 ## Commands
 
 - fmt: `cargo fmt --all -- --check`

@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "deny": {
+    "tools": [
+      "WebSearch"
+    ],
+    "network": true,
+    "paths": [
+      "~/.cargo/registry/",
+      "~/.cargo/git/",
+      "/usr/include/lz4.h",
+      "/usr/include/lz4hc.h",
+      "/usr/include/lz4frame.h",
+      "/usr/include/xxhash.h",
+      "~/Projects/prior-art/"
+    ],
+    "pathPatterns": [
+      {
+        "id": "build-script-output",
+        "pattern": "/target/([^/]+/)*build/",
+        "shouldMatch": [
+          "/home/u/p/target/debug/build/lz4-sys-1a2b/out/x.o"
+        ],
+        "shouldNotMatch": [
+          "/home/u/p/target/debug/deps/x"
+        ]
+      },
+      {
+        "id": "lz4-headers-anywhere",
+        "pattern": "/include/(lz4[a-z_]*|xxhash)\\.h$",
+        "shouldMatch": [
+          "/opt/homebrew/include/lz4frame.h",
+          "/usr/local/include/xxhash.h"
+        ],
+        "shouldNotMatch": [
+          "/usr/include/zstd.h",
+          "/home/u/p/crates/cleanlz4/src/frame.rs"
+        ]
+      },
+      {
+        "id": "lz4-source-trees",
+        "pattern": "lz4[^/]*/(lib|programs|ossfuzz|contrib)/",
+        "shouldMatch": [
+          "/home/u/src/lz4/lib/lz4.c",
+          "/home/u/x/lz4-sys-1.11.1/liblz4/lib/lz4frame.c"
+        ],
+        "shouldNotMatch": [
+          "/home/u/p/crates/cleanlz4/src/lib.rs",
+          "/home/u/p/docs/spec/lz4_Frame_format.md"
+        ]
+      },
+      {
+        "id": "prior-art-root",
+        "pattern": "/prior-art(/|$)",
+        "shouldMatch": [
+          "/home/ericmann/Projects/prior-art/lz4/README.md",
+          "/media/ericmann/Data/Projects/prior-art/PRIOR-ART.json",
+          "/home/ericmann/Projects/prior-art"
+        ],
+        "shouldNotMatch": [
+          "/home/ericmann/Projects/cleanlz4/docs/SPEC.md"
+        ]
+      }
+    ],
+    "words": [
+      "lz4_flex",
+      "lz4-flex",
+      "lz4-sys",
+      "lz4_sys",
+      "lz4-rs",
+      "lz4rs",
+      "lz4.c",
+      "lz4hc.c",
+      "lz4frame.c",
+      "lz4file.c",
+      "xxhash.c",
+      "xxhash.h",
+      "twox-hash",
+      "twox_hash",
+      "xxhash-rust",
+      "xxhash_rust",
+      "lz-fear",
+      "lz_fear",
+      "lzzzz",
+      "lz4-compression",
+      "lz4_compression",
+      "lz4-java",
+      "python-lz4",
+      "c2rust",
+      "prior-art",
+      "PRIOR-ART"
+    ],
+    "commandPatterns": [
+      {
+        "id": "no-reverse-engineering-the-oracle",
+        "pattern": "^(perf|objdump|gdb|lldb|valgrind|nm|strings|otool|readelf)\\b.*\\b(oracle|liblz4|lz4)\\b",
+        "shouldMatch": [
+          "objdump -d target/release/oracle",
+          "strings /usr/bin/lz4"
+        ],
+        "shouldNotMatch": [
+          "perf record target/release/examples/bench_decode",
+          "nm target/release/deps/cleanlz4-abc123.rlib"
+        ]
+      }
+    ],
+    "packages": {
+      "cargo": [
+        "lz4_flex",
+        "twox-hash",
+        "xxhash-rust",
+        "lz-fear",
+        "lzzzz",
+        "lz4-compression"
+      ]
+    }
+  },
+  "allow": {
+    "paths": [
+      "crates/cleanlz4/",
+      "crates/oracle/",
+      "fuzz/",
+      "testdata/",
+      "docs/"
+    ],
+    "urls": [
+      "https://corpus.canterbury.ac.nz/resources/cantrbry.tar.gz",
+      "https://sun.aei.polsl.pl/~sdeor/corpus/silesia.zip"
+    ]
+  },
+  "lockdown": {
+    "after": "P0-03"
+  },
+  "protected": [
+    "docs/spec/"
+  ]
+}
